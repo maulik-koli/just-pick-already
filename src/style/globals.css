@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+
+/* :root {
+  --primary: #7C6FF7;
+  --secondary: #F5A623;
+  --background: #FAFAF8;
+  --foreground: #1A1A1A;
+  --text-secondary: #6B7B7B;
+  --border: #E5E7EB;
+} */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body main {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+* {
+  @apply transition-colors duration-150 ease-in-out;
+}
+
+button,
+[role="button"],
+input,
+textarea,
+select {
+  @apply transition-none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+} */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
