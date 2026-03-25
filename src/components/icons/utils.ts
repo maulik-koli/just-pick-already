@@ -1,10 +1,22 @@
 import { 
     MoveRight,
-    MoveDown
+    MoveDown,
+    Scale,
+    Clock,
+    Target,
+    Brain,
+    Layers,
+    Waypoints
 } from "lucide-react"
 
 
 export const LUCIDE_ICON_MAP = {
     MoveRight,
-    MoveDown
+    MoveDown,
+    Clock,
+    Scale,
+    Target,
+    Brain,
+    Layers,
+    Waypoints
 }
