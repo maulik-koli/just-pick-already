@@ -4,6 +4,7 @@ import "@/src/style/globals.css";
 import AppProvider from "@/src/provider";
 import { cn } from "@heroui/react";
 import Header from "@/src/components/layouts/header";
+import Footer from "@/src/components/layouts/footer";
 
 const dmSans = DM_Sans({ 
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default function RootLayout({
             <main className="flex-1 bg-background text-foreground">
               {children}
             </main>
+            <Footer />
           </div>
         </AppProvider>
       </body>

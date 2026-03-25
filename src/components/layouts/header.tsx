@@ -5,7 +5,7 @@ import React from 'react'
 const Header: React.FC = () => {
     return (
         <header className='h-16 sticky top-0 z-50 flex border-b border-border bg-card'>
-            <div className='container mx-auto flex items-center justify-between'>
+            <div className='w-full max-w-7xl mx-auto flex items-center justify-between'>
                 <span className='text-xl font-bold text-foreground'>
                     Just Pick Already
                 </span>
