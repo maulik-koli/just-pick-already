@@ -1,8 +1,8 @@
 "use client"
 import React from 'react'
-import { CATEGORIES } from '@/src/constants/categories'
+import { CATEGORIES } from '@/constants/categories'
 import { cn } from '@heroui/react'
-import { useMovesStore } from '@/src/store'
+import { useMovesStore } from '@/store'
 
 
 const CategoryChips: React.FC = () => {
@@ -14,7 +14,7 @@ const CategoryChips: React.FC = () => {
                 <div 
                     key={`${cate}-${index}`}
                     className={cn(
-                        'py-1 px-3 rounded-2xl text-base border',
+                        'py-1 px-3 rounded-2xl text-base border cursor-pointer',
                         selectedCategory === cate
                             ? 'bg-primary/10 border-primary text-primary'
                             : 'bg-card border-border text-foreground/70'

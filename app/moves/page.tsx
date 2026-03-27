@@ -1,6 +1,8 @@
-import CategoryChips from '@/src/modules/framework/components/category-chips'
-import FrameworkGrid from '@/src/modules/framework/components/framework-grid'
+
 import React from 'react'
+import CategoryChips from '@mod/moves/components/category-chips'
+import MoveGrid from '@mod/moves/components/move-grid'
+
 
 const MovesPage: React.FC = () => {
     return (
@@ -16,7 +18,7 @@ const MovesPage: React.FC = () => {
 
             <CategoryChips />
 
-            <FrameworkGrid isFilter />
+            <MoveGrid isFilter />
         </div>
     )
 }

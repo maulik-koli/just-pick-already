@@ -1,5 +1,6 @@
+import { CategoryType } from "@/type/move";
 import { create } from "zustand";
-import { CategoryType } from "@/src/constants/categories";
+
 
 type MovesState = {
     selectedCategory: CategoryType
