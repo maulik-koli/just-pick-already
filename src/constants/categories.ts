@@ -7,5 +7,3 @@ export const CATEGORIES = [
     "Strategy",
     "Long-term Thinking"
 ] as const;
-
-export type CategoryType = typeof CATEGORIES[number]

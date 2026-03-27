@@ -1,10 +1,10 @@
 import React from "react";
-import Hero from "@/src/modules/main/components/hero";
-import AdBlock from "@/src/components/common/ad-block";
-import StepCard from "@/src/modules/main/components/step-card";
-import AboutSection from "@/src/modules/main/components/about-sec";
-import PopularFrameworkSection from "@/src/modules/main/components/popular-framework-sec";
-// import FeaturesSection from "@/src/modules/main/components/features-sec";
+import Hero from "@mod/main/components/hero";
+import AdBlock from "@/components/common/ad-block";
+import StepCard from "@mod/main/components/step-card";
+import AboutSection from "@mod/main/components/about-sec";
+import PopularMovesSection from "@mod/main/components/popular-move-sec";
+
 
 const HomePage: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
       <Hero />
       <AdBlock />
       <StepCard />
-      <PopularFrameworkSection />
+      <PopularMovesSection />
       {/* <FeaturesSection /> */}
       <AboutSection />
       <AdBlock />

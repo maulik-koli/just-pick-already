@@ -2,14 +2,14 @@
 @config "../../tailwind.config.ts";
 
 
-/* :root {
+:root {
   --primary: #7C6FF7;
   --secondary: #F5A623;
   --background: #FAFAF8;
   --foreground: #1A1A1A;
   --text-secondary: #6B7B7B;
   --border: #E5E7EB;
-} */
+}
 
 html {
   scroll-behavior: smooth;
@@ -56,15 +56,6 @@ select {
 ::selection {
   background-color: var(--primary);
   color: white;
-}
-
-a {
-  color: var(--primary);
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }
 
 /* img {

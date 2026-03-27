@@ -1,12 +1,14 @@
 'use client'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button, cn } from "@heroui/react";
-import Icon from '@/src/components/icons';
+import Icon from '@/components/icons';
+import { MovesType } from '@/type/move';
 
-type Moves = "decision-matrix" | "pre-mortem" | "eisenhower-matrix" | "regret-minimization"
+type MovesButtonType = Extract<MovesType, "decision-matrix" | "pre-mortem" | "eisenhower-matrix" | "regret-minimization">
 
-const ButtonValues: Record<Moves, { name: string, buttonLable: string  }> = {
+const ButtonValues: Record<MovesButtonType, { name: string, buttonLable: string  }> = {
     "decision-matrix": {
         name: "the Decision Matrix",
         buttonLable: "Can't choose between options?",
@@ -27,9 +29,11 @@ const ButtonValues: Record<Moves, { name: string, buttonLable: string  }> = {
 
 
 const HeroButtons: React.FC = () => {
-    const [selecteedChoice, setSelectedChoice] = useState<Moves>("decision-matrix");
+    const router = useRouter();
 
+    const [selecteedChoice, setSelectedChoice] = useState<MovesButtonType>("decision-matrix");
     const RedirectButtonMove = ButtonValues[selecteedChoice]
+
 
     return (
         <div className='w-full flex flex-col gap-10 items-center mt-2'>
@@ -72,6 +76,7 @@ const HeroButtons: React.FC = () => {
                             exit={{ y: -20, opacity: 0, filter: 'blur(4px)' }}
                             transition={{ duration: 0.25, ease: "easeOut" }}
                             className="flex items-center gap-2 whitespace-nowrap"
+                            onClick={() => router.push(`moves/${selecteedChoice}`)}
                         >
                             Try {RedirectButtonMove.name}
                             <Icon name='MoveRight' width={16} height={16} />
@@ -98,7 +103,7 @@ const SelectButton = ({value, isSelected, onSelect}: SelectButtonProps) => {
          <Button 
             className={cn(
                 'border',
-                isSelected ? 'border-primary bg-primary/5 text-primary' : "bg-card border-border "
+                isSelected ? 'border-primary bg-primary/10 text-primary' : "bg-card border-border "
             )}
             value={value}
             onPress={onSelect}
