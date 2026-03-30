@@ -32,7 +32,7 @@ const MovePageComp: React.FC<MovePageCompProps> = ({ slug }) => {
 
             <MoveExplanation slug={moveData.slug} />
 
-            <MoveInteractive />
+            <MoveInteractive slug={moveData.slug} />
 
             <MoveAiInsights slug={moveData.slug} />
 

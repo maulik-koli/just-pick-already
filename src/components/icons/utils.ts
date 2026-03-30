@@ -9,7 +9,13 @@ import {
     Waypoints,
     ArrowLeft,
     GalleryVerticalEnd,
-    FlaskConical
+    FlaskConical,
+    Plus,
+    X,
+    GripVertical,
+    Trophy,
+    Copy,
+    Check
 } from "lucide-react"
 import { GithubIcon } from "./custom"
 
@@ -25,7 +31,13 @@ export const LUCIDE_ICON_MAP = {
     Layers,
     Waypoints,
     GalleryVerticalEnd,
-    FlaskConical
+    FlaskConical,
+    Plus,
+    X,
+    GripVertical,
+    Trophy,
+    Copy,
+    Check
 }
 
 export const CUSTOM_ICON_MAP = {

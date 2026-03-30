@@ -41,7 +41,7 @@ const MoveAiInsights: React.FC<MoveAiInsightsProps> = ({ slug }) => {
 
 
     return (
-        <section className="w-full py-12 flex flex-col gap-8 font-body">
+        <section className="w-full flex flex-col gap-8 font-body">
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 mb-1">
                     <span className="bg-primary/10 text-primary font-bold px-2 py-0.5 rounded text-xs tracking-wider uppercase">
