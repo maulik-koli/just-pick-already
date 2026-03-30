@@ -1,12 +1,36 @@
 'use client'
 import React from 'react';
+import { MovesType } from '@/type/move';
+
 import { Card, cn } from '@heroui/react';
 import Icon from '@/components/icons';
+import DecisionMatrix from '../decision-matrix/components/main';
+import { useRestMovesData } from '@/hooks/use-reset';
+
+const MOVES_MAP: Record<MovesType, React.ComponentType> = {
+    'decision-matrix': DecisionMatrix,
+    "10-10-10-rule": () => <div>10-10-10-rule</div>,
+    "eisenhower-matrix": () => <div>eisenhower-matrix</div>,
+    "pre-mortem": () => <div>pre-mortem</div>,
+    "regret-minimization": () => <div>regret-minimization</div>,
+    "second-order-thinking": () => <div>second-order-thinking</div>
+}
+
+interface MoveInteractiveProps {
+    slug: string
+}
 
 
-const MoveInteractive: React.FC = () => {
+const MoveInteractive: React.FC<MoveInteractiveProps> = ({ slug }) => {
+    const resetData = useRestMovesData(slug as MovesType)
 
     const getInteractiveContent = () => {
+        const Component = MOVES_MAP[slug as MovesType]
+
+        if (Component) {
+            return <Component />
+        }
+
         return (
             <div className="w-full min-h-[400px] bg-background border border-border rounded-xl flex items-center justify-center p-8 shadow-inner shadow-primary/5">
                 <p className="text-text-secondary">Load Framework Builder Component</p>
@@ -17,7 +41,6 @@ const MoveInteractive: React.FC = () => {
 
     return (
         <section className="w-full flex flex-col gap-6 relative z-10">
-
             <div className="absolute inset-x-0 -top-20 -bottom-20 bg-background/50 pointer-events-none rounded-3xl" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] max-w-[800px] bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
 
@@ -45,7 +68,10 @@ const MoveInteractive: React.FC = () => {
                         <Icon name='GalleryVerticalEnd' width={16} height={16} />
                         Workspace
                     </div>
-                    <button className="text-sm font-medium text-text-muted hover:text-foreground transition-colors cursor-pointer">
+                    <button 
+                        className="text-sm font-medium text-text-muted hover:text-foreground transition-colors cursor-pointer"
+                        onClick={resetData}
+                    >
                         Clear Data
                     </button>
                 </div>
