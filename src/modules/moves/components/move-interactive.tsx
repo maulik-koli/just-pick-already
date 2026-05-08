@@ -1,19 +1,20 @@
 'use client'
 import React from 'react';
 import { MovesType } from '@/type/move';
+import { useRestMovesData } from '@/hooks/use-reset';
 
 import { Card, cn } from '@heroui/react';
 import Icon from '@/components/icons';
 import DecisionMatrix from '../decision-matrix/components/main';
-import { useRestMovesData } from '@/hooks/use-reset';
+import SecondOrderThinking from '../second-order/components/main';
 
 const MOVES_MAP: Record<MovesType, React.ComponentType> = {
     'decision-matrix': DecisionMatrix,
+    "second-order-thinking": SecondOrderThinking,
     "10-10-10-rule": () => <div>10-10-10-rule</div>,
     "eisenhower-matrix": () => <div>eisenhower-matrix</div>,
     "pre-mortem": () => <div>pre-mortem</div>,
     "regret-minimization": () => <div>regret-minimization</div>,
-    "second-order-thinking": () => <div>second-order-thinking</div>
 }
 
 interface MoveInteractiveProps {
