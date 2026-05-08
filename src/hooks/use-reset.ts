@@ -7,7 +7,8 @@ export const useRestMovesData = (slug: MovesType) => {
 
     const REST_MAP = useMemo(() => {
         return {
-            'decision-matrix': resetDecisionMatrix
+            'decision-matrix': resetDecisionMatrix,
+            'second-order-thinking': () => console.log('temp')
         } as Record<MovesType, () => void>
     }, [])
 
