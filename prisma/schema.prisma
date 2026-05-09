@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AgeRange {
+  UNDER_18
+  AGE_18_24
+  AGE_25_34
+  AGE_35_44
+  AGE_45_54
+  AGE_55_PLUS
+}
+
+enum Vibe {
+  CHILL
+  CURIOUS
+  AMBITIOUS
+  OVERTHINKING
+  STRESSED
+  OPTIMISTIC
+}
+
+enum DecisionStyle {
+  TRUST_YOUR_GUT
+  THINK_IT_THROUGH
+  ASK_FOR_ADVICE
+  WAIT_AND_SEE
+  TAKE_THE_BOLD_OPTION
+}
+
+enum SelfDescription {
+  KEEP_OPTIONS_OPEN
+  KNOW_WHAT_I_WANT
+  CHANGE_MY_MIND_OFTEN
+  GO_WITH_WHAT_FEELS_RIGHT
+  IT_DEPENDS_ON_THE_SITUATION
+}
+
+model Session {
+  id              String          @id @default(cuid())
+  ageRange        AgeRange
+  vibe            Vibe
+  decisionStyle   DecisionStyle
+  selfDescription SelfDescription
+  completed       Boolean         @default(false)
+  completedAt     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  answers Answer[]
+  results Result[]
+
+  @@map("sessions")
+}
+
+enum Zone {
+  SOCIAL_SITUATOINS
+  RELATIONSHIPS
+  CAREER
+  MORAL_GRAY_AREAS
+  INPULSE_VS_LOGIC
+}
+
+model Answer {
+  id                 String   @id @default(cuid())
+  sessionId          String
+  questionId         String
+  zone               Zone
+  selectedOptionId   String
+  selectedOptionText String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, questionId])
+  @@index([sessionId])
+  @@map("answers")
+}
+
+model Result {
+  sessionId     String   @id
+  resultData    Json
+  promptVersion Int      @default(1)
+  generatedAt   DateTime @default(now())
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("results")
+}
