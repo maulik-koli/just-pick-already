@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { DM_Sans } from 'next/font/google';
+import { DM_Sans, Geist } from 'next/font/google';
 import "@/style/globals.css";
-import { cn } from "@heroui/react";
 import AppProvider from "@/provider";
-import Header from "@/components/layouts/header";
-import Footer from "@/components/layouts/footer";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const dmSans = DM_Sans({ 
   subsets: ['latin'],
@@ -25,15 +25,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("light", dmSans.className)}>
+    <html lang="en" className={cn("light", dmSans.className, "font-sans", geist.variable)}>
       <body>
         <AppProvider>
           <div className="flex flex-col w-full">
-            <Header />  
             <main className="flex-1 bg-background text-foreground">
               {children}
             </main>
-            <Footer />
           </div>
         </AppProvider>
       </body>
