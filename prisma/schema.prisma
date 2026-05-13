@@ -47,6 +47,7 @@ model Session {
   vibe            Vibe
   decisionStyle   DecisionStyle
   selfDescription SelfDescription
+  questions       Json?
   completed       Boolean         @default(false)
   completedAt     DateTime?
   createdAt       DateTime        @default(now())
