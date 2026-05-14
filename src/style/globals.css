@@ -196,3 +196,14 @@
     padding-right: 0 !important;
   }
 }
+
+.dot-grid {
+  background-image: radial-gradient(circle, #E5DCD0 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.map-dot-bg {
+  background-color: #F1E9DA;
+  background-image: radial-gradient(circle, #D9CFC0 1px, transparent 1px);
+  background-size: 25px 25px;
+}
