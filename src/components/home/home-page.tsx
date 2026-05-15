@@ -8,6 +8,7 @@ import PreviewSections from './preview-sec'
 import EndCardSection from './end-card-sec'
 import AdBlock from '../common/ad-block'
 import Footer from '../common/footer'
+import OnbordingHandler from '../game/onbording-handler'
 
 
 const HomePageCom: React.FC = () => {
@@ -26,6 +27,8 @@ const HomePageCom: React.FC = () => {
                 <AdBlock />
                 <Footer />
             </div>
+
+            <OnbordingHandler />
         </div>
     )
 }

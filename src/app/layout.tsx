@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Geist } from 'next/font/google';
 import "@/style/globals.css";
 import AppProvider from "@/provider";
+import { Analytics } from "@vercel/analytics/next"
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("light", dmSans.className, "font-sans", geist.variable)}>
       <body>
+        <Analytics />
         <AppProvider>
           <div className="flex flex-col w-full">
             <main className="flex-1 bg-background text-foreground">
