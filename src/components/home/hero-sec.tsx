@@ -1,6 +1,8 @@
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion';
+import { useSessionStore } from '@/store/states/session';
+import { useRouter } from 'next/navigation';
 import { ChevronDown, Play } from 'lucide-react';
 import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
@@ -10,6 +12,10 @@ import { Button } from '@/components/ui/button';
 
 
 const HeroSection: React.FC = () => {
+    const router = useRouter()
+    const toggleOnbordingModel = useSessionStore((state) => state.toggleOnbordingModel);
+
+
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16 overflow-hidden">
             <div className={cn(
@@ -76,14 +82,14 @@ const HeroSection: React.FC = () => {
                 className="relative mt-10 flex flex-col items-stretch gap-3 w-full max-w-xs"
             >
                 {[
-                    { label: "START GAME", variant: "default" as const, onClick: () => console.log(true) },
+                    { label: "START GAME", variant: "default" as const, onClick: () => toggleOnbordingModel(true) },
                     {
                         label: "HOW TO PLAY",
                         variant: "outline" as const,
                         onClick: () =>
                         document.getElementById("how-to-play")?.scrollIntoView({ behavior: "smooth" }),
                     },
-                    { label: "ABOUT", variant: "ghost" as const, onClick: () => console.log({ to: "/" }) },
+                    { label: "ABOUT", variant: "ghost" as const, onClick: () => router.push("/about") },
                 ].map((b) => (
                     <Button
                         key={b.label}
@@ -132,14 +138,14 @@ const HeroSection: React.FC = () => {
             </motion.div>
 
             <motion.div
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-primary"
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center  text-primary"
                 animate={{ y: [0, 8, 0] }}
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             >
-                <span className="text-[10px] font-bold tracking-[0.2em]">
+                <span className="text-[8px] font-bold tracking-[0.2em]">
                 SCROLL
                 </span>
-                <ChevronDown stroke='currentColor' />
+                <ChevronDown stroke='currentColor' className='size-4' />
             </motion.div>
         </section>
     )
