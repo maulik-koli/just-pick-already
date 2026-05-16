@@ -1,20 +1,22 @@
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { onbordingSchema, OnbordingType } from "@/schemas/onbording.schema";
-import { getQuestions } from "@/service/questions";
-import { ApiError, ApiResponse, StatusCodeType } from "@/types/api";
-import { NextResponse } from "next/server";
-import { ZodError } from "zod";
 import { createId } from "@paralleldrive/cuid2";
+
+import { onbordingSchema } from "@/schemas/onbording.schema";
+import { getQuestions } from "@/service/questions";
 import { QuestionGeneration, questionGenerationSchema } from "@/schemas/questionGenerationSchema.schema";
 
+import { StartGamePayload, StartGameResponse } from "../_types";
+import { errorHandler } from "../_error";
 
-export async function POST(request: Request) {
+
+export async function POST(request: NextRequest) {
     try {
         // check schema
         const body = await request.json();
         onbordingSchema.parse(body)
 
-        const payload: OnbordingType = body
+        const payload: StartGamePayload = body
 
         // generate questions
         const question: QuestionGeneration = await getQuestions(payload)
@@ -57,7 +59,7 @@ export async function POST(request: Request) {
         })
 
  
-        const resData: ApiResponse<QuestionGeneration & { sessionId: string }> = {
+        const resData: StartGameResponse = {
             code: "OK",
             message: "Successfully generated questions",
             success: true,
@@ -70,28 +72,8 @@ export async function POST(request: Request) {
         return NextResponse.json(resData, { status: 200 });
 
     } catch (error: any) {
-        let code: StatusCodeType = "INTERNAL_SERVER_ERROR"
-        let message: string = error.message || "Something went wrong, please try again leter"
-        let status: number = 500
+        const { err, status } = errorHandler(error)
 
-        if (error instanceof ZodError) {
-            status = 400
-            code = "BAD_REQUEST"
-            
-            if( error.issues[0].code === 'invalid_type' || 
-                error.issues[0].code === 'unrecognized_keys'
-            ){
-                message = "Invalid payload data"
-            }
-            message = error.issues[0].message
-        }
-
-        const errorObj: ApiError  = {
-            success: false,
-            code,
-            message
-        }
-
-        return NextResponse.json(errorObj, { status });
+        return NextResponse.json(err, { status });
     }
 }

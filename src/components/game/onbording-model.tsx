@@ -2,11 +2,12 @@
 import React, { useState } from 'react'
 import { AgeRange, DecisionStyle, SelfDescription, Vibe } from '@/generated/prisma/enums'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Button } from '../ui/button'
-import { ArrowLeft, Astroid } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { OnbordingType } from '@/schemas/onbording.schema'
+import { cn } from '@/lib/utils'
+
+import { ArrowLeft, Astroid } from 'lucide-react'
+import { Button } from '../ui/button'
 
 type StepOptionsValue = AgeRange | DecisionStyle | SelfDescription | Vibe
 type OnbordingStep = { 

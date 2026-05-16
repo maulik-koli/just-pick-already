@@ -1,21 +1,21 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion';
-import { useSessionStore } from '@/store/states/session';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, Play } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useApiUiStore } from '@/store';
 import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
-import Character from '../game/character';
+import { ChevronDown, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Character from '../game/character';
 
 
 const HeroSection: React.FC = () => {
     const router = useRouter()
-    const toggleOnbordingModel = useSessionStore((state) => state.toggleOnbordingModel);
-
-
+    const toggleOnbordingModel = useApiUiStore((state) => state.toggleOnbordingModel);
+    
+    
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16 overflow-hidden">
             <div className={cn(
