@@ -1,9 +1,11 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+
 import { AnswersListItem } from "@/app/api/_types"
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema"
 
 type ZonesQuestoins = QuestionGeneration['zones']
+
 
 type GameState = {
     sessionId: string | null
