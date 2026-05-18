@@ -175,6 +175,10 @@
     @apply border-border outline-ring/50;
   }
 
+  html, body {
+    overflow: hidden;
+  }
+
   body {
     @apply bg-background text-foreground;
     scrollbar-width: none;
@@ -187,7 +191,7 @@
   }
 
   html {
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
   }
 
   body[data-scroll-locked] {
@@ -211,4 +215,22 @@
   background-color: #F1E9DA;
   background-image: radial-gradient(circle, #D9CFC0 1px, transparent 1px);
   background-size: 25px 25px;
+}
+
+.scroll-disable {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-disable::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.scroll-disable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-disable::-webkit-scrollbar-thumb {
+  background: transparent;
 }
