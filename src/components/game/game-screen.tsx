@@ -7,8 +7,8 @@ import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA } from '@/constants/game-
 import { CHAR_H, CHAR_W, useCharacterMove } from '@/hooks/use-character-move';
 
 import Character from './character';
-import { GameControlles, GameProgress } from './game-hud';
 import QuestionModel from './questoin-mode';
+import { GameControlles, GameProgress } from './game-hud';
 
 type ZoneStyleType = Record<
     Zone,
@@ -71,13 +71,13 @@ const GameScreen: React.FC = () => {
     const camY = Math.max(0, Math.min(WORLD_HEIGHT - viewport.h, y + CHAR_H / 2 - viewport.h / 2));
 
     if (!zone) {
-        return
+        <p>no data</p>
     }
 
     return (
         <div
             ref={containerRef}
-            className="relative w-screen h-screen overflow-hidden select-none bg-[#F5F0E8]"
+            className="relative w-screen h-screen overflow-hidden! select-none bg-[#F5F0E8] scroll-disable"
         >
             <GameProgress pct={47} />
 
@@ -142,7 +142,6 @@ const GameScreen: React.FC = () => {
 
                 {ZONESS_STAICS_DATA.map((z) => {
                     const s = ZONE_STYLES[z.id];
-                    // const done = answeredZones.has(z.id);
                     const done = false;
                     const zcx = z.x + z.w / 2;
                     const zcy = z.y + z.h / 2;

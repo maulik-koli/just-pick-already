@@ -8,7 +8,6 @@ const GamePageComponet: React.FC = () => {
   const data = useGameStore(state => state.zones)
 
   return (
-    // <div>{JSON.stringify(data)}</div>
     <GameScreen />
   )
 }

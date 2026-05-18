@@ -3,13 +3,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Astroid } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-import { Button } from '../ui/button'
 import { useGameStore } from '@/store/states/game'
 import { usePlayStore } from '@/store/states/play'
 import { QuestionZone, QuestionOption } from '@/schemas/questionGenerationSchema.schema'
 import { AnswersListItem } from '@/app/api/_types'
 import { ZONESS_STAICS_DATA, WORLD_WIDTH, WORLD_HEIGHT } from '@/constants/game-zones'
 import { CHAR_W, CHAR_H } from '@/hooks/use-character-move'
+import { Button } from '../ui/button'
 
 
 const getNextQuestionIndex = (zone: QuestionZone, answers: AnswersListItem[]) => {
@@ -26,7 +26,6 @@ const QuestionModel: React.FC = () => {
     const { answers, setAnswers, zones } = useGameStore()
     const { activeZone, closeModal } = usePlayStore()
     const open = !!activeZone;
-    const onClose = closeModal;
     
     const [zone, setZone] = useState<QuestionZone | null>(null);
 
@@ -83,6 +82,16 @@ const QuestionModel: React.FC = () => {
         closeModal();
     };
 
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && open) {
+                handleCloseModal();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [open, activeZone]);
 
     useEffect(() => {
         if (open && zone) {
@@ -138,7 +147,6 @@ const QuestionModel: React.FC = () => {
         }
         setAnswers(newAnswers);
 
-        // Auto-advance after 300ms if not on the last step
         if (step < zone.questions.length - 1) {
             setTimeout(() => {
                 handleNext();
@@ -205,7 +213,7 @@ const QuestionModel: React.FC = () => {
                                                     backgroundSize: "200% 100%",
                                                     animation: "shimmer-bar 2s linear infinite",
                                                 } : {
-                                                    background: "#D9CFC2", // Skipped color
+                                                    background: "#D9CFC2",
                                                 }}
                                             />
                                         )}
