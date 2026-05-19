@@ -1,0 +1,7 @@
+export { default as HeroSection } from './hero-sec'
+export { default as MapSection } from './map-sec'
+export { default as PreviewSections } from './preview-sec'
+export { default as HowToPlaySection } from './how-to-play-sec'
+export { default as ResultCardSection } from './result-card-sec'
+export { default as ZoneSections } from './zone-sec'
+export { default as EndCardSection } from './end-card-sec'

@@ -3,19 +3,28 @@ import React from 'react'
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useApiUiStore } from '@/store';
+import { useGameStore } from '@/store/states/game';
 import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
 import { ChevronDown, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Character from '../game/character';
+import Character from '../../game/character';
 
 
 const HeroSection: React.FC = () => {
     const router = useRouter()
     const toggleOnbordingModel = useApiUiStore((state) => state.toggleOnbordingModel);
+    const toggleContinueGameModel = useApiUiStore((state) => state.toggleContinueGameModel);
+    const hasGameData = useGameStore((state) => state.hasGameData);
     
-    
+    const handleStartClick = () => {
+        if (hasGameData()) {
+            toggleContinueGameModel(true);
+        } else {
+            toggleOnbordingModel(true);
+        }
+    };
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16 overflow-hidden">
             <div className={cn(
@@ -82,7 +91,7 @@ const HeroSection: React.FC = () => {
                 className="relative mt-10 flex flex-col items-stretch gap-3 w-full max-w-xs"
             >
                 {[
-                    { label: "START GAME", variant: "default" as const, onClick: () => toggleOnbordingModel(true) },
+                    { label: "START GAME", variant: "default" as const, onClick: handleStartClick },
                     {
                         label: "HOW TO PLAY",
                         variant: "outline" as const,

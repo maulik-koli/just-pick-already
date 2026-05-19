@@ -23,6 +23,8 @@ type ApiUiState = {
 
     openOnbordingModel: boolean
     toggleOnbordingModel: (open: boolean) => void
+    openContinueGameModel: boolean
+    toggleContinueGameModel: (open: boolean) => void
 }
 
 
@@ -34,6 +36,8 @@ export const useApiUiStore = create<ApiUiState>()((set) => ({
 
     openOnbordingModel: false,
     toggleOnbordingModel: (open) => set({ openOnbordingModel: open }),
+    openContinueGameModel: false,
+    toggleContinueGameModel: (open) => set({ openContinueGameModel: open }),
 
     setApiLoading: (key, isLoading) => set((state) => ({
         [key]: { ...state[key], isLoading }
