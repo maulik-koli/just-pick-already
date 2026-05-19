@@ -15,6 +15,7 @@ type GameState = {
     setSessionId: (id: string) => void,
     setQuestions: (zones: ZonesQuestoins) => void,
     setAnswers: (answers: AnswersListItem[]) => void,
+    hasGameData: () => boolean,
 }
 
 
@@ -26,6 +27,10 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     setSessionId: (id) => set({ sessionId: id }),
     setQuestions: (zones) => set({ zones }),
     setAnswers: (answers) => set({ answers }),
+    hasGameData: () => {
+        const state = get();
+        return !!state.sessionId && !!state.zones;
+    },
 }), {
     name: "game",
     partialize: (state) => ({

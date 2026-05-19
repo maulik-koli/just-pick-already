@@ -2,7 +2,7 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import { PERSONAS } from '@/constants/home-statics-data';
-import { Reveal, SectionHeader } from './common';
+import { Reveal, SectionHeader } from '../common';
 
 
 const ResultCardSection: React.FC = () => {

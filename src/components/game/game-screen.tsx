@@ -1,62 +1,13 @@
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion';
-import { Zone } from '@/generated/prisma/enums';
 import { useGameStore, usePlayStore } from '@/store';
-import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA } from '@/constants/game-zones';
+import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA, ZONE_STYLES } from '@/constants/game-zones';
 import { CHAR_H, CHAR_W, useCharacterMove } from '@/hooks/use-character-move';
 
 import Character from './character';
 import QuestionModel from './questoin-mode';
 import { GameControlles, GameProgress } from './game-hud';
-
-type ZoneStyleType = Record<
-    Zone,
-    { fill: string; border: string; nameColor: string; letter: string; radius: string; rotate: number }
->
-
-const ZONE_STYLES: ZoneStyleType = {
-    SOCIAL_SITUATOINS: {
-        fill: "#FFD4B8",
-        border: "#E8956A",
-        nameColor: "#9A4A1E",
-        letter: "S",
-        radius: "38% 62% 55% 45% / 48% 40% 60% 52%",
-        rotate: -1.5,
-    },
-    RELATIONSHIPS: {
-        fill: "#FFB8B8",
-        border: "#D96A6A",
-        nameColor: "#8A2E2E",
-        letter: "R",
-        radius: "58% 42% 48% 52% / 40% 56% 44% 60%",
-        rotate: 2,
-    },
-    CAREER: {
-        fill: "#FFF0B8",
-        border: "#D4A835",
-        nameColor: "#7A5A12",
-        letter: "C",
-        radius: "46% 54% 60% 40% / 52% 44% 56% 48%",
-        rotate: -1,
-    },
-    MORAL_GRAY_AREAS: {
-        fill: "#B8E8C8",
-        border: "#5EA87A",
-        nameColor: "#2E6A44",
-        letter: "M",
-        radius: "52% 48% 42% 58% / 44% 60% 40% 56%",
-        rotate: 1.5,
-    },
-    INPULSE_VS_LOGIC: {
-        fill: "#D4B8F0",
-        border: "#8A5EC8",
-        nameColor: "#4A2E7A",
-        letter: "I",
-        radius: "44% 56% 50% 50% / 58% 42% 56% 44%",
-        rotate: -2,
-    },
-};
 
 
 const GameScreen: React.FC = () => {
@@ -177,18 +128,15 @@ const GameScreen: React.FC = () => {
                                 }}
                             >
                                 <div
-                                    className="absolute font-black select-none pointer-events-none"
+                                    className="absolute select-none pointer-events-none flex items-center justify-center"
                                     style={{
                                         right: 8,
                                         bottom: -28,
-                                        fontSize: Math.min(z.w, z.h) * 0.85,
-                                        lineHeight: 1,
                                         color: s.border,
-                                        opacity: 0.06,
-                                        fontFamily: "ui-serif, Georgia, serif",
+                                        opacity: 0.12,
                                     }}
                                 >
-                                    {s.letter}
+                                    <s.Icon size={Math.min(z.w, z.h) * 0.85} strokeWidth={1.5} />
                                 </div>
 
                                 {done && (

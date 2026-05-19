@@ -1,14 +1,16 @@
 import React from 'react'
-import HeroSection from './hero-sec'
-import HowToPlaySection from './how-to-play-sec'
-import ResultCardSection from './result-card-sec'
-import ZoneSections from './zone-sec'
-import MapSection from './map-sec'
-import PreviewSections from './preview-sec'
-import EndCardSection from './end-card-sec'
 import AdBlock from '../common/ad-block'
 import Footer from '../common/footer'
-import OnbordingHandler from '../game/onbording-handler'
+import OnbordingHandler from './onbording-handler'
+import { 
+    HeroSection, 
+    EndCardSection, 
+    HowToPlaySection, 
+    MapSection, 
+    PreviewSections, 
+    ResultCardSection,
+    ZoneSections
+} from './sections'
 
 
 const HomePageCom: React.FC = () => {

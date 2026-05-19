@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Reveal, SectionHeader } from './common'
+import { Reveal, SectionHeader } from '../common'
 
 
 const EndCardSection: React.FC = () => {

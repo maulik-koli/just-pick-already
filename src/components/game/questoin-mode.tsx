@@ -7,7 +7,7 @@ import { useGameStore } from '@/store/states/game'
 import { usePlayStore } from '@/store/states/play'
 import { QuestionZone, QuestionOption } from '@/schemas/questionGenerationSchema.schema'
 import { AnswersListItem } from '@/app/api/_types'
-import { ZONESS_STAICS_DATA, WORLD_WIDTH, WORLD_HEIGHT } from '@/constants/game-zones'
+import { ZONESS_STAICS_DATA, WORLD_WIDTH, WORLD_HEIGHT, ZONE_STYLES } from '@/constants/game-zones'
 import { CHAR_W, CHAR_H } from '@/hooks/use-character-move'
 import { Button } from '../ui/button'
 
@@ -162,6 +162,9 @@ const QuestionModel: React.FC = () => {
     const answeredQuestionIds = new Set(answers.map(a => a.questionId));
     const allAnswered = zone.questions.every(q => answeredQuestionIds.has(q.id));
 
+    const zoneStatic = ZONESS_STAICS_DATA.find(z => z.id === zone.zone);
+    const zoneStyle = ZONE_STYLES[zone.zone];
+
     return (
         <AnimatePresence>
             {open && (
@@ -178,14 +181,30 @@ const QuestionModel: React.FC = () => {
                         exit={{ scale: 0.95, opacity: 0 }}
                         transition={{ type: "spring", damping: 24, stiffness: 280 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full dot-texture overflow-hidden bg-card rounded-[1.25rem] flex flex-col max-h-[90vh]"
-                        style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.15)", maxWidth: 720 }}
+                        className={cn(
+                            "w-full dot-texture overflow-hidden flex flex-col max-h-[90vh] rounded-[1.25rem] border-2",
+                            zoneStatic?.colorVar || "bg-card"
+                        )}
+                        style={{ 
+                            boxShadow: `0 25px 60px ${zoneStyle?.border}40`, 
+                            maxWidth: 720,
+                            borderColor: zoneStyle?.border
+                        }}
                     >
-                        <div className="w-full py-2.5 flex items-center justify-center bg-secondary shrink-0">
-                            <span className="text-[11px] font-bold uppercase text-primary tracking-[0.22em] flex gap-2 items-center">
-                                <Astroid fill='currentColor' className='size-3 mb-0.5' />
-                                {zone.zone.replace(/_/g, ' ')}
-                                <Astroid fill='currentColor' className='size-3 mb-0.5' />
+                        <div 
+                            className="w-full py-3 flex items-center justify-center shrink-0 border-b"
+                            style={{ 
+                                borderColor: `${zoneStyle?.border}40`,
+                                backgroundColor: 'rgba(255,255,255,0.4)'
+                            }}
+                        >
+                            <span 
+                                className="text-[12px] font-black uppercase tracking-[0.2em] flex gap-2 items-center"
+                                style={{ color: zoneStyle?.nameColor }}
+                            >
+                                <Astroid fill='currentColor' className='size-3.5 mb-0.5 opacity-80' />
+                                {zoneStatic?.name || zone.zone.replace(/_/g, ' ')}
+                                <Astroid fill='currentColor' className='size-3.5 mb-0.5 opacity-80' />
                             </span>
                         </div>
 
@@ -197,10 +216,8 @@ const QuestionModel: React.FC = () => {
                                 return (
                                     <div
                                         key={q.id}
-                                        className={cn(
-                                            "h-2 flex-1 rounded-full overflow-hidden relative",
-                                            (!isVisited && !isAnswered) ? "bg-border" : "bg-border"
-                                        )}
+                                        className="h-2 flex-1 rounded-full overflow-hidden relative"
+                                        style={{ backgroundColor: `${zoneStyle?.border}33` }}
                                     >
                                         {(isAnswered || isVisited) && (
                                             <motion.div
@@ -209,11 +226,11 @@ const QuestionModel: React.FC = () => {
                                                 transition={{ duration: 0.5, ease: "easeOut" }}
                                                 className="absolute inset-y-0 left-0 rounded-full"
                                                 style={isAnswered ? {
-                                                    background: "linear-gradient(90deg, #F4623A 0%, #FF8A5C 50%, #F4623A 100%)",
+                                                    background: `linear-gradient(90deg, ${zoneStyle?.nameColor} 0%, ${zoneStyle?.border} 50%, ${zoneStyle?.nameColor} 100%)`,
                                                     backgroundSize: "200% 100%",
                                                     animation: "shimmer-bar 2s linear infinite",
                                                 } : {
-                                                    background: "#D9CFC2",
+                                                    background: zoneStyle?.border,
                                                 }}
                                             />
                                         )}
@@ -222,13 +239,19 @@ const QuestionModel: React.FC = () => {
                             })}
                         </div>
 
-                        <div className="flex items-center justify-between px-7 pt-3.5 min-h-[32px] shrink-0">
-                            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-muted text-muted-foreground tracking-[0.14em]">
+                        <div className="flex items-center justify-between px-7 pt-4 min-h-[32px] shrink-0">
+                            <span 
+                                className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
+                                style={{ 
+                                    backgroundColor: `${zoneStyle?.border}26`,
+                                    color: zoneStyle?.nameColor 
+                                }}
+                            >
                                 Question {step + 1} of {zone.questions.length}
                             </span>
                         </div>
 
-                        <div className="px-7 pt-5 pb-7 overflow-y-auto">
+                        <div className="px-7 pt-5 pb-7 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={step}
@@ -239,7 +262,10 @@ const QuestionModel: React.FC = () => {
                                 >
 
                                     <div className="flex items-start gap-3 mb-3">
-                                        <div className="w-[3px] self-stretch rounded-full mt-1 bg-primary min-h-7" />
+                                        <div 
+                                            className="w-[3px] self-stretch rounded-full mt-1 min-h-7" 
+                                            style={{ backgroundColor: zoneStyle?.border }} 
+                                        />
                                         <h2 className="text-[20px] font-bold leading-tight text-foreground">
                                             {current.title}
                                         </h2>
@@ -262,20 +288,29 @@ const QuestionModel: React.FC = () => {
                                                     whileHover={!selected ? { y: -2 } : {}}
                                                     onClick={() => handleSelectOption(opt)}
                                                     className={cn(
-                                                        "group flex items-center justify-between gap-3 text-left px-4 py-3.5 transition-all rounded-[0.875rem] border cursor-pointer",
+                                                        "group flex items-center justify-between gap-3 text-left px-4 py-3.5 transition-all rounded-[0.875rem] border-2 cursor-pointer",
                                                         selected
-                                                            ? "border-primary bg-secondary text-primary font-bold shadow-[0_4px_12px_rgba(244,98,58,0.15)]"
-                                                            : "border-border bg-card text-foreground font-medium shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:bg-secondary hover:border-[rgba(244,98,58,0.5)]"
+                                                            ? "bg-card font-bold"
+                                                            : "bg-card/50 text-foreground font-medium hover:bg-card"
                                                     )}
+                                                    style={selected ? {
+                                                        borderColor: zoneStyle?.border,
+                                                        boxShadow: `0 4px 12px ${zoneStyle?.border}33`,
+                                                        color: zoneStyle?.nameColor
+                                                    } : {
+                                                        borderColor: `${zoneStyle?.border}40`,
+                                                    }}
                                                 >
                                                     <span className="text-sm">{opt.text}</span>
                                                     <span
-                                                        className={cn(
-                                                            "flex w-4.5 h-4.5 items-center justify-center shrink-0 rounded-full transition-all border",
-                                                            selected
-                                                                ? "border-primary bg-primary"
-                                                                : "border-[#D9CFC2] bg-transparent"
-                                                        )}
+                                                        className="flex w-4.5 h-4.5 items-center justify-center shrink-0 rounded-full transition-all border-2"
+                                                        style={selected ? {
+                                                            borderColor: zoneStyle?.border,
+                                                            backgroundColor: zoneStyle?.border
+                                                        } : {
+                                                            borderColor: `${zoneStyle?.border}66`,
+                                                            backgroundColor: "transparent"
+                                                        }}
                                                     >
                                                         {selected && (
                                                             <motion.span
@@ -298,7 +333,12 @@ const QuestionModel: React.FC = () => {
                                     onClick={handlePrev}
                                     variant="outline"
                                     disabled={step === 0}
-                                    className='flex-1 h-12 rounded-[0.875rem] font-bold border-border text-foreground hover:bg-muted hover:border-border disabled:opacity-50'
+                                    className='flex-1 h-12 rounded-[0.875rem] font-bold hover:bg-card disabled:opacity-50'
+                                    style={{ 
+                                        borderColor: `${zoneStyle?.border}66`, 
+                                        color: zoneStyle?.nameColor,
+                                        backgroundColor: "transparent" 
+                                    }}
                                 >
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Prev
                                 </Button>
@@ -306,17 +346,28 @@ const QuestionModel: React.FC = () => {
                                     <Button
                                         onClick={handleNext}
                                         variant="outline"
-                                        className='flex-1 h-12 rounded-[0.875rem] font-bold border-border text-foreground hover:bg-muted hover:border-border'
+                                        className='flex-1 h-12 rounded-[0.875rem] font-bold hover:bg-card'
+                                        style={{ 
+                                            borderColor: `${zoneStyle?.border}66`, 
+                                            color: zoneStyle?.nameColor,
+                                            backgroundColor: "transparent" 
+                                        }}
                                     >
                                         Next <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 ) : (
                                     <Button
                                         onClick={handleCloseModal}
-                                        className={cn(
-                                            "flex-1 h-12 rounded-[0.875rem] font-bold transition-all",
-                                            allAnswered ? "bg-primary text-white hover:bg-[#C1440E] border-primary hover:border-[#C1440E]" : "bg-muted text-muted-foreground hover:bg-muted border-transparent"
-                                        )}
+                                        className="flex-1 h-12 rounded-[0.875rem] font-bold transition-all border-2 text-white"
+                                        style={allAnswered ? {
+                                            backgroundColor: zoneStyle?.nameColor,
+                                            borderColor: zoneStyle?.nameColor,
+                                            boxShadow: `0 4px 12px ${zoneStyle?.border}40`,
+                                        } : {
+                                            backgroundColor: `${zoneStyle?.border}80`,
+                                            borderColor: "transparent",
+                                            color: "rgba(255,255,255,0.7)"
+                                        }}
                                     >
                                         {allAnswered ? "Finish Zone" : "Close"}
                                     </Button>

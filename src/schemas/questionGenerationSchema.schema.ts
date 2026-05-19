@@ -16,7 +16,7 @@ export const questionSchema = z.object({
     zone: z.enum(ZONES),
     title: z.string(),
     scenario: z.string(),
-    options: z.array(questionOptionSchema).length(5),
+    options: z.array(questionOptionSchema).length(4),
 });
 
 export const questionZoneSchema = z.object({

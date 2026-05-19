@@ -2,7 +2,7 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import { STEPS } from '@/constants/home-statics-data';
-import { Reveal, SectionHeader } from './common';
+import { Reveal, SectionHeader } from '../common';
 
 
 const HowToPlaySection: React.FC = () => {

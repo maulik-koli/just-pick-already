@@ -7,12 +7,16 @@ import { onbordingSchema, OnbordingType } from '@/schemas/onbording.schema';
 import { useStartGame } from '@/hooks/use-start-game';
 
 import OnbordingModel from './onbording-model'
-import LoadingScreen from './loading-screen';
+import ContinueGameModel from './continue-game-model';
+import LoadingScreen from '../game/loading-screen';
 
 
 const OnbordingHandler: React.FC = () => {
     const toggleOnbordingModel = useApiUiStore((state) => state.toggleOnbordingModel);
     const openOnbordingModel = useApiUiStore((state) => state.openOnbordingModel);
+    const toggleContinueGameModel = useApiUiStore((state) => state.toggleContinueGameModel);
+    const openContinueGameModel = useApiUiStore((state) => state.openContinueGameModel);
+
     const [showLoading, setShowLoading] = useState(false);
 
     const { startGame, isSubmitting } = useStartGame();
@@ -42,6 +46,11 @@ const OnbordingHandler: React.FC = () => {
                     open={openOnbordingModel}
                 />
             </FormProvider>
+            <ContinueGameModel 
+                open={openContinueGameModel}
+                onClose={() => toggleContinueGameModel(false)}
+                onStartNew={() => toggleOnbordingModel(true)}
+            />
             {showLoading && <LoadingScreen isLoading={isSubmitting} />}
         </>
     )
