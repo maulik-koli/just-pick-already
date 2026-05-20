@@ -6,12 +6,14 @@ import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA, ZONE_STYLES } from '@/co
 import { CHAR_H, CHAR_W, useCharacterMove } from '@/hooks/use-character-move';
 
 import Character from './character';
-import QuestionModel from './questoin-mode';
+import QuestionModel from './questoin-model';
 import { GameControlles, GameProgress } from './game-hud';
+import { constGameProgress } from '@/lib/utils';
 
 
 const GameScreen: React.FC = () => {
     const zone = useGameStore(state => state.zones)
+    const answers = useGameStore(state => state.answers)
     const { x, y, facing, isMoving } = usePlayStore();
     const { containerRef, viewport } = useCharacterMove()
 
@@ -25,12 +27,15 @@ const GameScreen: React.FC = () => {
         <p>no data</p>
     }
 
+
+    const pct = constGameProgress(answers.length);
+
     return (
         <div
             ref={containerRef}
             className="relative w-screen h-screen overflow-hidden! select-none bg-[#F5F0E8] scroll-disable"
         >
-            <GameProgress pct={47} />
+            <GameProgress pct={pct} />
 
             <GameControlles />
 
@@ -128,15 +133,28 @@ const GameScreen: React.FC = () => {
                                 }}
                             >
                                 <div
-                                    className="absolute select-none pointer-events-none flex items-center justify-center"
-                                    style={{
-                                        right: 8,
-                                        bottom: -28,
-                                        color: s.border,
-                                        opacity: 0.12,
+                                    className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center select-none"
+                                    style={{ 
+                                        opacity: 0.12, 
+                                        transform: 'rotate(-12deg) scale(1.5)' 
                                     }}
                                 >
-                                    <s.Icon size={Math.min(z.w, z.h) * 0.85} strokeWidth={1.5} />
+                                    {Array.from({ length: 7 }).map((_, i) => (
+                                        <span 
+                                            key={i} 
+                                            className="font-black whitespace-nowrap"
+                                            style={{
+                                                fontSize: Math.min(z.w, z.h) * 0.2,
+                                                lineHeight: 0.85,
+                                                color: i % 2 === 0 ? s.border : 'transparent',
+                                                WebkitTextStroke: i % 2 === 0 ? 'none' : `2px ${s.border}`,
+                                                marginLeft: i % 2 === 0 ? '-20%' : '20%',
+                                                letterSpacing: '0.05em'
+                                            }}
+                                        >
+                                            {z.name.toUpperCase()} • {z.name.toUpperCase()} • {z.name.toUpperCase()}
+                                        </span>
+                                    ))}
                                 </div>
 
                                 {done && (
