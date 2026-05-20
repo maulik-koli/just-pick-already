@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useFormContext } from 'react-hook-form'
 import { OnbordingType } from '@/schemas/onbording.schema'
 import { cn } from '@/lib/utils'
+import { useGameStore } from '@/store/states/game'
 
 import { ArrowLeft, Astroid } from 'lucide-react'
 import { Button } from '../ui/button'
@@ -22,6 +23,7 @@ const OnbordingModel: React.FC<OnbordingModelProps> = ({ open, onClose, onSubmit
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState(1);
     const { watch, setValue } = useFormContext<OnbordingType>();
+    const resetGame = useGameStore((s) => s.resetGame);
 
     const answers = watch(STEP_KEYS);
 
@@ -185,7 +187,10 @@ const OnbordingModel: React.FC<OnbordingModelProps> = ({ open, onClose, onSubmit
                                 <motion.button
                                     layout
                                     disabled={!allAnswered}
-                                    onClick={allAnswered ? onSubmit : undefined}
+                                    onClick={allAnswered ? () => {
+                                        resetGame();
+                                        onSubmit();
+                                    } : undefined}
                                     animate={{
                                         backgroundColor: allAnswered ? "#F4623A" : "#EDE5DB",
                                         color: allAnswered ? "#FFFFFF" : "#7A6F68",

@@ -3,6 +3,8 @@ import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Astroid, Gamepad2, RotateCcw } from 'lucide-react'
+import { useGameStore } from '@/store'
+import { constGameProgress } from '@/lib/utils'
 
 interface ContinueGameModelProps {
     open: boolean
@@ -10,10 +12,12 @@ interface ContinueGameModelProps {
     onStartNew: () => void
 }
 
+
 const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, onStartNew }) => {
     const router = useRouter()
+    const answers = useGameStore(state => state.answers)
     
-    const pct = 45; 
+    const pct = constGameProgress(answers.length); 
     
     const ringSize = 100;
     const ringStroke = 8;

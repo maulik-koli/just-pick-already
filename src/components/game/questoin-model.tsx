@@ -23,7 +23,7 @@ const getNextQuestionIndex = (zone: QuestionZone, answers: AnswersListItem[]) =>
 }
 
 const QuestionModel: React.FC = () => {
-    const { answers, setAnswers, zones } = useGameStore()
+    const { answers, addAnswer, zones } = useGameStore()
     const { activeZone, closeModal } = usePlayStore()
     const open = !!activeZone;
     
@@ -38,7 +38,6 @@ const QuestionModel: React.FC = () => {
 
     const [step, setStep] = useState(0)
     const [direction, setDirection] = useState(1)
-    const [visitedIds, setVisitedIds] = useState<Set<string>>(new Set())
 
     const handleCloseModal = () => {
         if (!activeZone) {
@@ -98,16 +97,10 @@ const QuestionModel: React.FC = () => {
             const nextIdx = getNextQuestionIndex(zone, useGameStore.getState().answers);
             const startIdx = nextIdx === -1 ? 0 : nextIdx;
             setStep(startIdx);
-            setVisitedIds(new Set([zone.questions[startIdx].id]));
             setDirection(1);
         }
     }, [open, zone]);
 
-    useEffect(() => {
-        if (zone?.questions[step]) {
-            setVisitedIds(prev => new Set(prev).add(zone.questions[step].id));
-        }
-    }, [step, zone]);
 
     const handleNext = () => {
         if (!zone) return;
@@ -127,25 +120,13 @@ const QuestionModel: React.FC = () => {
     const handleSelectOption = (option: QuestionOption) => {
         if (!zone) return;
         const currentQuestion = zone.questions[step];
-        const existing = answers.find(a => a.questionId === currentQuestion.id);
 
-        let newAnswers;
-        if (existing) {
-            newAnswers = answers.map(a => a.questionId === currentQuestion.id ? {
-                ...a,
-                selectedOptionId: option.id,
-                selectedOptionText: option.text,
-            } : a);
-        } else {
-            newAnswers = [...answers, {
-                id: Math.random().toString(36).substring(7),
-                zone: zone.zone,
-                questionId: currentQuestion.id,
-                selectedOptionId: option.id,
-                selectedOptionText: option.text,
-            }];
-        }
-        setAnswers(newAnswers);
+        addAnswer({
+            zone: zone.zone,
+            id: currentQuestion.id,
+            questionId: currentQuestion.id,
+            selectedOptionId: option.id,
+        });
 
         if (step < zone.questions.length - 1) {
             setTimeout(() => {
@@ -211,7 +192,6 @@ const QuestionModel: React.FC = () => {
                         <div className="flex items-center gap-1.5 px-7 pt-6 shrink-0">
                             {zone.questions.map((q, i) => {
                                 const isAnswered = answeredQuestionIds.has(q.id);
-                                const isVisited = visitedIds.has(q.id);
 
                                 return (
                                     <div
@@ -219,7 +199,7 @@ const QuestionModel: React.FC = () => {
                                         className="h-2 flex-1 rounded-full overflow-hidden relative"
                                         style={{ backgroundColor: `${zoneStyle?.border}33` }}
                                     >
-                                        {(isAnswered || isVisited) && (
+                                        {isAnswered && (
                                             <motion.div
                                                 initial={{ width: 0 }}
                                                 animate={{ width: "100%" }}
