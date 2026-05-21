@@ -12,7 +12,8 @@ export const useStartGame = () => {
     const resetApiState = useApiUiStore((state) => state.resetApiState);
 
     const setStartGameData = useGameStore((state) => state.setQuestions);
-    const setSessionId = useGameStore((state) => state.setSessionId)
+    const setSessionId = useGameStore((state) => state.setSessionId);
+    const setIsCompleted = useGameStore((state) => state.setIsCompleted);
 
     const isSubmitting = useApiUiStore((state) => state.startGameApi.isLoading)
     const error = useApiUiStore((state) => state.startGameApi.error)
@@ -42,7 +43,8 @@ export const useStartGame = () => {
             }
 
             setStartGameData(resData.data.zones);
-            setSessionId(resData.data.sessionId)
+            setSessionId(resData.data.sessionId);
+            setIsCompleted(false);
             setApiLoading('startGameApi', false);
 
             return { data: resData, error: null };

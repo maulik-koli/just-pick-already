@@ -73,7 +73,7 @@ model Answer {
   questionId         String
   zone               Zone
   selectedOptionId   String
-  selectedOptionText String?
+  selectedOptionText String
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 

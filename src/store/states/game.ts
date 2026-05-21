@@ -27,11 +27,13 @@ type GameState = {
     sessionId: string | null
     zones: ZonesQuestoins | null,
     answers: AnswersListItem[],
+    isCompleted: boolean,
 
     setSessionId: (id: string) => void,
     setQuestions: (zones: ZonesQuestoins) => void,
     setAnswers: (answers: AnswersListItem[]) => void,
     addAnswer: (answer: AnswersListItem) => void,
+    setIsCompleted: (completed: boolean) => void,
     resetGame: () => void,
     hasGameData: () => boolean,
 }
@@ -41,10 +43,12 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     sessionId: null,
     zones: null,
     answers: [],
+    isCompleted: false,
 
     setSessionId: (id) => set({ sessionId: id }),
     setQuestions: (zones) => set({ zones }),
     setAnswers: (answers) => set({ answers }),
+    setIsCompleted: (completed) => set({ isCompleted: completed }),
     addAnswer: (answer) => {
         const state = get();
         const existingIdx = state.answers.findIndex(a => a.questionId === answer.questionId);
@@ -78,6 +82,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
                     zone: answer.zone,
                     questionId: answer.questionId,
                     selectedOptionId: answer.selectedOptionId,
+                    selectedOptionText: answer.selectedOptionText
                 };
 
                 const res = await fetch(`/api/session/${currentSessionId}/answers`, {
@@ -122,7 +127,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
 
         processQueue();
     },
-    resetGame: () => set({ sessionId: null, zones: null, answers: [] }),
+    resetGame: () => set({ sessionId: null, zones: null, answers: [], isCompleted: false }),
     hasGameData: () => {
         const state = get();
         return !!state.sessionId && !!state.zones;
@@ -132,6 +137,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     partialize: (state) => ({
         sessionId: state.sessionId,
         zones: state.zones,
-        answers: state.answers
+        answers: state.answers,
+        isCompleted: state.isCompleted
     }),
 })) 
