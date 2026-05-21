@@ -126,6 +126,7 @@ const QuestionModel: React.FC = () => {
             id: currentQuestion.id,
             questionId: currentQuestion.id,
             selectedOptionId: option.id,
+            selectedOptionText: option.text
         });
 
         if (step < zone.questions.length - 1) {

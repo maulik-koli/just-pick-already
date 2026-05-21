@@ -14,6 +14,7 @@ export type AnswersListItem = {
     id: string;
     questionId: string;
     selectedOptionId: string;
+    selectedOptionText: string;
 } 
 
 export type GetAnswersResponse = ApiResponse<{ answers: AnswersListItem[] }>

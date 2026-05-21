@@ -55,7 +55,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         answerSchema.parse(body)
 
         const payload: AnswerPaylod = body
-        const { questionId, selectedOptionId, zone } = payload
+        const { questionId, selectedOptionId, zone, selectedOptionText } = payload
 
         // update or create in db
         const answer = await prisma.answer.upsert({
@@ -71,6 +71,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
                 sessionId,
                 questionId,
                 selectedOptionId,
+                selectedOptionText,
             },
         });
 
