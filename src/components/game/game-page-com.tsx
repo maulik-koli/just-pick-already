@@ -8,7 +8,9 @@ const GamePageComponet: React.FC = () => {
   const data = useGameStore(state => state.zones)
 
   return (
-    <GameScreen />
+    <div className='overflow-hidden!'>
+      <GameScreen />
+    </div>
   )
 }
 
