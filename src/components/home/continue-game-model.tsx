@@ -80,7 +80,7 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                         transition={{ type: "spring", damping: 24, stiffness: 280 }}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full dot-texture overflow-hidden bg-card rounded-[1.25rem] border border-border"
-                        style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.15)", maxWidth: 420 }}
+                        style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.15)", maxWidth: 560 }}
                     >
                         <div className="w-full py-2.5 flex items-center justify-center bg-secondary">
                             <span className="text-[11px] font-bold uppercase text-primary tracking-[0.22em] flex gap-2 items-center">
@@ -129,11 +129,11 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                                     </div>
                                     
                                     <h2 className="text-2xl font-black leading-tight text-foreground mb-3">
-                                        {isCompleted ? "Almost Done!" : "Continue Game?"}
+                                        {pct === 100 && !isCompleted ? "Almost Done!" : "Continue Game?"}
                                     </h2>
                                     <p className="text-sm text-muted-foreground mb-8">
-                                        {isCompleted 
-                                            ? "You have selected all your answers but haven't generated your final result yet." 
+                                        {pct === 100 && !isCompleted 
+                                            ? "You have finished selecting all answers but have yet to submit and generate your final result." 
                                             : "We found an existing game session. Do you want to pick up where you left off or start a brand new game?"}
                                     </p>
 
