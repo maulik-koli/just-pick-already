@@ -67,7 +67,7 @@ const OnbordingModel: React.FC<OnbordingModelProps> = ({ open, onClose, onSubmit
                         transition={{ type: "spring", damping: 24, stiffness: 280 }}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full dot-texture overflow-hidden bg-card rounded-[1.25rem]"
-                        style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.15)", maxWidth: 520 }}
+                        style={{ boxShadow: "0 25px 60px rgba(0,0,0,0.15)", maxWidth: 560 }}
                     >
                         <div className="w-full py-2.5 flex items-center justify-center bg-secondary">
                             <span className="text-[11px] font-bold uppercase text-primary tracking-[0.22em] flex gap-2 items-center">

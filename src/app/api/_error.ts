@@ -1,5 +1,6 @@
 import { ZodError } from "zod"
 import { ApiError, StatusCodeType } from "@/types/api"
+import { NextRequest, NextResponse } from "next/server"
 
 
 export const errorHandler = (error: any): { err: ApiError, status: number }  => {
@@ -28,3 +29,16 @@ export const errorHandler = (error: any): { err: ApiError, status: number }  => 
         status
     }
 }
+
+export const apiWrapper = (
+    handler: (req: NextRequest, ...args: any[]) => Promise<NextResponse> | NextResponse
+) => {
+    return async (req: NextRequest, ...args: any[]) => {
+        try {
+            return await handler(req, ...args);
+        } catch (error: any) {
+            const { err, status } = errorHandler(error);
+            return NextResponse.json(err, { status });
+        }
+    };
+};

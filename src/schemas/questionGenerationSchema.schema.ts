@@ -1,9 +1,5 @@
 import { z } from "zod";
-import { Zone } from "@/generated/prisma/enums";
-
-const ZONES: Zone[] = [
-    'CAREER', 'INPULSE_VS_LOGIC', 'MORAL_GRAY_AREAS', 'RELATIONSHIPS', 'SOCIAL_SITUATOINS'
-] as const
+import { ZONES } from "./enums";
 
 
 export const questionOptionSchema = z.object({
