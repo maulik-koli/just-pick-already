@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import Character from './character';
 
 const MESSAGES = [
-  "Analyzing your decision style...",
-  "Creating personalized dilemmas...",
-  "Preparing your personality journey...",
-  "Almost ready...",
+    "Analyzing your decision style...",
+    "Creating personalized dilemmas...",
+    "Preparing your personality journey...",
+    "Almost ready...",
 ];
 
 interface LoadingScreenProps {

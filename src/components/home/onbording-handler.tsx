@@ -1,59 +1,63 @@
-'use client'
-import React, { useState } from 'react'
+"use client";
+import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useApiUiStore } from '@/store'
-import { onbordingSchema, OnbordingType } from '@/schemas/onbording.schema';
-import { useStartGame } from '@/hooks/use-start-game';
 
-import OnbordingModel from './onbording-model'
-import ContinueGameModel from './continue-game-model';
-import LoadingScreen from '../game/loading-screen';
+import { useApiUiStore, useGameStore } from "@/store";
+import { onbordingSchema, OnbordingType } from "@/schemas/onbording.schema";
+import { useStartGame } from "@/hooks/api/mutation";
+import { Log } from "@/lib/utils";
+
+import OnbordingModel from "./onbording-model";
+import ContinueGameModel from "./continue-game-model";
+import LoadingScreen from "../game/loading-screen";
 
 
 const OnbordingHandler: React.FC = () => {
-    const toggleOnbordingModel = useApiUiStore((state) => state.toggleOnbordingModel);
     const openOnbordingModel = useApiUiStore((state) => state.openOnbordingModel);
-    const toggleContinueGameModel = useApiUiStore((state) => state.toggleContinueGameModel);
     const openContinueGameModel = useApiUiStore((state) => state.openContinueGameModel);
+    const toggleModal = useApiUiStore((state) => state.toggleModal);
 
-    const [showLoading, setShowLoading] = useState(false);
+    const setStartGameData = useGameStore((state) => state.setStartGameData);
 
-    const { startGame, isSubmitting } = useStartGame();
+    const { mutate: startGame, isPending: isSubmitting } = useStartGame();
 
     const form = useForm<OnbordingType>({
         resolver: zodResolver(onbordingSchema),
     });
 
-    const onSubmit = async (data: OnbordingType) => {
-        setShowLoading(true);
-        const { error } = await startGame(data);
-        
-        if (error) {
-            console.log("Error starting game:", error);
-            setShowLoading(false);
-        } else {
-            toggleOnbordingModel(false);
-        }
-    }
+    const onSubmit = (data: OnbordingType) => {
+        startGame(data, {
+            onSuccess: (data) => {
+                if (data.data) {
+                    const { zones, sessionId } = data.data;
+                    setStartGameData(zones, sessionId);
+                    toggleModal('openOnbordingModel', false);
+                }
+            },
+            onError: (error) => {
+                Log("Error starting game:", error);
+            },
+        });
+    };
 
     return (
         <>
             <FormProvider {...form}>
                 <OnbordingModel
-                    onClose={() => toggleOnbordingModel(false)}
+                    onClose={() => toggleModal('openOnbordingModel', false)}
                     onSubmit={form.handleSubmit(onSubmit)}
                     open={openOnbordingModel}
                 />
             </FormProvider>
-            <ContinueGameModel 
+            <ContinueGameModel
                 open={openContinueGameModel}
-                onClose={() => toggleContinueGameModel(false)}
-                onStartNew={() => toggleOnbordingModel(true)}
+                onClose={() => toggleModal('openContinueGameModel', false)}
+                onStartNew={() => toggleModal('openOnbordingModel', true)}
             />
-            {showLoading && <LoadingScreen isLoading={isSubmitting} />}
+            {isSubmitting && <LoadingScreen isLoading={isSubmitting} />}
         </>
-    )
-}
+    );
+};
 
-export default OnbordingHandler
+export default OnbordingHandler;

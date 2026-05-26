@@ -2,29 +2,30 @@
 import React from 'react'
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useApiUiStore } from '@/store';
-import { useGameStore } from '@/store/states/game';
+
+import { useApiUiStore, useGameStore } from '@/store';
 import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
+import Character from '../../game/character';
 import { ChevronDown, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Character from '../../game/character';
 
 
 const HeroSection: React.FC = () => {
     const router = useRouter()
-    const toggleOnbordingModel = useApiUiStore((state) => state.toggleOnbordingModel);
-    const toggleContinueGameModel = useApiUiStore((state) => state.toggleContinueGameModel);
+    const toggleModal = useApiUiStore((state) => state.toggleModal);
     const hasGameData = useGameStore((state) => state.hasGameData);
-    
+
     const handleStartClick = () => {
         if (hasGameData()) {
-            toggleContinueGameModel(true);
+            toggleModal('openContinueGameModel', true);
         } else {
-            toggleOnbordingModel(true);
+            toggleModal('openOnbordingModel', true);
         }
-    };
+    }
+
+
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16 overflow-hidden">
             <div className={cn(
@@ -96,7 +97,7 @@ const HeroSection: React.FC = () => {
                         label: "HOW TO PLAY",
                         variant: "outline" as const,
                         onClick: () =>
-                        document.getElementById("how-to-play")?.scrollIntoView({ behavior: "smooth" }),
+                            document.getElementById("how-to-play")?.scrollIntoView({ behavior: "smooth" }),
                     },
                     { label: "ABOUT", variant: "ghost" as const, onClick: () => router.push("/about") },
                 ].map((b) => (
@@ -106,7 +107,7 @@ const HeroSection: React.FC = () => {
                         variant={b.variant}
                         className={cn(
                             "w-full rounded-xl tracking-wide overflow-hidden h-auto group gap-0",
-                            b.variant === "default" 
+                            b.variant === "default"
                                 ? "py-4 text-base font-bold shadow-md relative"
                                 : b.variant === "ghost" ? "py-3 text-sm font-semibold" : "py-4 text-base font-bold border-2"
                         )}
@@ -133,8 +134,8 @@ const HeroSection: React.FC = () => {
                                     aria-hidden
                                     className="absolute inset-y-0 w-1/3 pointer-events-none"
                                     style={{
-                                    background:
-                                        "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%)",
+                                        background:
+                                            "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%)",
                                     }}
                                     initial={{ x: "-150%" }}
                                     animate={{ x: "350%" }}
@@ -152,7 +153,7 @@ const HeroSection: React.FC = () => {
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             >
                 <span className="text-[8px] font-bold tracking-[0.2em]">
-                SCROLL
+                    SCROLL
                 </span>
                 <ChevronDown stroke='currentColor' className='size-4' />
             </motion.div>

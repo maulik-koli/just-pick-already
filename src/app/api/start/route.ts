@@ -39,8 +39,8 @@ export const POST = apiWrapper(async (request: NextRequest) => {
                 })
             }
         })
-    } 
-    
+    }
+
 
     // validate questions
     const result = await questionGenerationSchema.safeParseAsync(mapQuestions)
@@ -64,6 +64,7 @@ export const POST = apiWrapper(async (request: NextRequest) => {
         success: true,
         data: {
             sessionId: session.id,
+            isComplete: session.completed,
             zones: mapQuestions.zones,
         }
     }

@@ -2,13 +2,14 @@
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useFormContext } from 'react-hook-form'
-import { OnbordingType } from '@/schemas/onbording.schema'
-import { cn } from '@/lib/utils'
+
 import { useGameStore } from '@/store/states/game'
+import { OnbordingType } from '@/schemas/onbording.schema'
+import { ONBORDING_STEPS, StepOptionsValue } from '@/constants/onbording-data'
+import { cn } from '@/lib/utils'
 
 import { ArrowLeft, Astroid } from 'lucide-react'
 import { Button } from '../ui/button'
-import { ONBORDING_STEPS, StepOptionsValue } from '@/constants/onbording-data'
 
 const STEP_KEYS: (keyof OnbordingType)[] = ['ageRange', 'vibe', 'decisionStyle', 'selfDescription'];
 
@@ -22,6 +23,7 @@ interface OnbordingModelProps {
 const OnbordingModel: React.FC<OnbordingModelProps> = ({ open, onClose, onSubmit }) => {
     const [step, setStep] = useState(0);
     const [direction, setDirection] = useState(1);
+    
     const { watch, setValue } = useFormContext<OnbordingType>();
     const resetGame = useGameStore((s) => s.resetGame);
 

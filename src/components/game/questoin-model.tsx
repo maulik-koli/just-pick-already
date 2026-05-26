@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Astroid } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
-import { useGameStore } from '@/store/states/game'
-import { usePlayStore } from '@/store/states/play'
+import { useGameStore, usePlayStore } from '@/store'
+import { useSyncAnswer } from '@/hooks/api/mutation'
 import { QuestionZone, QuestionOption } from '@/schemas/questionGenerationSchema.schema'
 import { AnswersListItem } from '@/app/api/_types'
 import { ZONESS_STAICS_DATA, WORLD_WIDTH, WORLD_HEIGHT, ZONE_STYLES } from '@/constants/game-zones'
 import { CHAR_W, CHAR_H } from '@/hooks/use-character-move'
+import { cn, Log } from '@/lib/utils'
+
+import { ArrowLeft, ArrowRight, Astroid } from 'lucide-react'
 import { Button } from '../ui/button'
 
 
@@ -117,17 +118,45 @@ const QuestionModel: React.FC = () => {
         }
     }
 
+    const { mutate: syncAnswerMutate } = useSyncAnswer();
+
     const handleSelectOption = (option: QuestionOption) => {
         if (!zone) return;
         const currentQuestion = zone.questions[step];
 
-        addAnswer({
+        const currentState = useGameStore.getState();
+        const existingIdx = currentState.answers.findIndex(a => a.questionId === currentQuestion.id);
+        const wasUpdate = existingIdx > -1;
+        const oldOptionId = wasUpdate ? currentState.answers[existingIdx].selectedOptionId : null;
+
+        const answer: AnswersListItem = {
             zone: zone.zone,
             id: currentQuestion.id,
             questionId: currentQuestion.id,
             selectedOptionId: option.id,
             selectedOptionText: option.text
-        });
+        };
+
+        // optimistic update in Zustand
+        addAnswer(answer);
+
+        // Sync with backend
+        const sessionId = currentState.sessionId;
+        if (sessionId) {
+            syncAnswerMutate(
+                { sessionId, data: answer }, 
+                { 
+                    onError: (err) => {
+                        Log("Answer sync failed", err);
+                        useGameStore.getState().rollbackAnswer(
+                            answer, 
+                            wasUpdate, 
+                            oldOptionId
+                        );
+                    } 
+                } 
+            );
+        }
 
         if (step < zone.questions.length - 1) {
             setTimeout(() => {
@@ -146,6 +175,7 @@ const QuestionModel: React.FC = () => {
 
     const zoneStatic = ZONESS_STAICS_DATA.find(z => z.id === zone.zone);
     const zoneStyle = ZONE_STYLES[zone.zone];
+
 
     return (
         <AnimatePresence>

@@ -1,7 +1,6 @@
 import { apiWrapper } from "@/app/api/_error";
 import { Answer } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-import { AnswerPayloadItem } from "@/prompts/generate-result.prompt";
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
 import { getResult } from "@/service/result";
 import { ResultResponse } from "@/app/api/_types";
