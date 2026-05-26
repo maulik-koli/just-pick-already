@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist } from 'next/font/google';
-import "@/style/globals.css";
-import AppProvider from "@/provider";
 import { Analytics } from "@vercel/analytics/next"
+
+import AppProvider from "@/provider";
 import { cn } from "@/lib/utils";
+import "@/style/globals.css";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

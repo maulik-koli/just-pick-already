@@ -6,7 +6,7 @@ import { Reveal, SectionHeader } from '../common'
 
 const EndCardSection: React.FC = () => {
     return (
-        <section className="px-4 py-24" style={{ backgroundColor: "#F7F2EC" }}>
+        <section className="px-4 py-24 bg-muted">
             <div className="max-w-3xl mx-auto">
                 <Reveal>
                     <SectionHeader

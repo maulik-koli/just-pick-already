@@ -32,6 +32,7 @@ export const GET = apiWrapper(async (_request: NextRequest, { params }: RoutePar
         success: true,
         data: {
             sessionId: session.id,
+            isComplete: session.completed,
             ...session.questions as QuestionGeneration,
         }
     }

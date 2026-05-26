@@ -86,3 +86,11 @@ export const PERSONAS = [
     { title: "The Chaotic Optimist", traits: ["Impulsive", "Warm", "Adaptable"], rot: 2 },
     { title: "The Quiet Strategist", traits: ["Reserved", "Analytical", "Patient"], rot: 7 },
 ];
+
+export const ZONES_SECTION_DATA = [
+    { name: "Social Situations", line: "The party. The small talk. The escape plan.", zone_color: "bg-zone-social" },
+    { name: "Relationships", line: "Honest answers, awkward truths.", zone_color: "bg-zone-relationships" },
+    { name: "Career", line: "Money, meaning, and your weekends.", zone_color: "bg-zone-career" },
+    { name: "Moral Grey Areas", line: "No right answer. Pick anyway.", zone_color: "bg-zone-moral" },
+    { name: "Impulse vs Logic", line: "The booking page is open. The clock is ticking.", zone_color: "bg-zone-impulse" },
+];

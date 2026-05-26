@@ -4,11 +4,12 @@ import { motion } from 'framer-motion';
 import { useGameStore, usePlayStore } from '@/store';
 import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA, ZONE_STYLES } from '@/constants/game-zones';
 import { CHAR_H, CHAR_W, useCharacterMove } from '@/hooks/use-character-move';
+import { constGameProgress } from '@/lib/utils';
 
 import Character from './character';
 import QuestionModel from './questoin-model';
+import NoGameData from './no-game-data';
 import { GameControlles, GameProgress } from './game-hud';
-import { constGameProgress } from '@/lib/utils';
 
 
 const GameScreen: React.FC = () => {
@@ -23,12 +24,10 @@ const GameScreen: React.FC = () => {
     const camX = Math.max(0, Math.min(WORLD_WIDTH - viewport.w, x + CHAR_W / 2 - viewport.w / 2));
     const camY = Math.max(0, Math.min(WORLD_HEIGHT - viewport.h, y + CHAR_H / 2 - viewport.h / 2));
 
-    if (!zone) {
-        <p>no data</p>
-    }
-
-
     const pct = constGameProgress(answers.length);
+
+
+    if (!zone) return <NoGameData />
 
     return (
         <div

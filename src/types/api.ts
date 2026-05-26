@@ -24,3 +24,15 @@ export type ApiError = {
     code: StatusCodeType;
     message: string;
 }
+
+import { UseMutationOptions, UseQueryOptions } from "@tanstack/react-query";
+
+export type QueryOptions<TData> = Omit<
+  UseQueryOptions<TData, ApiError>,
+  "queryKey" | "queryFn"
+>;
+
+export type MutationOptions<TData, TVariables> = Omit<
+  UseMutationOptions<TData, ApiError, TVariables>,
+  "mutationKey" | "mutationFn"
+>;

@@ -3,6 +3,7 @@ import { ApiResponse } from '@/types/api';
 import { NextResponse } from 'next/server';
 import { apiWrapper } from '@/app/api/_error';
 import { Type  } from "@google/genai";
+import { Log } from '@/lib/utils';
 
 const greetingResponseSchema = {
     type: Type.OBJECT,
@@ -25,7 +26,7 @@ export const GET = apiWrapper(async () => {
         },
     })
 
-    console.log(aiTestResponse.text)
+    Log("test api", aiTestResponse.text)
 
     const testRes: ApiResponse<{ ai: string }> = {
         success: true,

@@ -1,9 +1,9 @@
 import React from 'react'
-import GamePageComponet from '@/components/game/game-page-com'
+import GameScreen from '@/components/game/game-screen'
 
 const GamePage: React.FC = () => {
     return (
-        <GamePageComponet />
+        <GameScreen />
     )
 }
 
