@@ -9,6 +9,7 @@ import { constGameProgress } from '@/lib/utils';
 import Character from './character';
 import QuestionModel from './questoin-model';
 import NoGameData from './no-game-data';
+import CompletionButton from './completion-btn';
 import { GameControlles, GameProgress } from './game-hud';
 
 
@@ -202,6 +203,8 @@ const GameScreen: React.FC = () => {
             </motion.div>
 
             <QuestionModel />
+
+            <CompletionButton />
         </div>
     );
 }

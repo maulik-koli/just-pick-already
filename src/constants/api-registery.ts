@@ -1,9 +1,10 @@
 
 export const QUERY_REGISTRY = {
-  getSession: "getSession",
+  getSession: "get-session",
 } as const;
 
 export const MUTATION_REGISTRY = {
-  startGame: "startGame",
-  syncAnswer: "syncAnswer",
+  startGame: "start-game",
+  syncAnswer: "sync-answer",
+  gameResult: "game-result",
 } as const;

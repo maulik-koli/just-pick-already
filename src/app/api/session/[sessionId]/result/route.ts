@@ -1,10 +1,13 @@
-import { apiWrapper } from "@/app/api/_error";
-import { Answer } from "@/generated/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Answer } from "@/generated/prisma/client";
+
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
 import { getResult } from "@/service/result";
+import { Result } from "@/schemas/result.schema";
+
 import { ResultResponse } from "@/app/api/_types";
-import { NextRequest, NextResponse } from "next/server";
+import { apiWrapper } from "@/app/api/_error";
 
 interface RouteParams {
     params: Promise<{
@@ -13,13 +16,14 @@ interface RouteParams {
 }
 
 
-export const POST = apiWrapper(async (request: NextRequest, { params }: RouteParams) => {
+export const POST = apiWrapper(async (_request: NextRequest, { params }: RouteParams) => {
     const { sessionId } = await params
 
     const sessionData = await prisma.session.findUnique({
         where: { id: sessionId },
         include: {
-            answers: true
+            answers: true,
+            results: true
         }
     })
 
@@ -27,11 +31,18 @@ export const POST = apiWrapper(async (request: NextRequest, { params }: RoutePar
         throw new Error("Session not found")
     }
 
-    
-    const { answers, ...session } = sessionData
+    const { answers, results, ...session } = sessionData
 
-    if (session.completed) {
-        throw new Error("Session already completed")
+    // if result already exists, return it instead of generating a new one
+    if (results && results.length > 0) {
+        const resData: ResultResponse = {
+            code: "OK",
+            message: "Successfully fetched existing result",
+            success: true,
+            data: results[0].resultData as unknown as Result
+        };
+
+        return NextResponse.json(resData, { status: 200 });
     }
 
     const questionData = session.questions as QuestionGeneration
@@ -45,12 +56,10 @@ export const POST = apiWrapper(async (request: NextRequest, { params }: RoutePar
         vibe: session.vibe
     });
 
-    // Save result and mark session as completed in a transaction
+    // save result and mark session as completed in a transaction
     await prisma.$transaction([
-        prisma.result.upsert({
-            where: { sessionId },
-            update: { resultData: resultData as any },
-            create: { sessionId, resultData: resultData as any }
+        prisma.result.create({
+            data: { sessionId, resultData }
         }),
         prisma.session.update({
             where: { id: sessionId },
