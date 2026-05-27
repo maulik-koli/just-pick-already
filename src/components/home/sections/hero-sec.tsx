@@ -8,8 +8,8 @@ import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
 import Character from '../../game/character';
+import { ShinyButton } from '@/components/ui/shiny-button';
 import { ChevronDown, Play } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 
 const HeroSection: React.FC = () => {
@@ -101,49 +101,33 @@ const HeroSection: React.FC = () => {
                     },
                     { label: "ABOUT", variant: "ghost" as const, onClick: () => router.push("/about") },
                 ].map((b) => (
-                    <Button
+                    <ShinyButton
                         key={b.label}
-                        asChild
                         variant={b.variant}
+                        hideShiny={b.variant !== "default"}
                         className={cn(
-                            "w-full rounded-xl tracking-wide overflow-hidden h-auto group gap-0",
+                            "w-full rounded-xl tracking-wide h-auto group gap-0",
                             b.variant === "default"
-                                ? "py-4 text-base font-bold shadow-md relative"
+                                ? "py-4 text-base font-bold shadow-md"
                                 : b.variant === "ghost" ? "py-3 text-sm font-semibold" : "py-4 text-base font-bold border-2"
                         )}
+                        variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
+                        onClick={b.onClick}
+                        whileHover="hover"
+                        initial="rest"
+                        animate="rest"
                     >
-                        <motion.button
-                            variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-                            onClick={b.onClick}
-                            whileHover="hover"
-                            initial="rest"
-                            animate="rest"
+                        <motion.span
+                            variants={{ rest: { opacity: 0, width: 0, marginRight: 0 }, hover: { opacity: 1, width: 20, marginRight: 8 } }}
+                            transition={{ duration: 0.2 }}
+                            className="inline-flex items-center overflow-hidden shrink-0"
                         >
-                            <motion.span
-                                variants={{ rest: { opacity: 0, width: 0, marginRight: 0 }, hover: { opacity: 1, width: 20, marginRight: 8 } }}
-                                transition={{ duration: 0.2 }}
-                                className="inline-flex items-center overflow-hidden shrink-0"
-                            >
-                                <motion.span variants={{ rest: { x: -6 }, hover: { x: 0 } }} transition={{ duration: 0.2 }}>
-                                    <Play fill='currentColor' strokeWidth={2} className='w-5 h-5 shrink-0 opacity-80' />
-                                </motion.span>
+                            <motion.span variants={{ rest: { x: -6 }, hover: { x: 0 } }} transition={{ duration: 0.2 }}>
+                                <Play fill='currentColor' strokeWidth={2} className='w-5 h-5 shrink-0 opacity-80' />
                             </motion.span>
-                            <span className="relative z-10">{b.label}</span>
-                            {b.variant === "default" && (
-                                <motion.span
-                                    aria-hidden
-                                    className="absolute inset-y-0 w-1/3 pointer-events-none"
-                                    style={{
-                                        background:
-                                            "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%)",
-                                    }}
-                                    initial={{ x: "-150%" }}
-                                    animate={{ x: "350%" }}
-                                    transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.6 }}
-                                />
-                            )}
-                        </motion.button>
-                    </Button>
+                        </motion.span>
+                        <span>{b.label}</span>
+                    </ShinyButton>
                 ))}
             </motion.div>
 

@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 
 import { ArrowLeft, Astroid } from 'lucide-react'
 import { Button } from '../ui/button'
+import { ShinyButton } from '../ui/shiny-button'
 
 const STEP_KEYS: (keyof OnbordingType)[] = ['ageRange', 'vibe', 'decisionStyle', 'selfDescription'];
 
@@ -186,7 +187,7 @@ const OnbordingModel: React.FC<OnbordingModelProps> = ({ open, onClose, onSubmit
                             </AnimatePresence>
 
                             {isLast && (
-                                <motion.button
+                                <ShinyButton
                                     layout
                                     disabled={!allAnswered}
                                     onClick={allAnswered ? () => {
@@ -200,28 +201,16 @@ const OnbordingModel: React.FC<OnbordingModelProps> = ({ open, onClose, onSubmit
                                     whileHover={allAnswered ? { backgroundColor: "#C1440E" } : {}}
                                     whileTap={allAnswered ? { scale: 0.98 } : {}}
                                     transition={{ duration: 0.4, ease: "easeOut" }}
+                                    hideShiny={!allAnswered}
                                     className={cn(
-                                        "mt-6 w-full h-14 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-shadow",
+                                        "mt-6 w-full h-14 font-bold rounded-[0.875rem] transition-shadow",
                                         allAnswered 
                                             ? "cursor-pointer shadow-[0_8px_20px_rgba(244,98,58,0.3)]" 
                                             : "cursor-not-allowed shadow-none"
                                     )}
                                 >
-                                <span className="text-base relative z-10">
-                                    Let's Go
-                                </span>
-                                {allAnswered && (
-                                    <span
-                                        className="pointer-events-none absolute inset-0"
-                                        style={{
-                                            background:
-                                            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
-                                            backgroundSize: "200% 100%",
-                                            animation: "shimmer-bar 2.5s linear infinite",
-                                        }}
-                                    />
-                                )}
-                                </motion.button>
+                                    <span className="text-base">Let's Go</span>
+                                </ShinyButton>
                             )}
                         </div>
                     </motion.div>
