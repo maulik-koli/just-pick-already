@@ -15,8 +15,6 @@ const section = (i: number) => ({
     transition: { duration: 0.45, delay: 0.05 + i * 0.06, ease: [0.22, 1, 0.36, 1] as const },
 });
 
-
-
 interface ResultModelProps {
     open: boolean
     onClose: () => void
@@ -26,6 +24,16 @@ interface ResultModelProps {
 
 
 const ResultModel: React.FC<ResultModelProps> = ({ open, onClose, data, isPending }) => {
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && open) {
+                onClose();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [open, onClose]);
     return (
         <AnimatePresence>
             {open && (
@@ -41,8 +49,15 @@ const ResultModel: React.FC<ResultModelProps> = ({ open, onClose, data, isPendin
                         exit={{ scale: 0.95, opacity: 0 }}
                         transition={{ type: "spring", damping: 24, stiffness: 280 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full max-w-[680px] dot-texture overflow-hidden bg-card rounded-[1.25rem] shadow-[0_25px_60px_rgba(0,0,0,0.15)]"
+                        className="relative w-full max-w-[680px] dot-texture overflow-hidden bg-card rounded-[1.25rem] shadow-[0_25px_60px_rgba(0,0,0,0.15)]"
                     >
+                        <button
+                            onClick={onClose}
+                            className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-black/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                            aria-label="Close modal"
+                        >
+                            <XIcon className="w-5 h-5" />
+                        </button>
                         <AnimatePresence mode="wait">
                             {isPending || !data ? (
                                 <ResultLoader key="loader" />
@@ -56,6 +71,8 @@ const ResultModel: React.FC<ResultModelProps> = ({ open, onClose, data, isPendin
         </AnimatePresence>
     )
 }
+
+export default ResultModel
 
 
 
@@ -117,7 +134,6 @@ const ResultLoader: React.FC = () => {
 
 
 
-
 const ResultBody: React.FC<{ data: Result; onClose: () => void }> = ({ data, onClose }) => {
     const router = useRouter()
     const resetGame = useGameStore((s) => s.resetGame)
@@ -160,6 +176,7 @@ const CardShell: React.FC<{ children: React.ReactNode; className?: string; i: nu
 );
 
 
+
 const IdentityHeader: React.FC<{ data: Result }> = ({ data }) => (
     <motion.div
         {...section(0)}
@@ -178,11 +195,13 @@ const IdentityHeader: React.FC<{ data: Result }> = ({ data }) => (
 );
 
 
+
 const SummaryCard: React.FC<{ text: string }> = ({ text }) => (
     <CardShell i={1}>
         <p className="text-[17px] leading-relaxed text-foreground">{text}</p>
     </CardShell>
 );
+
 
 
 const TraitScores: React.FC<{ scores: Result["scores"] }> = ({ scores }) => (
@@ -211,6 +230,7 @@ const TraitScores: React.FC<{ scores: Result["scores"] }> = ({ scores }) => (
 );
 
 
+
 const TopTraits: React.FC<{ traits: string[] }> = ({ traits }) => (
     <CardShell i={3}>
         <h3 className="text-lg font-bold text-foreground mb-4">Defining Traits</h3>
@@ -229,6 +249,7 @@ const TopTraits: React.FC<{ traits: string[] }> = ({ traits }) => (
         </div>
     </CardShell>
 );
+
 
 
 const StrengthsBlindSpots: React.FC<{ strengths: string[]; blindSpots: string[] }> = ({ strengths, blindSpots }) => (
@@ -257,6 +278,7 @@ const StrengthsBlindSpots: React.FC<{ strengths: string[]; blindSpots: string[] 
         </div>
     </motion.div>
 );
+
 
 
 const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insights }) => {
@@ -291,6 +313,7 @@ const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insight
 }
 
 
+
 const SurprisingChoice: React.FC<{ mc: Result["mostSurprisingChoice"] }> = ({ mc }) => (
     <motion.div
         {...section(6)}
@@ -304,6 +327,7 @@ const SurprisingChoice: React.FC<{ mc: Result["mostSurprisingChoice"] }> = ({ mc
         <p className="text-[15px] text-muted-foreground leading-relaxed">{mc.explanation}</p>
     </motion.div>
 );
+
 
 
 const ShareCard: React.FC<{ shareText: string; onPlayAgain: () => void }> = ({ shareText, onPlayAgain }) => {
@@ -345,6 +369,7 @@ const ShareCard: React.FC<{ shareText: string; onPlayAgain: () => void }> = ({ s
 }
 
 
+
 const ShareBtn: React.FC<{
     children: React.ReactNode
     onClick?: () => void
@@ -368,6 +393,3 @@ const ShareBtn: React.FC<{
         </button>
     );
 }
-
-
-export default ResultModel

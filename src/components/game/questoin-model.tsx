@@ -64,13 +64,13 @@ const QuestionModel: React.FC = () => {
             let ny = state.y;
 
             if (minDist === distTop) {
-                ny = activeZoneStatic.y - CHAR_H - 10;
+                ny = activeZoneStatic.y - CHAR_H - 15;
             } else if (minDist === distBottom) {
-                ny = activeZoneStatic.y + activeZoneStatic.h + 10;
+                ny = activeZoneStatic.y + activeZoneStatic.h + 15;
             } else if (minDist === distLeft) {
-                nx = activeZoneStatic.x - CHAR_W - 10;
+                nx = activeZoneStatic.x - CHAR_W - 15;
             } else {
-                nx = activeZoneStatic.x + activeZoneStatic.w + 10;
+                nx = activeZoneStatic.x + activeZoneStatic.w + 15;
             }
 
             nx = Math.max(0, Math.min(WORLD_WIDTH - CHAR_W, nx));

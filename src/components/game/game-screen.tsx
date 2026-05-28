@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore, usePlayStore } from '@/store';
 import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA, ZONE_STYLES } from '@/constants/game-zones';
 import { CHAR_H, CHAR_W, useCharacterMove } from '@/hooks/use-character-move';
@@ -16,7 +16,7 @@ import { GameControlles, GameProgress } from './game-hud';
 const GameScreen: React.FC = () => {
     const zone = useGameStore(state => state.zones)
     const answers = useGameStore(state => state.answers)
-    const { x, y, facing, isMoving } = usePlayStore();
+    const { x, y, facing, isMoving, activeZone, openZone } = usePlayStore();
     const { containerRef, viewport } = useCharacterMove()
 
     const cx = x + CHAR_W / 2;
@@ -26,6 +26,32 @@ const GameScreen: React.FC = () => {
     const camY = Math.max(0, Math.min(WORLD_HEIGHT - viewport.h, y + CHAR_H / 2 - viewport.h / 2));
 
     const pct = constGameProgress(answers.length);
+
+    const insideZone = ZONESS_STAICS_DATA.find(
+        (z) => cx >= z.x && cx <= z.x + z.w && cy >= z.y && cy <= z.y + z.h,
+    );
+    let isInsideCompletedZone = false;
+    if (insideZone && zone) {
+        const zoneData = zone.find(zd => zd.zone === insideZone.id);
+        if (zoneData) {
+            const answeredCount = zoneData.questions.filter(q => 
+                answers.some(a => a.questionId === q.id)
+            ).length;
+            isInsideCompletedZone = answeredCount === zoneData.questions.length && zoneData.questions.length > 0;
+        }
+    }
+
+    React.useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key.toLowerCase() === 'e') {
+                if (insideZone && isInsideCompletedZone && !activeZone) {
+                    openZone(insideZone.id);
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [insideZone, isInsideCompletedZone, activeZone, openZone]);
 
 
     if (!zone) return <NoGameData />
@@ -98,7 +124,16 @@ const GameScreen: React.FC = () => {
 
                 {ZONESS_STAICS_DATA.map((z) => {
                     const s = ZONE_STYLES[z.id];
-                    const done = false;
+                    
+                    const zoneData = zone.find(zd => zd.zone === z.id);
+                    let done = false;
+                    if (zoneData) {
+                        const answeredCount = zoneData.questions.filter(q => 
+                            answers.some(a => a.questionId === q.id)
+                        ).length;
+                        done = answeredCount === zoneData.questions.length && zoneData.questions.length > 0;
+                    }
+                    
                     const zcx = z.x + z.w / 2;
                     const zcy = z.y + z.h / 2;
                     const dist = Math.hypot(cx - zcx, cy - zcy);
@@ -158,27 +193,33 @@ const GameScreen: React.FC = () => {
                                 </div>
 
                                 {done && (
-                                    <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-                                        <rect width="100%" height="100%" fill="url(#hatch)" opacity="0.35" />
-                                    </svg>
+                                    <>
+                                        <div className="absolute inset-0 bg-black/5 mix-blend-multiply" />
+                                        <svg className="absolute inset-0 w-full h-full pointer-events-none mix-blend-overlay" preserveAspectRatio="none">
+                                            <rect width="100%" height="100%" fill="url(#hatch)" opacity="0.6" />
+                                        </svg>
+                                    </>
                                 )}
                             </div>
 
                             <div
-                                className="absolute left-0 right-0 flex justify-center pointer-events-none"
+                                className="absolute left-0 right-0 flex justify-center items-center gap-1.5 pointer-events-none"
                                 style={{ top: 18 }}
                             >
                                 <span
-                                    className="text-sm font-extrabold uppercase"
+                                    className="text-sm font-extrabold uppercase drop-shadow-sm"
                                     style={{
                                         color: s.nameColor,
                                         letterSpacing: "0.18em",
-                                        textDecoration: done ? "line-through" : "none",
-                                        textDecorationThickness: 1.5,
                                     }}
                                 >
                                     {z.name}
                                 </span>
+                                {done && (
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={s.nameColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-sm">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                )}
                             </div>
                         </motion.div>
                     );
@@ -201,6 +242,25 @@ const GameScreen: React.FC = () => {
                     <Character isMoving={isMoving} facing={facing} />
                 </div>
             </motion.div>
+
+            <AnimatePresence>
+                {isInsideCompletedZone && !activeZone && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: -20, x: "-50%" }}
+                        animate={{ opacity: 1, y: 0, x: "-50%" }}
+                        exit={{ opacity: 0, y: -20, x: "-50%" }}
+                        className="absolute top-10 left-1/2 bg-[#F5F0E8]/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-md border border-[rgba(139,115,85,0.2)] flex items-center gap-2 z-40 pointer-events-none"
+                        style={{ boxShadow: '0 4px 12px rgba(139,115,85,0.1)' }}
+                    >
+                        <div className="w-5 h-5 rounded-[0.25rem] bg-[#E8DCC8] border border-[rgba(139,115,85,0.3)] flex items-center justify-center font-bold text-[10px] text-[#5C4A36] shadow-sm">
+                            E
+                        </div>
+                        <span className="text-[10px] font-extrabold text-[#5C4A36]/80 tracking-[0.05em] uppercase pr-1">
+                            Revisit Zone
+                        </span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <QuestionModel />
 
