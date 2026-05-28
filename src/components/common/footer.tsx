@@ -6,7 +6,7 @@ const NAV_LINKS = [
     { href: "#", label: "About" },
     { href: "#", label: "Privacy Policy" },
     { href: "#", label: "Terms and Conditions" },
-    { href: "#", label: "Contact" },
+    { href: "/contact", label: "Contact" },
 ]
 
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA } from "@/constants/game-zones";
-import { usePlayStore } from "@/store";
+import { usePlayStore, useGameStore } from "@/store";
 
 export const CHAR_W = 48;
 export const CHAR_H = 64;
@@ -80,7 +80,19 @@ export const useCharacterMove = () => {
                 (z) => cx >= z.x && cx <= z.x + z.w && cy >= z.y && cy <= z.y + z.h,
             );
             if (inside) {
-                openZone(inside.id);
+                const gameState = useGameStore.getState();
+                const zoneData = gameState.zones?.find(z => z.zone === inside.id);
+                let isZoneCompleted = false;
+                if (zoneData) {
+                    const answeredCount = zoneData.questions.filter(q => 
+                        gameState.answers.some(a => a.questionId === q.id)
+                    ).length;
+                    isZoneCompleted = answeredCount === zoneData.questions.length && zoneData.questions.length > 0;
+                }
+                
+                if (!isZoneCompleted) {
+                    openZone(inside.id);
+                }
             }
 
             raf.current = requestAnimationFrame(tick);

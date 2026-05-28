@@ -1,4 +1,3 @@
-
 export const GithubIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
     return (
         <svg
@@ -14,46 +13,18 @@ export const GithubIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
     )
 }
 
-export const MapLine: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
-    return (
-        <svg
-            viewBox="0 0 1000 460"
-            preserveAspectRatio="none"
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            {...props}
-        >
-            <path
-                d="M 90 380 Q 180 300, 230 220 T 430 130"
-                stroke="#A89A82"
-                strokeWidth="2.5"
-                strokeDasharray="2 8"
-                strokeLinecap="round"
-                fill="none"
-            />
-            <path
-                d="M 430 130 Q 560 180, 620 260 T 780 350"
-                stroke="#A89A82"
-                strokeWidth="2.5"
-                strokeDasharray="2 8"
-                strokeLinecap="round"
-                fill="none"
-            />
-            <path
-                d="M 230 220 Q 360 240, 480 270 T 720 200"
-                stroke="#A89A82"
-                strokeWidth="2.5"
-                strokeDasharray="2 8"
-                strokeLinecap="round"
-                fill="none"
-            />
-            <path
-                d="M 620 260 Q 700 230, 770 200"
-                stroke="#A89A82"
-                strokeWidth="2.5"
-                strokeDasharray="2 8"
-                strokeLinecap="round"
-                fill="none"
-            />
-        </svg>
-    )
-}
+export const Xicon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg
+        width={44}
+        height={40}
+        viewBox="0 0 44 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+    >
+        <path
+            d="M34.6526 0H41.3995L26.6594 16.847L44 39.7719H30.4225L19.7881 25.8681L7.61989 39.7719H0.868864L16.6349 21.7522L0 0H13.9222L23.5348 12.7087L34.6526 0ZM32.2846 35.7336H36.0232L11.8908 3.82626H7.87892L32.2846 35.7336Z"
+            fill={props.fill ?? "black"}
+        />
+    </svg>
+)

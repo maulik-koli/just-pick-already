@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 import Character from '../../game/character'
 import { Reveal, SectionHeader } from '../common'
-import { MapLine } from '../../icons/custom'
+import { MapLine } from '@/components/icons/savgs'
 
 
 const MapSection: React.FC = () => {
