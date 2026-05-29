@@ -1,7 +1,6 @@
 import React from 'react'
 import AdBlock from '../common/ad-block'
 import Footer from '../common/footer'
-import OnbordingHandler from './onbording-handler'
 import { 
     HeroSection, 
     EndCardSection, 
@@ -29,8 +28,6 @@ const HomePageCom: React.FC = () => {
                 <AdBlock />
                 <Footer />
             </div>
-
-            <OnbordingHandler />
         </div>
     )
 }

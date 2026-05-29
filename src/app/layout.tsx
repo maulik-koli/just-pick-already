@@ -3,8 +3,10 @@ import { DM_Sans, Geist } from 'next/font/google';
 import { Analytics } from "@vercel/analytics/next"
 
 import AppProvider from "@/provider";
+import Header from "@/components/common/header";
 import { cn } from "@/lib/utils";
 import "@/style/globals.css";
+import OnbordingHandler from "@/components/home/onbording-handler";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -32,8 +34,10 @@ export default function RootLayout({
         <Analytics />
         <AppProvider>
           <div className="flex flex-col w-full">
+            <Header />
             <main className="flex-1 bg-background text-foreground">
               {children}
+              <OnbordingHandler />
             </main>
           </div>
         </AppProvider>

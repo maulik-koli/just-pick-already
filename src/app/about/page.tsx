@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Metadata } from "next";
+import AboutPageComp from "@/components/contact-about/about-page";
 
-const AboutPage: React.FC = () => {
-    return (
-        <div>AboutPage</div>
-    )
+export const metadata: Metadata = {
+  title: "About | Just Pick Already",
+  description: "Stop overthinking. Just pick already. Learn more about the AI-powered personality game.",
 }
 
-export default AboutPage
+const AboutPage: React.FC = () => {
+  return <AboutPageComp />;
+}
+
+export default AboutPage;

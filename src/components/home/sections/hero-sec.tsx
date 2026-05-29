@@ -3,7 +3,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
-import { useApiUiStore, useGameStore } from '@/store';
+import { useHandleStart } from '@/hooks/use-handle-start';
 import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
@@ -14,17 +14,7 @@ import { ChevronDown, Play } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
     const router = useRouter()
-    const toggleModal = useApiUiStore((state) => state.toggleModal);
-    const hasGameData = useGameStore((state) => state.hasGameData);
-
-    const handleStartClick = () => {
-        if (hasGameData()) {
-            toggleModal('openContinueGameModel', true);
-        } else {
-            toggleModal('openOnbordingModel', true);
-        }
-    }
-
+    const { handleStartGame } = useHandleStart()
 
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16 overflow-hidden">
@@ -92,7 +82,7 @@ const HeroSection: React.FC = () => {
                 className="relative mt-10 flex flex-col items-stretch gap-3 w-full max-w-xs"
             >
                 {[
-                    { label: "START GAME", variant: "default" as const, onClick: handleStartClick },
+                    { label: "START GAME", variant: "default" as const, onClick: handleStartGame },
                     {
                         label: "HOW TO PLAY",
                         variant: "outline" as const,
