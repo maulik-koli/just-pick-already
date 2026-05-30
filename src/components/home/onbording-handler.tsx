@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useApiUiStore, useGameStore } from "@/store";
 import { onbordingSchema, OnbordingType } from "@/schemas/onbording.schema";
 import { useStartGame } from "@/hooks/api/mutation";
-import { Log } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 import OnbordingModel from "./onbording-model";
 import ContinueGameModel from "./continue-game-model";
@@ -19,6 +19,7 @@ const OnbordingHandler: React.FC = () => {
     const toggleModal = useApiUiStore((state) => state.toggleModal);
 
     const setStartGameData = useGameStore((state) => state.setStartGameData);
+    const toast = useToast()
 
     const { mutate: startGame, isPending: isSubmitting } = useStartGame();
 
@@ -36,7 +37,7 @@ const OnbordingHandler: React.FC = () => {
                 }
             },
             onError: (error) => {
-                Log("Error starting game:", error);
+                toast.error("Error starting game", error.message);
             },
         });
     };

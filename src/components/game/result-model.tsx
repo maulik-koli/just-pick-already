@@ -4,16 +4,13 @@ import { useRouter } from 'next/navigation'
 
 import { Result } from '@/schemas/result.schema'
 import { useGameStore } from '@/store'
-import { RESULT_LOADER_LINES, TRAIT_LABELS, ZONE_KEY_TO_COLOR, ZONE_KEY_TO_LABEL } from '@/constants/result-data'
+import { RESULT_LOADER_LINES, ZONE_KEY_TO_COLOR, ZONE_KEY_TO_LABEL } from '@/constants/result-data'
 
 import { AlertTriangle, Link2, MessageCircle, Sparkles, X as XIcon } from 'lucide-react'
 import Character from './character'
+import { DownloadPosterBtn } from './download-poster-btn'
+import { section, CardShell, IdentityHeader, SummaryCard, TraitScores, TopTraits } from './common-result-section'
 
-const section = (i: number) => ({
-    initial: { opacity: 0, y: 14 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.45, delay: 0.05 + i * 0.06, ease: [0.22, 1, 0.36, 1] as const },
-});
 
 interface ResultModelProps {
     open: boolean
@@ -34,6 +31,8 @@ const ResultModel: React.FC<ResultModelProps> = ({ open, onClose, data, isPendin
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [open, onClose]);
+
+
     return (
         <AnimatePresence>
             {open && (
@@ -49,7 +48,7 @@ const ResultModel: React.FC<ResultModelProps> = ({ open, onClose, data, isPendin
                         exit={{ scale: 0.95, opacity: 0 }}
                         transition={{ type: "spring", damping: 24, stiffness: 280 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="relative w-full max-w-[680px] dot-texture overflow-hidden bg-card rounded-[1.25rem] shadow-[0_25px_60px_rgba(0,0,0,0.15)]"
+                        className="relative w-full max-w-[800px] dot-texture overflow-hidden bg-card rounded-[1.25rem] shadow-[0_25px_60px_rgba(0,0,0,0.15)] modal-container-capture"
                     >
                         <button
                             onClick={onClose}
@@ -142,15 +141,16 @@ const ResultBody: React.FC<{ data: Result; onClose: () => void }> = ({ data, onC
         resetGame()
         onClose()
         router.push('/')
+        
     }
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="overflow-y-auto max-h-[92vh] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            className="overflow-y-auto max-h-[92vh] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-container-capture"
         >
-            <div className="flex flex-col gap-5 p-5 sm:p-7">
+            <div className="flex flex-col gap-5 p-5 sm:p-7 bg-card">
                 <IdentityHeader data={data} />
                 <SummaryCard text={data.summary} />
                 <TraitScores scores={data.scores} />
@@ -158,7 +158,7 @@ const ResultBody: React.FC<{ data: Result; onClose: () => void }> = ({ data, onC
                 <StrengthsBlindSpots strengths={data.strengths} blindSpots={data.blindSpots} />
                 <ZoneBreakdown insights={data.zoneInsights} />
                 <SurprisingChoice mc={data.mostSurprisingChoice} />
-                <ShareCard shareText={data.shareText} onPlayAgain={handlePlayAgain} />
+                <ShareCard shareText={data.shareText} data={data} onPlayAgain={handlePlayAgain} />
             </div>
         </motion.div>
     );
@@ -166,115 +166,53 @@ const ResultBody: React.FC<{ data: Result; onClose: () => void }> = ({ data, onC
 
 
 
-const CardShell: React.FC<{ children: React.ReactNode; className?: string; i: number }> = ({ children, className, i }) => (
-    <motion.div
-        {...section(i)}
-        className={`bg-card p-6 rounded-2xl border border-border shadow-[0_6px_20px_-14px_rgba(120,80,40,0.25)] ${className ?? ''}`}
-    >
-        {children}
-    </motion.div>
-);
 
-
-
-const IdentityHeader: React.FC<{ data: Result }> = ({ data }) => (
-    <motion.div
-        {...section(0)}
-        className="relative overflow-hidden p-7 text-white bg-primary rounded-2xl shadow-[0_10px_30px_-12px_rgba(244,98,58,0.45)]"
-    >
-        <div className="absolute inset-0 dot-texture opacity-70 pointer-events-none" />
-        <div className="absolute -right-6 -top-6 w-32 h-32 rounded-full bg-white/10" />
-        <div className="relative">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">{data.title}</h2>
-            <div className="my-3 h-[3px] w-12 rounded-full bg-white/55" />
-            <p className="text-base sm:text-lg font-medium text-white/88">
-                {data.subtitle}
-            </p>
-        </div>
-    </motion.div>
-);
-
-
-
-const SummaryCard: React.FC<{ text: string }> = ({ text }) => (
-    <CardShell i={1}>
-        <p className="text-[17px] leading-relaxed text-foreground">{text}</p>
-    </CardShell>
-);
-
-
-
-const TraitScores: React.FC<{ scores: Result["scores"] }> = ({ scores }) => (
-    <CardShell i={2}>
-        <h3 className="text-lg font-bold text-foreground mb-5">Your Profile</h3>
-        <div className="flex flex-col gap-3.5">
-            {TRAIT_LABELS.map(({ key, label }, idx) => {
-                const val = scores[key];
-                return (
-                    <div key={key} className="grid grid-cols-[110px_1fr_36px] items-center gap-3 sm:grid-cols-[140px_1fr_44px]">
-                        <span className="text-xs sm:text-sm text-muted-foreground capitalize">{label}</span>
-                        <div className="h-2.5 rounded-full overflow-hidden bg-secondary">
-                            <motion.div
-                                className="h-full rounded-full bg-linear-to-r from-primary to-accent"
-                                initial={{ width: 0 }}
-                                animate={{ width: `${val}%` }}
-                                transition={{ duration: 0.9, delay: 0.25 + idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                            />
-                        </div>
-                        <span className="text-sm font-bold text-right text-primary">{val}</span>
-                    </div>
-                );
-            })}
-        </div>
-    </CardShell>
-);
-
-
-
-const TopTraits: React.FC<{ traits: string[] }> = ({ traits }) => (
-    <CardShell i={3}>
-        <h3 className="text-lg font-bold text-foreground mb-4">Defining Traits</h3>
-        <div className="flex flex-wrap gap-2.5">
-            {traits.map((t, i) => (
-                <motion.span
-                    key={t}
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.35, delay: 0.4 + i * 0.07, type: "spring", stiffness: 280, damping: 18 }}
-                    className="px-4 py-1.5 rounded-full text-sm font-semibold text-white bg-primary"
-                >
-                    {t}
-                </motion.span>
-            ))}
-        </div>
-    </CardShell>
-);
 
 
 
 const StrengthsBlindSpots: React.FC<{ strengths: string[]; blindSpots: string[] }> = ({ strengths, blindSpots }) => (
     <motion.div {...section(4)} className="grid gap-5 sm:grid-cols-2">
-        <div className="p-6 bg-secondary border border-border rounded-2xl">
-            <h3 className="text-base font-bold mb-4 text-secondary-foreground">Strengths</h3>
-            <ul className="flex flex-col gap-3">
-                {strengths.map((s) => (
-                    <li key={s} className="flex gap-3 items-start text-foreground text-[15px] leading-snug">
-                        <span className="mt-1.5 w-2 h-2 rounded-full shrink-0 bg-primary" />
-                        <span>{s}</span>
-                    </li>
-                ))}
-            </ul>
+        <div className="p-6 bg-secondary/60 border border-border rounded-2xl relative overflow-hidden group">
+            <div className="absolute -top-4 -right-4 p-4 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-10 pointer-events-none">
+                <Sparkles className="w-24 h-24" />
+            </div>
+            <div className="relative">
+                <div className="flex items-center gap-2 mb-4">
+                    <span className="p-1.5 rounded-lg bg-primary/20 text-primary">
+                        <Sparkles className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-base font-bold text-foreground">Strengths</h3>
+                </div>
+                <ul className="flex flex-col gap-3">
+                    {strengths.map((s) => (
+                        <li key={s} className="flex gap-3 items-start text-muted-foreground text-[14px] sm:text-[15px] leading-snug">
+                            <span className="mt-2 w-1.5 h-1.5 rounded-full shrink-0 bg-primary" />
+                            <span className="font-medium text-foreground">{s}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
-        <div className="p-6 bg-muted border border-border rounded-2xl">
-            <h3 className="text-base font-bold mb-4 text-muted-foreground">Growth Edges</h3>
-            <ul className="flex flex-col gap-3">
-                {blindSpots.map((b) => (
-                    <li key={b} className="flex gap-3 items-start text-foreground text-[15px] leading-snug">
-                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-accent" />
-                        <span>{b}</span>
-                    </li>
-                ))}
-            </ul>
+        <div className="p-6 bg-muted/60 border border-border rounded-2xl relative overflow-hidden group">
+            <div className="absolute -top-4 -right-4 p-4 opacity-5 transition-transform duration-500 group-hover:scale-110 group-hover:opacity-10 pointer-events-none">
+                <AlertTriangle className="w-24 h-24" />
+            </div>
+            <div className="relative">
+                <div className="flex items-center gap-2 mb-4">
+                    <span className="p-1.5 rounded-lg bg-accent/20 text-accent">
+                        <AlertTriangle className="w-4 h-4" />
+                    </span>
+                    <h3 className="text-base font-bold text-foreground">Growth Edges</h3>
+                </div>
+                <ul className="flex flex-col gap-3">
+                    {blindSpots.map((b) => (
+                        <li key={b} className="flex gap-3 items-start text-muted-foreground text-[14px] sm:text-[15px] leading-snug">
+                            <span className="mt-2 w-1.5 h-1.5 rounded-full shrink-0 bg-accent" />
+                            <span className="font-medium text-foreground">{b}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     </motion.div>
 );
@@ -284,31 +222,47 @@ const StrengthsBlindSpots: React.FC<{ strengths: string[]; blindSpots: string[] 
 const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insights }) => {
     const entries = Object.entries(insights);
     return (
-        <CardShell i={5}>
-            <h3 className="text-lg font-bold text-foreground mb-4">Zone Breakdown</h3>
-            <div className="flex flex-col">
-                {entries.map(([key, text], idx) => (
-                    <div
-                        key={key}
-                        className={`py-4 ${idx !== 0 ? 'border-t border-border' : ''}`}
-                    >
-                        <div className="flex items-center gap-2.5 mb-1.5">
-                            <span
-                                className="w-3 h-3 rounded-full shrink-0"
-                                style={{
-                                    background: ZONE_KEY_TO_COLOR[key],
-                                    boxShadow: `inset 0 0 0 1.5px ${ZONE_KEY_TO_COLOR[key]}80`,
-                                }}
-                            />
-                            <span className="text-xs font-bold tracking-[0.12em] uppercase text-foreground">
-                                {ZONE_KEY_TO_LABEL[key] ?? key}
-                            </span>
-                        </div>
-                        <p className="text-[15px] text-muted-foreground leading-snug pl-[22px]">{text}</p>
-                    </div>
-                ))}
+        <motion.div {...section(5)} className="flex flex-col gap-4 mt-2">
+            <div className="flex items-center gap-4 px-2">
+                <div className="h-px bg-border flex-1" />
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em] shrink-0">Zone Breakdown</h3>
+                <div className="h-px bg-border flex-1" />
             </div>
-        </CardShell>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {entries.map(([key, text], idx) => {
+                    const color = ZONE_KEY_TO_COLOR[key] || "var(--primary)";
+                    const isLastOdd = idx === entries.length - 1 && entries.length % 2 !== 0;
+                    return (
+                        <div
+                            key={key}
+                            className={`relative p-5 sm:p-6 rounded-2xl bg-card border border-border overflow-hidden transition-colors hover:border-border/80 hover:bg-secondary/20 ${isLastOdd ? 'sm:col-span-2' : ''}`}
+                        >
+                            <div
+                                className="absolute top-0 left-0 w-full h-1"
+                                style={{ background: color }}
+                            />
+
+                            <div className="flex flex-col h-full mt-1">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span
+                                        className="w-2 h-2 rounded-full shrink-0"
+                                        style={{ background: color }}
+                                    />
+                                    <h4
+                                        className="text-[11px] font-black tracking-[0.15em] uppercase text-foreground"
+                                    >
+                                        {ZONE_KEY_TO_LABEL[key] ?? key}
+                                    </h4>
+                                </div>
+                                <p className="text-[14px] sm:text-[14.5px] leading-relaxed text-muted-foreground">
+                                    {text}
+                                </p>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </motion.div>
     );
 }
 
@@ -330,7 +284,7 @@ const SurprisingChoice: React.FC<{ mc: Result["mostSurprisingChoice"] }> = ({ mc
 
 
 
-const ShareCard: React.FC<{ shareText: string; onPlayAgain: () => void }> = ({ shareText, onPlayAgain }) => {
+const ShareCard: React.FC<{ shareText: string; data: Result; onPlayAgain: () => void }> = ({ shareText, data, onPlayAgain }) => {
     const [copied, setCopied] = useState(false);
 
     const copy = async () => {
@@ -351,12 +305,13 @@ const ShareCard: React.FC<{ shareText: string; onPlayAgain: () => void }> = ({ s
             <blockquote className="text-left p-5 mb-5 italic text-foreground bg-secondary border-l-3 border-l-primary rounded-lg">
                 &ldquo;{shareText}&rdquo;
             </blockquote>
-            <div className="flex flex-col sm:flex-row gap-2.5 justify-center mb-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 justify-center mb-4">
                 <ShareBtn onClick={copy} icon={<Link2 className="w-4 h-4" />}>
                     {copied ? "Copied!" : "Copy Link"}
                 </ShareBtn>
                 <ShareBtn asLink href={tw} icon={<XIcon className="w-4 h-4" />}>Twitter</ShareBtn>
                 <ShareBtn asLink href={wa} icon={<MessageCircle className="w-4 h-4" />}>WhatsApp</ShareBtn>
+                <DownloadPosterBtn data={data} />
             </div>
             <button
                 onClick={onPlayAgain}

@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist } from 'next/font/google';
 import { Analytics } from "@vercel/analytics/next"
+import { cn } from "@/lib/utils";
+import "@/style/globals.css";
 
 import AppProvider from "@/provider";
 import Header from "@/components/common/header";
-import { cn } from "@/lib/utils";
-import "@/style/globals.css";
 import OnbordingHandler from "@/components/home/onbording-handler";
+import { Toaster } from "@/components/ui/sonner";
+
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -15,7 +17,6 @@ const dmSans = DM_Sans({
   variable: '--font-dm-sans',
   weight: ['400', '500', '600', '700']
 });
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -40,6 +41,7 @@ export default function RootLayout({
               <OnbordingHandler />
             </main>
           </div>
+          <Toaster position="top-right" />
         </AppProvider>
       </body>
     </html>

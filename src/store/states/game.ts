@@ -12,9 +12,6 @@ type GameState = {
     answers: AnswersListItem[],
     isCompleted: boolean,
 
-    setSessionId: (id: string) => void,
-    setQuestions: (zones: ZonesQuestoins) => void,
-    setAnswers: (answers: AnswersListItem[]) => void,
     addAnswer: (answer: AnswersListItem) => void,
     rollbackAnswer: (answer: AnswersListItem, wasUpdate: boolean, oldOptionId: string | null) => void,
     setIsCompleted: (completed: boolean) => void,
@@ -30,9 +27,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
     answers: [],
     isCompleted: false,
 
-    setSessionId: (id) => set({ sessionId: id }),
-    setQuestions: (zones) => set({ zones }),
-    setAnswers: (answers) => set({ answers }),
     setIsCompleted: (completed) => set({ isCompleted: completed }),
     addAnswer: (answer) => {
         set((currentState) => {
@@ -77,7 +71,6 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
         const state = get();
         return !!state.sessionId && !!state.zones;
     },
-
     setStartGameData: (data, sessionId) => set({
         zones: data,
         isCompleted: false,

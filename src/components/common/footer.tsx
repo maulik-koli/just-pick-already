@@ -3,10 +3,10 @@ import React from 'react'
 import Link from 'next/link'
 
 const NAV_LINKS = [
-    { href: "#", label: "About" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
     { href: "#", label: "Privacy Policy" },
     { href: "#", label: "Terms and Conditions" },
-    { href: "/contact", label: "Contact" },
 ]
 
 
