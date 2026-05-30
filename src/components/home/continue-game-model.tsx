@@ -42,6 +42,32 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
 
     const isCompleted = data?.data?.isComplete
 
+    const getMessageData = () => {
+        const messageData: { 
+            title: string, 
+            message: string,
+            buttonText: string
+        } = {
+            title: 'Continue Game?',
+            message: 'We found an existing game session. Do you want to pick up where you left off or start a brand new game?',
+            buttonText: 'Continue Game',
+        }
+        if (pct === 100) {
+            if (!isCompleted) {
+                messageData.title = 'Almost Done!';
+                messageData.message = 'You have finished selecting all answers but have yet to submit and generate your final result.';
+                messageData.buttonText = 'Submit Answers';
+            }
+
+            messageData.title = 'Game Completed!';
+            messageData.message = 'You have already submitted your answers and your result has been generated.';
+            messageData.buttonText = 'View Result';
+
+        }
+
+        return messageData;
+    }
+
     const getContent = () => {
         if (isLoading) {
             return (
@@ -99,12 +125,10 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                 </div>
                 
                 <h2 className="text-2xl font-black leading-tight text-foreground mb-3">
-                    {pct === 100 && !isCompleted ? "Almost Done!" : "Continue Game?"}
+                    {getMessageData().title}
                 </h2>
                 <p className="text-sm text-muted-foreground mb-8">
-                    {pct === 100 && !isCompleted 
-                        ? "You have finished selecting all answers but have yet to submit and generate your final result." 
-                        : "We found an existing game session. Do you want to pick up where you left off or start a brand new game?"}
+                    {getMessageData().message}
                 </p>
 
                 <div className="w-full flex flex-col gap-3">
@@ -115,7 +139,7 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                         className="w-full h-14 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-shadow shadow-[0_4px_12px_rgba(244,98,58,0.2)] bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                         <Gamepad2 className="w-5 h-5" />
-                        <span className="text-base relative z-10">Continue Game</span>
+                        <span className="text-base relative z-10">{getMessageData().buttonText}</span>
                     </motion.button>
                     
                     <motion.button

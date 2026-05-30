@@ -1,18 +1,23 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+
 import { useGameStore, usePlayStore } from '@/store';
-import { cn, constGameProgress } from '@/lib/utils';
-import { ShinyButton } from '@/components/ui/shiny-button';
+import { useToast } from '@/hooks/use-toast';
 import { useGameResult } from '@/hooks/api/mutation';
+import { cn, constGameProgress } from '@/lib/utils';
+
 import ResultModel from './result-model';
+import { ShinyButton } from '@/components/ui/shiny-button';
 
 
 const CompletionButton: React.FC = () => {
   const answers = useGameStore((s) => s.answers);
   const sessionId = useGameStore((s) => s.sessionId);
+  const setIsCompleted = useGameStore((s) => s.setIsCompleted);
   const { activeZone } = usePlayStore()
 
   const { mutate, data, isPending, reset } = useGameResult();
+  const toast = useToast()
 
   const pct = constGameProgress(answers.length);
   const done = pct === 100
@@ -22,7 +27,14 @@ const CompletionButton: React.FC = () => {
 
   const handleClick = () => {
     if (!sessionId) return;
-    mutate(sessionId);
+    mutate(sessionId, {
+      onSuccess: () => {
+        setIsCompleted(true)
+      },
+      onError: (error) => {
+        toast.error("Faild to submit", error.message)
+      }
+    });
   }
 
   const handleClose = () => {

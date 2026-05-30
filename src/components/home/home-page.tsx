@@ -1,5 +1,5 @@
 import React from 'react'
-import AdBlock from '../common/ad-block'
+// import AdBlock from '../common/ad-block'
 import Footer from '../common/footer'
 import { 
     HeroSection, 
@@ -25,7 +25,7 @@ const HomePageCom: React.FC = () => {
                 <ResultCardSection />
                 <ZoneSections />
                 <EndCardSection />
-                <AdBlock />
+                {/* <AdBlock /> */}
                 <Footer />
             </div>
         </div>

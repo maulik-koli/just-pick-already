@@ -13,7 +13,7 @@ import CompletionButton from './completion-btn';
 import { GameControlles, GameProgress } from './game-hud';
 
 
-const GameScreen: React.FC = () => {
+const GameScreenInner: React.FC = () => {
     const zone = useGameStore(state => state.zones)
     const answers = useGameStore(state => state.answers)
     const { x, y, facing, isMoving, activeZone, openZone } = usePlayStore();
@@ -30,6 +30,7 @@ const GameScreen: React.FC = () => {
     const insideZone = ZONESS_STAICS_DATA.find(
         (z) => cx >= z.x && cx <= z.x + z.w && cy >= z.y && cy <= z.y + z.h,
     );
+    
     let isInsideCompletedZone = false;
     if (insideZone && zone) {
         const zoneData = zone.find(zd => zd.zone === insideZone.id);
@@ -54,12 +55,10 @@ const GameScreen: React.FC = () => {
     }, [insideZone, isInsideCompletedZone, activeZone, openZone]);
 
 
-    if (!zone) return <NoGameData />
-
     return (
         <div
             ref={containerRef}
-            className="relative w-screen h-screen overflow-hidden! select-none bg-[#F5F0E8] scroll-disable"
+            className="relative w-full h-dvh overflow-hidden! select-none bg-[#F5F0E8] scroll-disable"
         >
             <GameProgress pct={pct} />
 
@@ -125,7 +124,7 @@ const GameScreen: React.FC = () => {
                 {ZONESS_STAICS_DATA.map((z) => {
                     const s = ZONE_STYLES[z.id];
                     
-                    const zoneData = zone.find(zd => zd.zone === z.id);
+                    const zoneData = zone?.find(zd => zd.zone === z.id);
                     let done = false;
                     if (zoneData) {
                         const answeredCount = zoneData.questions.filter(q => 
@@ -267,6 +266,15 @@ const GameScreen: React.FC = () => {
             <CompletionButton />
         </div>
     );
+}
+
+const GameScreen: React.FC = () => {
+    const zone = useGameStore(state => state.zones)
+    
+    // only render the game engine if zones are loaded
+    if (!zone) return <NoGameData />
+    
+    return <GameScreenInner />
 }
 
 export default GameScreen

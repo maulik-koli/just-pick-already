@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { useGameStore, usePlayStore } from '@/store'
 import { useSyncAnswer } from '@/hooks/api/mutation'
+import { useToast } from '@/hooks/use-toast'
 import { QuestionZone, QuestionOption } from '@/schemas/questionGenerationSchema.schema'
 import { AnswersListItem } from '@/app/api/_types'
 import { ZONESS_STAICS_DATA, WORLD_WIDTH, WORLD_HEIGHT, ZONE_STYLES } from '@/constants/game-zones'
@@ -29,6 +30,7 @@ const QuestionModel: React.FC = () => {
     const open = !!activeZone;
     
     const [zone, setZone] = useState<QuestionZone | null>(null);
+    const toast = useToast()
 
     useEffect(() => {
         if (activeZone && zones) {
@@ -148,6 +150,7 @@ const QuestionModel: React.FC = () => {
                 { 
                     onError: (err) => {
                         Log("Answer sync failed", err);
+                        toast.error("Error", "Failed to save your answer. Please try again.")
                         useGameStore.getState().rollbackAnswer(
                             answer, 
                             wasUpdate, 
