@@ -1,3 +1,4 @@
+import { AppError } from "@/app/api/_error";
 import { Answer } from "@/generated/prisma/client";
 import { ai, AI_MODEL } from "@/lib/ai";
 import { AnswerPayloadItem, generateResultPrompt } from "@/prompts/generate-result.prompt";
@@ -23,7 +24,7 @@ export const getResult = async (
         const question = questionMap.get(answer.questionId);
         
         if (!question) {
-            throw new Error(`Question not found for ID: ${answer.questionId}`);
+            throw new AppError(`Question not found for ID: ${answer.questionId}`, 404, "RESOURCE_NOT_FOUND");
         }
 
         return {
@@ -51,7 +52,7 @@ export const getResult = async (
     const rawText = response.text;
 
     if (!rawText) {
-        throw new Error("Gemini returned an empty response.");
+        throw new AppError("Gemini returned an empty response.");
     }
 
     const parsed = JSON.parse(rawText);

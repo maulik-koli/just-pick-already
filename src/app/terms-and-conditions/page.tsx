@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Metadata } from "next";
+import TermsAndConditionsPageComp from "@/components/legal-pages/terms-and-conditions-page";
 
-const TermsAndConditionsPage: React.FC = () => {
-    return (
-        <div>TermsAndConditionsPage</div>
-    )
+export const metadata: Metadata = {
+  title: "Terms and Conditions | Just Pick Already",
+  description: "Terms and Conditions for Just Pick Already. Please read these terms before using the site.",
 }
 
-export default TermsAndConditionsPage
+const TermsAndConditionsPage: React.FC = () => {
+    return <TermsAndConditionsPageComp />
+}
+
+export default TermsAndConditionsPage;

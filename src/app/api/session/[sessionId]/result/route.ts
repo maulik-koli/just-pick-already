@@ -7,7 +7,7 @@ import { getResult } from "@/service/result";
 import { Result } from "@/schemas/result.schema";
 
 import { ResultResponse } from "@/app/api/_types";
-import { apiWrapper } from "@/app/api/_error";
+import { apiWrapper, AppError } from "@/app/api/_error";
 
 interface RouteParams {
     params: Promise<{
@@ -28,7 +28,7 @@ export const POST = apiWrapper(async (_request: NextRequest, { params }: RoutePa
     })
 
     if (!sessionData) {
-        throw new Error("Session not found")
+        throw new AppError("Session not found, please restart the game", 404, "RESOURCE_NOT_FOUND")
     }
 
     const { answers, results, ...session } = sessionData
@@ -91,12 +91,12 @@ function validateSessionAns(questionData: QuestionGeneration , answers: Answer[]
     );
 
     if (hasInvalidAnswers) {
-        throw new Error("Invalid answers detected")
+        throw new AppError("Invalid answers detected", 400, "BAD_REQUEST")
     }
 
     const isComplete  = allQuestionIds.length === answers.length;
 
     if (!isComplete) {
-        throw new Error("There are still some unsnwers yet to select")
+        throw new AppError("There are still some unsnwers yet to select", 400, "BAD_REQUEST")
     }
 }

@@ -1,3 +1,4 @@
+import { AppError } from "@/app/api/_error"
 import { ai, AI_MODEL } from "@/lib/ai"
 import { generateQuestionsPrompt } from "@/prompts/generate-questions.prompt"
 import { generateQuestionsResponseSchema } from "@/prompts/generate-questions.response-schema"
@@ -21,7 +22,7 @@ export const getQuestions = async (payload: OnbordingType) => {
     const rawText = response.text;
 
     if (!rawText) {
-        throw new Error("Gemini returned an empty response.");
+        throw new AppError("Gemini returned an empty response.");
     }
 
     const parsed = JSON.parse(rawText);

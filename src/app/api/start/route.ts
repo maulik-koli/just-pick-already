@@ -7,7 +7,7 @@ import { getQuestions } from "@/service/questions";
 import { QuestionGeneration, questionGenerationSchema } from "@/schemas/questionGenerationSchema.schema";
 
 import { StartGamePayload, StartGameResponse } from "../_types";
-import { apiWrapper } from "../_error";
+import { apiWrapper, AppError } from "../_error";
 
 
 export const POST = apiWrapper(async (request: NextRequest) => {
@@ -46,7 +46,7 @@ export const POST = apiWrapper(async (request: NextRequest) => {
     const result = await questionGenerationSchema.safeParseAsync(mapQuestions)
 
     if (!result.success) {
-        throw new Error("Unable to generate valid questions. Please try again later")
+        throw new AppError("Unable to generate valid questions. Please try again later", 400, "BAD_REQUEST")
     }
 
     // create session
