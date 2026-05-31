@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { useHandleStart } from "@/hooks/use-handle-start";
 
-const allowedPaths = ["/", "/about", "/contact"];
+const allowedPaths = ["/", "/about", "/contact", "/privacy-policy", "/terms-and-conditions"];
 
 const Header: React.FC = () => {
     const pathname = usePathname();

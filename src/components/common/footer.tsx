@@ -5,8 +5,8 @@ import Link from 'next/link'
 const NAV_LINKS = [
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-    { href: "#", label: "Privacy Policy" },
-    { href: "#", label: "Terms and Conditions" },
+    { href: "/privacy-policy", label: "Privacy Policy" },
+    { href: "/terms-and-conditions", label: "Terms and Conditions" },
 ]
 
 
