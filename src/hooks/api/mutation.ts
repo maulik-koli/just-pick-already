@@ -3,7 +3,7 @@ import { MutationOptions } from "@/types/api";
 import { MUTATION_REGISTRY } from "@/constants/api-registery";
 
 import { gameResult, startGame, syncAnswer } from "./services";
-import { ResultResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/app/api/_types";
+import { ResultCreateResponse, ResultResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/app/api/_types";
 
 
 export const useStartGame = (
@@ -27,7 +27,7 @@ export const useSyncAnswer = (
 };
 
 export const useGameResult = (
-  options?: MutationOptions<ResultResponse, string>,
+  options?: MutationOptions<ResultCreateResponse, string>,
 ) => {
   return useMutation({
     mutationKey: [MUTATION_REGISTRY.gameResult],

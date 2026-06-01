@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -14,6 +15,7 @@ import LoadingScreen from "../game/loading-screen";
 
 
 const OnbordingHandler: React.FC = () => {
+    const router = useRouter();
     const openOnbordingModel = useApiUiStore((state) => state.openOnbordingModel);
     const openContinueGameModel = useApiUiStore((state) => state.openContinueGameModel);
     const toggleModal = useApiUiStore((state) => state.toggleModal);
@@ -34,6 +36,7 @@ const OnbordingHandler: React.FC = () => {
                     const { zones, sessionId } = data.data;
                     setStartGameData(zones, sessionId);
                     toggleModal('openOnbordingModel', false);
+                    router.push("/game");
                 }
             },
             onError: (error) => {

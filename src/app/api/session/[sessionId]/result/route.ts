@@ -6,7 +6,7 @@ import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
 import { getResult } from "@/service/result";
 import { Result } from "@/schemas/result.schema";
 
-import { ResultResponse } from "@/app/api/_types";
+import { ResultCreateResponse, ResultResponse } from "@/app/api/_types";
 import { apiWrapper, AppError } from "@/app/api/_error";
 
 interface RouteParams {
@@ -33,13 +33,13 @@ export const POST = apiWrapper(async (_request: NextRequest, { params }: RoutePa
 
     const { answers, results, ...session } = sessionData
 
-    // if result already exists, return it instead of generating a new one
+    // if result already exists
     if (results && results.length > 0) {
-        const resData: ResultResponse = {
+        const resData: ResultCreateResponse = {
             code: "OK",
-            message: "Successfully fetched existing result",
+            message: "Result already exists ",
             success: true,
-            data: results[0].resultData as unknown as Result
+            data: null
         };
 
         return NextResponse.json(resData, { status: 200 });
@@ -67,15 +67,49 @@ export const POST = apiWrapper(async (_request: NextRequest, { params }: RoutePa
         })
     ]);
 
-    const resData: ResultResponse = {
+    const resData: ResultCreateResponse = {
         code: "OK",
         message: "Successfully generated result",
         success: true,
-        data: resultData
+        data: null
     };
 
     return NextResponse.json(resData, { status: 200 });
 });
+
+
+
+export const GET = apiWrapper(async (_request: NextRequest, { params }: RouteParams) => {
+    const { sessionId } = await params
+
+    const sessionData = await prisma.session.findUnique({
+        where: { id: sessionId },
+        include: {
+            results: true
+        }
+    })
+
+    if (!sessionData) {
+        throw new AppError("Session not found, please restart the game", 404, "RESOURCE_NOT_FOUND")
+    }
+
+    const { results, ...session } = sessionData
+
+    if ((results && results.length === 0) || !session.completed) {
+        throw new AppError("Your game session is still unfinished, please finish game and submit your answers", 404, "RESOURCE_NOT_FOUND")
+    }
+
+    const resData: ResultResponse = {
+        code: "OK",
+        message: "Successfully fetched existing result",
+        success: true,
+        data: results[0].resultData as unknown as Result
+    };
+
+    return NextResponse.json(resData, { status: 200 });
+})
+
+
 
 
 
