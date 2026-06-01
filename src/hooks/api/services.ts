@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { ResultResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/app/api/_types";
+import { ResultCreateResponse, ResultResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/app/api/_types";
 
 
 export const startGame = async (payload: StartGamePayload): Promise<StartGameResponse> => {
@@ -17,7 +17,12 @@ export const syncAnswer = async (payload: UpdateAnswerPayload): Promise<UpdateAn
   return response.data;
 };
 
-export const gameResult = async (sessionId: string): Promise<ResultResponse> => {
+export const gameResult = async (sessionId: string): Promise<ResultCreateResponse> => {
   const response = await api.post(`/session/${sessionId}/result`, undefined);
+  return response.data;
+};
+
+export const getResult = async (sessionId: string): Promise<ResultResponse> => {
+  const response = await api.get(`/session/${sessionId}/result`);
   return response.data;
 };

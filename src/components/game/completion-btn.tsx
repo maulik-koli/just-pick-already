@@ -1,35 +1,35 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
 
 import { useGameStore, usePlayStore } from '@/store';
 import { useToast } from '@/hooks/use-toast';
 import { useGameResult } from '@/hooks/api/mutation';
 import { cn, constGameProgress } from '@/lib/utils';
 
-import ResultModel from './result-model';
+import GameSpinoverlay from './game-spinoverly';
 import { ShinyButton } from '@/components/ui/shiny-button';
 
 
 const CompletionButton: React.FC = () => {
+  const router = useRouter()
   const answers = useGameStore((s) => s.answers);
   const sessionId = useGameStore((s) => s.sessionId);
   const setIsCompleted = useGameStore((s) => s.setIsCompleted);
   const { activeZone } = usePlayStore()
 
-  const { mutate, data, isPending, reset } = useGameResult();
+  const { mutate, isPending } = useGameResult();
   const toast = useToast()
 
   const pct = constGameProgress(answers.length);
   const done = pct === 100
-
-  const resultData = data?.data ?? null;
-  const modalOpen = isPending || !!resultData;
 
   const handleClick = () => {
     if (!sessionId) return;
     mutate(sessionId, {
       onSuccess: () => {
         setIsCompleted(true)
+        router.push(`/results?session=${sessionId}`)
       },
       onError: (error) => {
         toast.error("Faild to submit", error.message)
@@ -37,15 +37,11 @@ const CompletionButton: React.FC = () => {
     });
   }
 
-  const handleClose = () => {
-    reset();
-  }
-
 
   return (
     <>
       <AnimatePresence>
-        {done && !activeZone && !modalOpen && (
+        {done && !activeZone && !isPending && (
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,12 +63,9 @@ const CompletionButton: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <ResultModel
-        open={modalOpen}
-        onClose={handleClose}
-        data={resultData}
-        isPending={isPending}
-      />
+      <AnimatePresence>
+        {isPending && <GameSpinoverlay />}
+      </AnimatePresence>
     </>
   )
 }

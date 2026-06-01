@@ -1,11 +1,12 @@
-import { AppError } from "@/app/api/_error";
-import { Answer } from "@/generated/prisma/client";
 import { ai, AI_MODEL } from "@/lib/ai";
+import { Answer } from "@/generated/prisma/client";
 import { AnswerPayloadItem, generateResultPrompt } from "@/prompts/generate-result.prompt";
-import { generateResultResponseSchema } from "@/prompts/generate-result.response";
+// import { generateResultResponseSchema } from "@/prompts/generate-result.response";
+
 import { OnbordingType } from "@/schemas/onbording.schema";
-import { Question, QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
 import { resultSchema } from "@/schemas/result.schema";
+import { Question, QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
+import { AppError } from "@/app/api/_error";
 
 
 export const getResult = async (
@@ -44,7 +45,7 @@ export const getResult = async (
         contents: prompt,
         config: {
             responseMimeType: "application/json",
-            responseSchema: generateResultResponseSchema,
+            // responseSchema: generateResultResponseSchema,
             temperature: 1,
         },
     })

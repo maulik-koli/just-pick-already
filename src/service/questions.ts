@@ -1,33 +1,42 @@
-import { AppError } from "@/app/api/_error"
 import { ai, AI_MODEL } from "@/lib/ai"
 import { generateQuestionsPrompt } from "@/prompts/generate-questions.prompt"
-import { generateQuestionsResponseSchema } from "@/prompts/generate-questions.response-schema"
-import { OnbordingType } from "@/schemas/onbording.schema"
 import { questionGenerationSchema } from "@/schemas/questionGenerationSchema.schema"
+// import { generateQuestionsResponseSchema } from "@/prompts/generate-questions.response-schema"
+
+import { OnbordingType } from "@/schemas/onbording.schema"
+import { AppError } from "@/app/api/_error"
 
 
 export const getQuestions = async (payload: OnbordingType) => {
-    const prompt = generateQuestionsPrompt(payload)
-
-    const response = await ai.models.generateContent({
-        model: AI_MODEL,
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
-            responseSchema: generateQuestionsResponseSchema,
-            temperature: 1,
-        },
-    })
-
-    const rawText = response.text;
-
-    if (!rawText) {
-        throw new AppError("Gemini returned an empty response.");
+    try {
+        const prompt = generateQuestionsPrompt(payload)
+    
+        const response = await ai.models.generateContent({
+            model: AI_MODEL,
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                // responseSchema: generateQuestionsResponseSchema,
+                temperature: 1,
+                thinkingConfig: {
+                    thinkingBudget: 0
+                }
+            },
+        })
+    
+        const rawText = response.text;
+    
+        if (!rawText) {
+            throw new AppError("Gemini ubable to generate data.");
+        }
+    
+        const parsed = JSON.parse(rawText);
+    
+        const validated = questionGenerationSchema.parse(parsed);
+    
+        return validated;
     }
-
-    const parsed = JSON.parse(rawText);
-
-    const validated = questionGenerationSchema.parse(parsed);
-
-    return validated;
+    catch(e) {
+        throw new AppError("Gemini ubable to generate data.");
+    }
 }

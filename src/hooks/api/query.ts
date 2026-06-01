@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryOptions } from "@/types/api";
 import { QUERY_REGISTRY } from "@/constants/api-registery";
 
-import { getSession } from "./services";
-import { StartGameResponse } from "@/app/api/_types";
+import { getSession, getResult } from "./services";
+import { ResultResponse, StartGameResponse } from "@/app/api/_types";
 
 
 export const useGetSession = (
@@ -13,6 +13,20 @@ export const useGetSession = (
     return useQuery({
         queryKey: [QUERY_REGISTRY.getSession, sessionId],
         queryFn: () => getSession(sessionId!),
+        enabled: !!sessionId,
+        retry: false,
+        ...options,
+    });
+};
+
+
+export const useGetResult = (
+    sessionId: string | null,
+    options?: QueryOptions<ResultResponse>,
+) => {
+    return useQuery({
+        queryKey: [QUERY_REGISTRY.getResult, sessionId],
+        queryFn: () => getResult(sessionId!),
         enabled: !!sessionId,
         retry: false,
         ...options,
