@@ -17,7 +17,7 @@ const ResultCardSection: React.FC = () => {
                 </Reveal>
 
                 <Reveal delay={0.1}>
-                    <div className="relative h-[340px] sm:h-[380px] flex items-center justify-center group">
+                    <div className="relative h-[340px] sm:h-[380px] flex items-center justify-center group max-md:scale-[0.85] max-sm:scale-[0.70]">
                         {PERSONAS.map((p, i) => {
                             const offset = (i - (PERSONAS.length - 1) / 2) * 90;
                             return (
