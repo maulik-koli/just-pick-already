@@ -12,9 +12,9 @@ const NAV_LINKS = [
 
 const Footer: React.FC = () => {
     return (
-        <footer className="px-4 py-8 border-t bg-muted text-muted-foreground">
-            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+        <footer className="px-4 py-8 max-md:py-6 border-t bg-muted text-muted-foreground">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 max-md:text-center">
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 max-md:gap-x-4 text-sm text-muted-foreground">
                     {NAV_LINKS.map(li => (
                         <Link key={li.label} href={li.href} className="hover:underline">
                             {li.label}

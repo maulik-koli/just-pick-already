@@ -1,16 +1,21 @@
-import React, { useRef } from 'react'
-import * as htmlToImage from 'html-to-image'
-import { Download } from 'lucide-react'
+'use client'
+import React, { useRef, useState } from 'react'
+import { Download, Loader2 } from 'lucide-react'
 
 import { Result } from '@/schemas/result.schema'
 import { IdentityHeader, SummaryCard, TraitScores, TopTraits } from './common-result-section'
 
 export const DownloadPosterBtn: React.FC<{ data: Result }> = ({ data }) => {
+    const cls = "inline-flex items-center justify-center gap-2 px-5 h-11 rounded-full border-2 border-white/40 text-sm font-semibold transition-all cursor-pointer text-white bg-white/10 hover:bg-white hover:text-primary hover:border-white backdrop-blur-sm"
+
     const posterRef = useRef<HTMLDivElement>(null)
+    const [isDownloading, setIsDownloading] = useState(false)
 
     const handleDownloadPng = async () => {
-        if (!posterRef.current) return;
+        if (!posterRef.current || isDownloading) return;
+        setIsDownloading(true);
         try {
+            const htmlToImage = await import('html-to-image');
             const dataUrl = await htmlToImage.toPng(posterRef.current, {
                 pixelRatio: 2,
                 backgroundColor: 'transparent',
@@ -21,18 +26,21 @@ export const DownloadPosterBtn: React.FC<{ data: Result }> = ({ data }) => {
             a.click();
         } catch (e) {
             console.error("Failed to generate image", e);
+        } finally {
+            setIsDownloading(false);
         }
     }
-
 
 
     return (
         <>
             <button
                 onClick={handleDownloadPng}
-                className="inline-flex items-center justify-center gap-2 px-4 h-10 rounded-full border-2 border-primary text-sm font-semibold transition-colors cursor-pointer text-primary bg-transparent hover:bg-primary hover:text-white"
+                className={cls}
+                disabled={isDownloading}
             >
-                <Download className="w-4 h-4" /><span>Save as PNG</span>
+                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                <span>{isDownloading ? "Saving..." : "Save as PNG"}</span>
             </button>
 
             <div className="absolute w-0 h-0 overflow-hidden pointer-events-none">

@@ -16,7 +16,7 @@ const ZoneSections: React.FC = () => {
                     description='Each one tests a different side of you.'
                 />
             </Reveal>
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                 {ZONES_SECTION_DATA.map((z, i) => (
                     <Reveal key={z.name} delay={i * 0.06}>
                         <motion.div

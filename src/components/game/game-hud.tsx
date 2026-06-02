@@ -84,7 +84,7 @@ export const GameControlles: React.FC = () => {
                 className="absolute top-4 right-4 z-30 md:hidden rounded-full px-3 py-1.5 text-[10px] text-white"
                 style={{ backgroundColor: "rgba(26,26,26,0.75)" }}
             >
-                tap a zone to begin
+                move into a zone using joystick
             </div>
         </>
 

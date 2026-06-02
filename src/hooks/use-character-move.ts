@@ -12,6 +12,7 @@ export const useCharacterMove = () => {
     const [viewport, setViewport] = useState<{ w: number, h:number }>({ w: 1200, h: 800 });
 
     const keys = useRef<Record<string, boolean>>({});
+    const joystick = useRef<{ dx: number, dy: number }>({ dx: 0, dy: 0 });
     const raf = useRef<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -49,13 +50,16 @@ export const useCharacterMove = () => {
                 return;
             }
 
-            const k = keys.current;
-            let dx = 0;
-            let dy = 0;
-            if (k["arrowup"] || k["w"]) dy -= 1;
-            if (k["arrowdown"] || k["s"]) dy += 1;
-            if (k["arrowleft"] || k["a"]) dx -= 1;
-            if (k["arrowright"] || k["d"]) dx += 1;
+            let dx = joystick.current.dx;
+            let dy = joystick.current.dy;
+
+            if (dx === 0 && dy === 0) {
+                const k = keys.current;
+                if (k["arrowup"] || k["w"]) dy -= 1;
+                if (k["arrowdown"] || k["s"]) dy += 1;
+                if (k["arrowleft"] || k["a"]) dx -= 1;
+                if (k["arrowright"] || k["d"]) dx += 1;
+            }
 
             const moving = dx !== 0 || dy !== 0;
             let nx = state.x;
@@ -64,10 +68,11 @@ export const useCharacterMove = () => {
 
             if (moving) {
                 const len = Math.hypot(dx, dy);
-                nx = Math.max(0, Math.min(WORLD_WIDTH - CHAR_W, state.x + (dx / len) * SPEED));
-                ny = Math.max(0, Math.min(WORLD_HEIGHT - CHAR_H, state.y + (dy / len) * SPEED));
-                if (dx > 0) face = "right";
-                else if (dx < 0) face = "left";
+                const speedMult = len > 0 ? (len > 1 ? 1 / len : 1) : 0; 
+                nx = Math.max(0, Math.min(WORLD_WIDTH - CHAR_W, state.x + dx * speedMult * SPEED));
+                ny = Math.max(0, Math.min(WORLD_HEIGHT - CHAR_H, state.y + dy * speedMult * SPEED));
+                if (dx > 0.1) face = "right";
+                else if (dx < -0.1) face = "left";
             }
 
             if (moving || state.isMoving !== moving) {
@@ -106,6 +111,7 @@ export const useCharacterMove = () => {
 
     return {
         viewport,
-        containerRef
+        containerRef,
+        joystick
     }
 }

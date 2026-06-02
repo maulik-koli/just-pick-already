@@ -10,6 +10,7 @@ import Character from './character';
 import QuestionModel from './questoin-model';
 import NoGameData from './no-game-data';
 import CompletionButton from './completion-btn';
+import { VirtualJoystick } from './virtual-joystick';
 import { GameControlles, GameProgress } from './game-hud';
 
 
@@ -17,7 +18,7 @@ const GameScreenInner: React.FC = () => {
     const zone = useGameStore(state => state.zones)
     const answers = useGameStore(state => state.answers)
     const { x, y, facing, isMoving, activeZone, openZone } = usePlayStore();
-    const { containerRef, viewport } = useCharacterMove()
+    const { containerRef, viewport, joystick } = useCharacterMove()
 
     const cx = x + CHAR_W / 2;
     const cy = y + CHAR_H / 2;
@@ -63,6 +64,8 @@ const GameScreenInner: React.FC = () => {
             <GameProgress pct={pct} />
 
             <GameControlles />
+
+            <VirtualJoystick onChange={(v) => { joystick.current = v; }} />
 
             <motion.div
                 className="absolute top-0 left-0"
@@ -244,20 +247,25 @@ const GameScreenInner: React.FC = () => {
 
             <AnimatePresence>
                 {isInsideCompletedZone && !activeZone && (
-                    <motion.div 
+                    <motion.button 
                         initial={{ opacity: 0, y: -20, x: "-50%" }}
                         animate={{ opacity: 1, y: 0, x: "-50%" }}
                         exit={{ opacity: 0, y: -20, x: "-50%" }}
-                        className="absolute top-10 left-1/2 bg-[#F5F0E8]/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-md border border-[rgba(139,115,85,0.2)] flex items-center gap-2 z-40 pointer-events-none"
+                        className="absolute top-10 left-1/2 bg-[#F5F0E8]/90 backdrop-blur-sm px-3 md:py-1.5 py-2 rounded-full shadow-md border border-[rgba(139,115,85,0.2)] flex items-center gap-2 z-40 cursor-pointer pointer-events-auto"
                         style={{ boxShadow: '0 4px 12px rgba(139,115,85,0.1)' }}
+                        onClick={() => { if (insideZone) openZone(insideZone.id); }}
                     >
-                        <div className="w-5 h-5 rounded-[0.25rem] bg-[#E8DCC8] border border-[rgba(139,115,85,0.3)] flex items-center justify-center font-bold text-[10px] text-[#5C4A36] shadow-sm">
+                        <div className="hidden md:flex w-5 h-5 rounded-[0.25rem] bg-[#E8DCC8] border border-[rgba(139,115,85,0.3)] items-center justify-center font-bold text-[10px] text-[#5C4A36] shadow-sm">
                             E
                         </div>
-                        <span className="text-[10px] font-extrabold text-[#5C4A36]/80 tracking-[0.05em] uppercase pr-1">
+                        <span className="hidden md:inline text-[10px] font-extrabold text-[#5C4A36]/80 tracking-[0.05em] uppercase pr-1">
                             Revisit Zone
                         </span>
-                    </motion.div>
+                        
+                        <span className="md:hidden text-[11px] font-extrabold text-[#5C4A36] tracking-[0.05em] uppercase px-2">
+                            Tap here to revisit
+                        </span>
+                    </motion.button>
                 )}
             </AnimatePresence>
 

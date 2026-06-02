@@ -124,6 +124,7 @@ const OsuCircles: React.FC<OsuCirclesProps> = ({ active, onScoreChange }) => {
     const comboRef = useRef(0)
     const scoreRef = useRef(0)
     const activeRef = useRef(active)
+    const clickedCirclesRef = useRef<Set<number>>(new Set())
     const spawnTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     // keep activeRef in sync
@@ -169,6 +170,7 @@ const OsuCircles: React.FC<OsuCirclesProps> = ({ active, onScoreChange }) => {
         e.stopPropagation()
         e.preventDefault()
 
+        clickedCirclesRef.current.add(circle.id)
         setCircles(prev => prev.filter(c => c.id !== circle.id))
 
         const elapsed = Date.now() - circle.born
@@ -196,15 +198,13 @@ const OsuCircles: React.FC<OsuCirclesProps> = ({ active, onScoreChange }) => {
 
         // auto-expire after LIFETIME
         setTimeout(() => {
-            setCircles(prev => {
-                const exists = prev.find(c => c.id === id)
-                if (exists) {
-                    comboRef.current = 0
-                    onScoreChangeRef.current?.({ score: scoreRef.current, combo: 0 })
-                    showFloat(x, y, 'Miss', '#E24B4A')
-                }
-                return prev.filter(c => c.id !== id)
-            })
+            if (!clickedCirclesRef.current.has(id) && activeRef.current) {
+                comboRef.current = 0
+                onScoreChangeRef.current?.({ score: scoreRef.current, combo: 0 })
+                showFloat(x, y, 'Miss', '#E24B4A')
+                setCircles(prev => prev.filter(c => c.id !== id))
+            }
+            clickedCirclesRef.current.delete(id)
         }, LIFETIME)
 
         // schedule next spawn
