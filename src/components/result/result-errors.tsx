@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGameStore } from "@/store";
 import { AlertTriangle, Gamepad2, Home, SearchX, ServerCrash } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 
 interface ResultErrorScreenProps {
     error: { code?: string; message?: string } | null
@@ -23,8 +25,7 @@ const ResultErrorScreen: React.FC<ResultErrorScreenProps> = ({ error, sessionId 
     const isResultNotFound = errorMessage.toLowerCase().includes("unfinished") ||
         errorMessage.toLowerCase().includes("result") && errorMessage.toLowerCase().includes("not found")
 
-    // Show redirect to /game only if result not found AND user has game data on this device
-    // AND the stored session matches the requested session
+
     const canContinueGame = isResultNotFound &&
         hasGameData() &&
         storedSessionId === sessionId
@@ -70,7 +71,7 @@ const ResultErrorScreen: React.FC<ResultErrorScreenProps> = ({ error, sessionId 
                         onClick={() => router.push('/game')}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.98 }}
-                        className="flex-1 h-12 inline-flex items-center justify-center gap-2 font-bold rounded-xl transition-all bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_4px_12px_rgba(244,98,58,0.2)] cursor-pointer"
+                        className={cn(buttonVariants({ variant: "default", size: "lg" }), "flex-1 h-10")}
                     >
                         <Gamepad2 className="w-4 h-4" />
                         <span className="text-sm">Continue Game</span>
@@ -81,7 +82,7 @@ const ResultErrorScreen: React.FC<ResultErrorScreenProps> = ({ error, sessionId 
                     onClick={() => router.push('/')}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex-1 h-12 inline-flex items-center justify-center gap-2 font-bold rounded-xl transition-all bg-card border-2 border-border text-foreground hover:bg-secondary hover:border-primary/50 cursor-pointer"
+                    className={cn(buttonVariants({ variant: "outline", size: "lg" }), "flex-1 h-10")}
                 >
                     <Home className="w-4 h-4" />
                     <span className="text-sm">Go Home</span>

@@ -41,6 +41,7 @@ const QuestionModel: React.FC = () => {
 
     const [step, setStep] = useState(0)
     const [direction, setDirection] = useState(1)
+    const [isTransitioning, setIsTransitioning] = useState(false)
 
     const handleCloseModal = () => {
         if (!activeZone) {
@@ -101,6 +102,7 @@ const QuestionModel: React.FC = () => {
             const startIdx = nextIdx === -1 ? 0 : nextIdx;
             setStep(startIdx);
             setDirection(1);
+            setIsTransitioning(false);
         }
     }, [open, zone]);
 
@@ -123,7 +125,8 @@ const QuestionModel: React.FC = () => {
     const { mutate: syncAnswerMutate } = useSyncAnswer();
 
     const handleSelectOption = (option: QuestionOption) => {
-        if (!zone) return;
+        if (!zone || isTransitioning) return;
+        setIsTransitioning(true);
         const currentQuestion = zone.questions[step];
 
         const currentState = useGameStore.getState();
@@ -164,7 +167,10 @@ const QuestionModel: React.FC = () => {
         if (step < zone.questions.length - 1) {
             setTimeout(() => {
                 handleNext();
+                setIsTransitioning(false);
             }, 300);
+        } else {
+            setIsTransitioning(false);
         }
     };
 
@@ -305,7 +311,8 @@ const QuestionModel: React.FC = () => {
                                                         "group flex items-center justify-between gap-3 text-left px-4 py-3.5 transition-all rounded-[0.875rem] border-2 cursor-pointer",
                                                         selected
                                                             ? "bg-card font-bold"
-                                                            : "bg-card/50 text-foreground font-medium hover:bg-card"
+                                                            : "bg-card/50 text-foreground font-medium hover:bg-card",
+                                                        isTransitioning && "pointer-events-none opacity-90"
                                                     )}
                                                     style={selected ? {
                                                         borderColor: zoneStyle?.border,

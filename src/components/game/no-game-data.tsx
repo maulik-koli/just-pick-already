@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { AlertCircle, Home, RotateCcw } from 'lucide-react'
 import { useApiUiStore } from '@/store'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 const NoGameData: React.FC = () => {
     const router = useRouter()
@@ -25,7 +27,7 @@ const NoGameData: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
             {/* Background elements */}
             <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_600px_400px_at_center_45%,var(--color-secondary))_0%,transparent_70%]" />
-            
+
             <motion.div
                 initial={{ scale: 0.92, y: 20, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -53,20 +55,20 @@ const NoGameData: React.FC = () => {
                             onClick={handleStartNew}
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full h-14 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-shadow shadow-[0_4px_12px_rgba(244,98,58,0.2)] bg-primary text-primary-foreground hover:bg-primary/90"
+                            className={cn(buttonVariants({ variant: "default" }), "w-full h-14 gap-2 font-bold rounded-[0.875rem]")}
                         >
                             <RotateCcw className="w-5 h-5" />
-                            <span className="text-base relative z-10">Start New Game</span>
+                            <span className="text-base">Start New Game</span>
                         </motion.button>
-                        
+
                         <motion.button
                             onClick={handleGoHome}
                             whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full h-14 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-all bg-card border-2 border-border text-foreground hover:bg-secondary hover:border-primary/50"
+                            className={cn(buttonVariants({ variant: "outline" }), "w-full h-14 gap-2 font-bold rounded-[0.875rem]")}
                         >
                             <Home className="w-5 h-5" />
-                            <span className="text-base relative z-10">Return to Home</span>
+                            <span className="text-base">Return to Home</span>
                         </motion.button>
                     </div>
                 </div>

@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { useHandleStart } from "@/hooks/use-handle-start";
 
-const allowedPaths = ["/", "/about", "/contact", "/privacy-policy", "/terms-and-conditions"];
+const allowedPaths = ["/", "/about", "/contact", "/privacy-policy", "/terms-and-conditions", "/results"];
 
 const Header: React.FC = () => {
     const pathname = usePathname();
     const { scrollY } = useScroll();
     const { handleStartGame } = useHandleStart()
-    
+
     const isAllowedPath = allowedPaths.includes(pathname);
 
     const [scrolledPastHero, setScrolledPastHero] = useState(false);
@@ -30,7 +30,7 @@ const Header: React.FC = () => {
 
     if (!isAllowedPath) return null;
     const isVisible = pathname === "/" ? scrolledPastHero : true;
-    
+
 
     return (
         <AnimatePresence>
@@ -43,14 +43,14 @@ const Header: React.FC = () => {
                     className="fixed top-4 left-1/2 z-50 px-6 py-2.5 max-md:px-4 max-md:py-2 flex items-center justify-between w-[95%] max-md:w-[98%] max-w-5xl bg-background/80 backdrop-blur-md border border-border rounded-2xl shadow-sm"
                 >
                     <div className="flex-1 flex items-center">
-                        <Link 
-                            href="/" 
+                        <Link
+                            href="/"
                             className="font-black text-xl max-md:text-base tracking-tight text-primary transition-transform hover:scale-[1.02]"
                         >
                             JUST PICK ALREADY
                         </Link>
                     </div>
-                    
+
                     <nav className="flex items-center gap-6 max-md:gap-3 text-sm font-bold tracking-wide">
                         <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors max-md:hidden">
                             ABOUT
@@ -58,16 +58,16 @@ const Header: React.FC = () => {
                         <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors max-md:hidden">
                             CONTACT
                         </Link>
-                        <a 
-                            href="https://github.com" 
-                            target="_blank" 
+                        <a
+                            href="https://github.com"
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-foreground transition-colors"
                         >
                             <GithubIcon className="w-5 h-5 fill-current" />
                         </a>
-                        
-                        <Button 
+
+                        <Button
                             className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm transition-all rounded-xl px-5 h-9 font-bold tracking-wider gap-2 flex items-center max-md:px-3 max-md:text-xs"
                             onClick={handleStartGame}
                             type="button"

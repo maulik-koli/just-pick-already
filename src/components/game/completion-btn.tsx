@@ -25,7 +25,7 @@ const CompletionButton: React.FC = () => {
   const done = pct === 100
 
   const handleClick = () => {
-    if (!sessionId) return;
+    if (!sessionId || isPending) return;
     mutate(sessionId, {
       onSuccess: () => {
         setIsCompleted(true)
