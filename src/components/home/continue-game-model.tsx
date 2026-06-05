@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 
 import { Astroid, Gamepad2, RotateCcw } from 'lucide-react'
 import { useGameStore } from '@/store'
-import { constGameProgress } from '@/lib/utils'
+import { constGameProgress, cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
 
 import { useGetSession } from '@/hooks/api/query'
 
@@ -22,8 +23,8 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
 
     const { isLoading, data, error, refetch } = useGetSession(open ? sessionId : null);
 
-    const pct = constGameProgress(answers.length); 
-    
+    const pct = constGameProgress(answers.length);
+
     const ringSize = 100;
     const ringStroke = 8;
     const ringRadius = (ringSize - ringStroke) / 2;
@@ -43,8 +44,8 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
     const isCompleted = data?.data?.isComplete
 
     const getMessageData = () => {
-        const messageData: { 
-            title: string, 
+        const messageData: {
+            title: string,
             message: string,
             buttonText: string
         } = {
@@ -57,12 +58,11 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                 messageData.title = 'Almost Done!';
                 messageData.message = 'You have finished selecting all answers but have yet to submit and generate your final result.';
                 messageData.buttonText = 'Submit Answers';
+            } else {
+                messageData.title = 'Game Completed!';
+                messageData.message = 'You have already submitted your answers and your result has been generated.';
+                messageData.buttonText = 'View Result';
             }
-
-            messageData.title = 'Game Completed!';
-            messageData.message = 'You have already submitted your answers and your result has been generated.';
-            messageData.buttonText = 'View Result';
-
         }
 
         return messageData;
@@ -79,7 +79,7 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
         }
 
         if (error) {
-            return <ErrorBlock 
+            return <ErrorBlock
                 handleNewGame={handleNewGame}
                 handleRetry={() => refetch()}
                 message='Oops! Failed to load your session'
@@ -123,7 +123,7 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                         {pct}%
                     </div>
                 </div>
-                
+
                 <h2 className="text-2xl font-black leading-tight text-foreground mb-3">
                     {getMessageData().title}
                 </h2>
@@ -136,20 +136,20 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
                         onClick={handleContinue}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full h-14 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-shadow shadow-[0_4px_12px_rgba(244,98,58,0.2)] bg-primary text-primary-foreground hover:bg-primary/90"
+                        className={cn(buttonVariants({ variant: "default" }), "w-full h-14 gap-2 font-bold rounded-[0.875rem]")}
                     >
                         <Gamepad2 className="w-5 h-5" />
-                        <span className="text-base relative z-10">{getMessageData().buttonText}</span>
+                        <span className="text-base">{getMessageData().buttonText}</span>
                     </motion.button>
-                    
+
                     <motion.button
                         onClick={handleNewGame}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full h-14 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-all bg-card border-2 border-border text-foreground hover:bg-secondary hover:border-primary/50"
+                        className={cn(buttonVariants({ variant: "outline" }), "w-full h-14 gap-2 font-bold rounded-[0.875rem]")}
                     >
                         <RotateCcw className="w-5 h-5" />
-                        <span className="text-base relative z-10">Start New Game</span>
+                        <span className="text-base">Start New Game</span>
                     </motion.button>
                 </div>
             </>
@@ -195,22 +195,20 @@ const ContinueGameModel: React.FC<ContinueGameModelProps> = ({ open, onClose, on
 
 export default ContinueGameModel
 
-
-
 function ErrorBlock({ message, handleNewGame, handleRetry }: { message: string, handleNewGame: () => void, handleRetry?: () => void }) {
     return (
         <div className="flex flex-col items-center justify-center py-10 w-full gap-3">
             <p className="text-sm text-destructive font-medium mb-3">{message}</p>
-            
+
             {handleRetry && (
                 <motion.button
                     onClick={handleRetry}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full h-12 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-all bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_4px_12px_rgba(244,98,58,0.2)]"
+                    className={cn(buttonVariants({ variant: "default" }), "w-full h-12 gap-2 font-bold rounded-[0.875rem]")}
                 >
                     <RotateCcw className="w-5 h-5" />
-                    <span className="text-sm relative z-10">Try Again</span>
+                    <span className="text-sm">Try Again</span>
                 </motion.button>
             )}
 
@@ -218,10 +216,10 @@ function ErrorBlock({ message, handleNewGame, handleRetry }: { message: string, 
                 onClick={handleNewGame}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full h-12 inline-flex items-center justify-center gap-2 font-bold relative overflow-hidden rounded-[0.875rem] transition-all bg-card border-2 border-border text-foreground hover:bg-secondary hover:border-primary/50"
+                className={cn(buttonVariants({ variant: "outline" }), "w-full h-12 gap-2 font-bold rounded-[0.875rem]")}
             >
                 <RotateCcw className="w-5 h-5" />
-                <span className="text-sm relative z-10">Start New Game</span>
+                <span className="text-sm">Start New Game</span>
             </motion.button>
         </div>
     )

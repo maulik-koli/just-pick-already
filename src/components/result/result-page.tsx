@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -14,7 +14,9 @@ import ResultErrorScreen from './result-errors'
 import Footer from '../common/footer'
 import { TraitScores, TopTraits } from './common-result-section'
 import { DownloadPosterBtn } from './download-poster-btn'
-import { AlertTriangle, Link2, MessageCircle, Sparkles, X as XIcon, RotateCcw } from 'lucide-react'
+import { AlertTriangle, Sparkles, RotateCcw, Copy, Users, Heart, Briefcase, Scale, Brain } from 'lucide-react'
+import { WhatsAppIcon, Xicon } from '../icons/custom-icons'
+import { SITE_URL } from '@/constants/seo'
 
 
 const containerVariants = {
@@ -298,6 +300,14 @@ const StrengthsBlindSpots: React.FC<{ strengths: string[]; blindSpots: string[] 
 
 
 
+const ZONE_ICONS: Record<string, React.ElementType> = {
+    SOCIAL_SITUATOINS: Users,
+    RELATIONSHIPS: Heart,
+    CAREER: Briefcase,
+    MORAL_GRAY_AREAS: Scale,
+    INPULSE_VS_LOGIC: Brain,
+};
+
 const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insights }) => {
     const entries = Object.entries(insights)
     return (
@@ -307,6 +317,8 @@ const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insight
                 {entries.map(([key, text], idx) => {
                     const color = ZONE_KEY_TO_COLOR[key] || "var(--primary)"
                     const isLastOdd = idx === entries.length - 1 && entries.length % 2 !== 0
+                    const Icon = ZONE_ICONS[key] || Sparkles;
+
                     return (
                         <motion.div
                             key={key}
@@ -327,13 +339,22 @@ const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insight
                             />
 
                             <div className="flex flex-col h-full mt-1 relative z-10">
-                                <div className="flex items-center gap-2.5 mb-3">
-                                    <span
-                                        className="w-2.5 h-2.5 rounded-full shrink-0"
-                                        style={{ background: color }}
-                                    />
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div 
+                                        className="flex items-center justify-center w-6 h-6 rounded-full shrink-0 relative"
+                                        style={{ backgroundColor: `${color}1A` }}
+                                    >
+                                        <Icon 
+                                            className="w-3.5 h-3.5 relative z-10" 
+                                            style={{ color, filter: `drop-shadow(0 0 6px ${color}80)` }} 
+                                        />
+                                        <span 
+                                            className="absolute inset-0 rounded-full border opacity-30" 
+                                            style={{ borderColor: color, backgroundColor: `${color}0A` }}
+                                        />
+                                    </div>
                                     <h4
-                                        className="text-[11px] font-black tracking-[0.15em] uppercase text-foreground"
+                                        className="text-[11px] font-black tracking-[0.15em] uppercase text-foreground mt-0.5"
                                     >
                                         {ZONE_KEY_TO_LABEL[key] ?? key}
                                     </h4>
@@ -374,19 +395,31 @@ const SurprisingChoice: React.FC<{ mc: Result["mostSurprisingChoice"] }> = ({ mc
 
 const ShareSection: React.FC<{ shareText: string; data: Result; onPlayAgain: () => void }> = ({ shareText, data, onPlayAgain }) => {
     const [copied, setCopied] = useState(false)
+    const [fullMessage, setFullMessage] = useState(shareText)
+
+    useEffect(() => {
+        const url = SITE_URL;
+        setFullMessage(
+            `"${shareText}"\n\nPlay "Just Pick Already!" and find out your decision-making persona at: ${url}`
+        );
+    }, [shareText]);
 
     const copy = async () => {
-        try { await navigator.clipboard.writeText(shareText) } catch { /* noop */ }
+        try { 
+            await navigator.clipboard.writeText(fullMessage)
+        } catch { }
+
         setCopied(true)
         setTimeout(() => setCopied(false), 1600)
     }
 
-    const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`
-    const wa = `https://wa.me/?text=${encodeURIComponent(shareText)}`
+    const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(fullMessage)}`
+    const wa = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`
 
+    
     return (
         <div className="relative overflow-hidden rounded-[2.5rem] border-4 border-foreground shadow-[6px_6px_0_var(--color-foreground)]">
-            {/* Background */}
+
             <div className="absolute inset-0 bg-primary" />
             <div
                 className="absolute inset-0 opacity-[0.08]"
@@ -413,16 +446,28 @@ const ShareSection: React.FC<{ shareText: string; data: Result; onPlayAgain: () 
                     Tell the world what kind of decision-maker you are.
                 </p>
 
-                <blockquote className="text-left p-5 sm:p-6 mb-8 italic text-white bg-white/10 border-l-3 border-l-white/50 rounded-xl max-w-lg mx-auto backdrop-blur-sm">
-                    &ldquo;{shareText}&rdquo;
-                </blockquote>
+                <div className="text-left p-5 sm:p-6 mb-8 text-white bg-white/10 border-l-3 border-l-white/50 rounded-xl max-w-lg mx-auto backdrop-blur-sm whitespace-pre-wrap text-sm leading-relaxed italic">
+                    {fullMessage}
+                </div>
 
                 <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center mb-6">
-                    <ShareBtn onClick={copy} icon={<Link2 className="w-4 h-4" />}>
-                        {copied ? "Copied!" : "Copy Link"}
+                    <ShareBtn onClick={copy} icon={<Copy className="w-4 h-4" />}>
+                        {copied ? "Copied!" : "Copy Result"}
                     </ShareBtn>
-                    <ShareBtn asLink href={tw} icon={<XIcon className="w-4 h-4" />}>Twitter</ShareBtn>
-                    <ShareBtn asLink href={wa} icon={<MessageCircle className="w-4 h-4" />}>WhatsApp</ShareBtn>
+                    <ShareBtn
+                        asLink
+                        href={tw}
+                        icon={<Xicon className="w-3.5 h-3.5" fill="currentColor" />}
+                    >
+                        X
+                    </ShareBtn>
+                    <ShareBtn
+                        asLink
+                        href={wa}
+                        icon={<WhatsAppIcon className="w-4 h-4" fill="currentColor" />}
+                    >
+                        WhatsApp
+                    </ShareBtn>
                     <DownloadPosterBtn data={data} />
                 </div>
 

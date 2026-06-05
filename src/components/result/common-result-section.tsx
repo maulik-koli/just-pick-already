@@ -100,12 +100,12 @@ export const TraitScores: React.FC<{ scores: Result["scores"]; disableAnimation?
 
 export const TopTraits: React.FC<{ traits: string[]; disableAnimation?: boolean }> = ({ traits, disableAnimation }) => (
     <CardShell i={3} disableAnimation={disableAnimation}>
-        <h3 className="text-lg font-bold text-foreground mb-4">Defining Traits</h3>
-        <div className={disableAnimation ? "flex flex-wrap gap-2" : "flex flex-wrap gap-1.5"}>
+        <h3 className="text-lg font-black tracking-tight text-foreground mb-5">Defining Traits</h3>
+        <div className={disableAnimation ? "flex flex-wrap gap-3" : "flex flex-wrap gap-2.5"}>
             {traits.map((t, i) => {
                 const className = disableAnimation 
-                    ? "text-[14px] font-semibold px-3.5 py-1.5 rounded-full bg-accent text-accent-foreground"
-                    : "text-[12px] sm:text-xs font-semibold px-2.5 py-1 rounded-full bg-accent text-accent-foreground";
+                    ? "text-[13px] font-black tracking-[0.05em] uppercase px-4 py-2 rounded-xl bg-accent text-accent-foreground border-b-4 border-black/15"
+                    : "text-[11px] sm:text-[12px] font-black tracking-[0.06em] uppercase px-4 py-2 rounded-xl bg-accent text-accent-foreground border-b-[3px] border-black/15 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all cursor-default select-none";
 
                 if (disableAnimation) {
                     return <span key={t} className={className}>{t}</span>;
