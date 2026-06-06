@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/prisma";
 import { createId } from "@paralleldrive/cuid2";
 
 import { onbordingSchema } from "@/schemas/onbording.schema";
-import { getQuestions } from "@/service/questions";
+import { getQuestions } from "@/server/service/questions";
 import { QuestionGeneration, questionGenerationSchema } from "@/schemas/questionGenerationSchema.schema";
 
-import { StartGamePayload, StartGameResponse } from "../_types";
-import { apiWrapper, AppError } from "../_error";
+import { StartGamePayload, StartGameResponse } from "@/types/_types";
+import { apiWrapper, AppError } from "../../../lib/_error";
 
 
 export const POST = apiWrapper(async (request: NextRequest) => {

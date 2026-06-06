@@ -2,8 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { MutationOptions } from "@/types/api";
 import { MUTATION_REGISTRY } from "@/constants/api-registery";
 
-import { gameResult, startGame, syncAnswer } from "./services";
-import { ResultCreateResponse, ResultResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/app/api/_types";
+import { gameResult, sendEmail, startGame, syncAnswer } from "./services";
+import { ResultCreateResponse, ResultResponse, SendEmailResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/types/_types";
+import { ContactFormType } from "@/schemas/contact.schema";
 
 
 export const useStartGame = (
@@ -32,6 +33,17 @@ export const useGameResult = (
   return useMutation({
     mutationKey: [MUTATION_REGISTRY.gameResult],
     mutationFn: (sessionId: string) => gameResult(sessionId),
+    
+    ...options,
+  });
+};
+
+export const useSendEmail = (
+  options?: MutationOptions<SendEmailResponse, ContactFormType>,
+) => {
+  return useMutation({
+    mutationKey: [MUTATION_REGISTRY.gameResult],
+    mutationFn: (payload) => sendEmail(payload),
     ...options,
   });
 };

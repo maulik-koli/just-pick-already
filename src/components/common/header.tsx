@@ -8,15 +8,23 @@ import { GithubIcon } from "@/components/icons/custom-icons";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
 import { useHandleStart } from "@/hooks/use-handle-start";
+import { STATIC_LINKS } from "@/constants/static-links";
 
-const allowedPaths = ["/", "/about", "/contact", "/privacy-policy", "/terms-and-conditions", "/results"];
+const allowedPaths = ["/", "/about", "/contact", "/privacy-policy", "/terms-and-conditions", 
+    // "/results"
+];
 
-const Header: React.FC = () => {
+interface HeaderPorps {
+    isCustomeCondition?: boolean
+}
+
+
+const Header: React.FC<HeaderPorps> = ({ isCustomeCondition = false }) => {
     const pathname = usePathname();
     const { scrollY } = useScroll();
     const { handleStartGame } = useHandleStart()
 
-    const isAllowedPath = allowedPaths.includes(pathname);
+    const isAllowedPath = isCustomeCondition || allowedPaths.includes(pathname);
 
     const [scrolledPastHero, setScrolledPastHero] = useState(false);
 
@@ -59,7 +67,7 @@ const Header: React.FC = () => {
                             CONTACT
                         </Link>
                         <a
-                            href="https://github.com"
+                            href={STATIC_LINKS.github}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-foreground transition-colors"

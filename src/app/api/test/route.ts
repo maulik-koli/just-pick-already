@@ -1,8 +1,8 @@
-import { ai, AI_MODEL } from '@/lib/ai';
+import { ai, AI_MODEL } from '@/server/service/ai';
 import { ApiResponse } from '@/types/api';
 import { NextResponse } from 'next/server';
-import { apiWrapper } from '@/app/api/_error';
-import { Type  } from "@google/genai";
+import { apiWrapper } from '@/lib/_error';
+import { Type } from "@google/genai";
 import { Log } from '@/lib/utils';
 
 const greetingResponseSchema = {

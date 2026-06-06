@@ -8,4 +8,5 @@ export const MUTATION_REGISTRY = {
   startGame: "start-game",
   syncAnswer: "sync-answer",
   gameResult: "game-result",
+  sendEmail: "send-email",
 } as const;

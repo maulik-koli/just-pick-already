@@ -5,7 +5,7 @@ import { useGameStore, usePlayStore } from '@/store'
 import { useSyncAnswer } from '@/hooks/api/mutation'
 import { useToast } from '@/hooks/use-toast'
 import { QuestionZone, QuestionOption } from '@/schemas/questionGenerationSchema.schema'
-import { AnswersListItem } from '@/app/api/_types'
+import { AnswersListItem } from '@/types/_types'
 import { ZONESS_STAICS_DATA, WORLD_WIDTH, WORLD_HEIGHT, ZONE_STYLES } from '@/constants/game-zones'
 import { CHAR_W, CHAR_H } from '@/hooks/use-character-move'
 import { cn, Log } from '@/lib/utils'
@@ -28,7 +28,7 @@ const QuestionModel: React.FC = () => {
     const { answers, addAnswer, zones } = useGameStore()
     const { activeZone, closeModal } = usePlayStore()
     const open = !!activeZone;
-    
+
     const [zone, setZone] = useState<QuestionZone | null>(null);
     const toast = useToast()
 
@@ -51,7 +51,7 @@ const QuestionModel: React.FC = () => {
 
         const state = usePlayStore.getState();
         const activeZoneStatic = ZONESS_STAICS_DATA.find(z => z.id === activeZone);
-        
+
         if (activeZoneStatic) {
             const cx = state.x + CHAR_W / 2;
             const cy = state.y + CHAR_H / 2;
@@ -81,7 +81,7 @@ const QuestionModel: React.FC = () => {
 
             state.setPosition(nx, ny, state.facing, false);
         }
-        
+
         closeModal();
     };
 
@@ -149,18 +149,18 @@ const QuestionModel: React.FC = () => {
         const sessionId = currentState.sessionId;
         if (sessionId) {
             syncAnswerMutate(
-                { sessionId, data: answer }, 
-                { 
+                { sessionId, data: answer },
+                {
                     onError: (err) => {
                         Log("Answer sync failed", err);
                         toast.error("Error", "Failed to save your answer. Please try again.")
                         useGameStore.getState().rollbackAnswer(
-                            answer, 
-                            wasUpdate, 
+                            answer,
+                            wasUpdate,
                             oldOptionId
                         );
-                    } 
-                } 
+                    }
+                }
             );
         }
 
@@ -206,20 +206,20 @@ const QuestionModel: React.FC = () => {
                             "w-full dot-texture overflow-hidden flex flex-col max-h-[90vh] rounded-[1.25rem] border-2",
                             zoneStatic?.colorVar || "bg-card"
                         )}
-                        style={{ 
-                            boxShadow: `0 25px 60px ${zoneStyle?.border}40`, 
+                        style={{
+                            boxShadow: `0 25px 60px ${zoneStyle?.border}40`,
                             maxWidth: 720,
                             borderColor: zoneStyle?.border
                         }}
                     >
-                        <div 
+                        <div
                             className="w-full py-3 flex items-center justify-center shrink-0 border-b"
-                            style={{ 
+                            style={{
                                 borderColor: `${zoneStyle?.border}40`,
                                 backgroundColor: 'rgba(255,255,255,0.4)'
                             }}
                         >
-                            <span 
+                            <span
                                 className="text-[12px] font-black uppercase tracking-[0.2em] flex gap-2 items-center"
                                 style={{ color: zoneStyle?.nameColor }}
                             >
@@ -260,11 +260,11 @@ const QuestionModel: React.FC = () => {
                         </div>
 
                         <div className="flex items-center justify-between px-7 pt-4 min-h-[32px] shrink-0">
-                            <span 
+                            <span
                                 className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.14em]"
-                                style={{ 
+                                style={{
                                     backgroundColor: `${zoneStyle?.border}26`,
-                                    color: zoneStyle?.nameColor 
+                                    color: zoneStyle?.nameColor
                                 }}
                             >
                                 Question {step + 1} of {zone.questions.length}
@@ -282,9 +282,9 @@ const QuestionModel: React.FC = () => {
                                 >
 
                                     <div className="flex items-start gap-3 mb-3">
-                                        <div 
-                                            className="w-[3px] self-stretch rounded-full mt-1 min-h-7" 
-                                            style={{ backgroundColor: zoneStyle?.border }} 
+                                        <div
+                                            className="w-[3px] self-stretch rounded-full mt-1 min-h-7"
+                                            style={{ backgroundColor: zoneStyle?.border }}
                                         />
                                         <h2 className="text-[20px] font-bold leading-tight text-foreground">
                                             {current.title}
@@ -355,10 +355,10 @@ const QuestionModel: React.FC = () => {
                                     variant="outline"
                                     disabled={step === 0}
                                     className='flex-1 h-12 rounded-[0.875rem] font-bold hover:bg-card disabled:opacity-50'
-                                    style={{ 
-                                        borderColor: `${zoneStyle?.border}66`, 
+                                    style={{
+                                        borderColor: `${zoneStyle?.border}66`,
                                         color: zoneStyle?.nameColor,
-                                        backgroundColor: "transparent" 
+                                        backgroundColor: "transparent"
                                     }}
                                 >
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Prev
@@ -368,10 +368,10 @@ const QuestionModel: React.FC = () => {
                                         onClick={handleNext}
                                         variant="outline"
                                         className='flex-1 h-12 rounded-[0.875rem] font-bold hover:bg-card'
-                                        style={{ 
-                                            borderColor: `${zoneStyle?.border}66`, 
+                                        style={{
+                                            borderColor: `${zoneStyle?.border}66`,
                                             color: zoneStyle?.nameColor,
-                                            backgroundColor: "transparent" 
+                                            backgroundColor: "transparent"
                                         }}
                                     >
                                         Next <ArrowRight className="ml-2 h-4 w-4" />

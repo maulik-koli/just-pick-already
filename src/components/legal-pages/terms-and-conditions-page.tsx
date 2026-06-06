@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Footer from "../common/footer";
+import { STATIC_LINKS } from "@/constants/static-links";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -16,6 +17,7 @@ const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 25 } },
 };
+
 
 const TermsAndConditionsPageComp: React.FC = () => {
     return (
@@ -114,7 +116,7 @@ const TermsAndConditionsPageComp: React.FC = () => {
                     <motion.section variants={itemVariants}>
                         <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground mb-4">9. Contact</h2>
                         <div className="text-lg text-muted-foreground leading-relaxed space-y-4">
-                            <p>For any questions about these terms, contact us at: <code className="text-foreground bg-muted px-2 py-1 rounded-md text-base">[your-email@example.com]</code></p>
+                            <p>For any questions about these terms, contact us at: <code className="text-foreground bg-muted px-2 py-1 rounded-md text-base">{STATIC_LINKS.email}</code></p>
                         </div>
                     </motion.section>
 

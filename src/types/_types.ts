@@ -31,4 +31,6 @@ export type UpdateAnswerPayload = {
 
 export type ResultResponse = ApiResponse<Result>
 
-export type ResultCreateResponse = ApiResponse<null>
+export type ResultCreateResponse = ApiResponse<Result>
+
+export type SendEmailResponse = ApiResponse<null>

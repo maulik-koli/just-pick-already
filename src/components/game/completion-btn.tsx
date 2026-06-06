@@ -6,9 +6,19 @@ import { useGameStore, usePlayStore } from '@/store';
 import { useToast } from '@/hooks/use-toast';
 import { useGameResult } from '@/hooks/api/mutation';
 import { cn, constGameProgress } from '@/lib/utils';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_REGISTRY } from '@/constants/api-registery';
 
-import GameSpinoverlay from './game-spinoverly';
+import FullScreenLoader from '@/components/common/full-screen-loader';
 import { ShinyButton } from '@/components/ui/shiny-button';
+import { RESULT_LOADER_LINES } from "@/constants/result-data";
+
+const SUBMIT_LINES = [
+  "Sealing the envelope...",
+  "Counting your choices...",
+  "Sending to the oracle...",
+  ...RESULT_LOADER_LINES,
+];
 
 
 const CompletionButton: React.FC = () => {
@@ -24,10 +34,13 @@ const CompletionButton: React.FC = () => {
   const pct = constGameProgress(answers.length);
   const done = pct === 100
 
+  const queryClient = useQueryClient();
+
   const handleClick = () => {
     if (!sessionId || isPending) return;
     mutate(sessionId, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        queryClient.setQueryData([QUERY_REGISTRY.getResult, sessionId], data);
         setIsCompleted(true)
         router.push(`/results?session=${sessionId}`)
       },
@@ -64,7 +77,7 @@ const CompletionButton: React.FC = () => {
       </AnimatePresence>
 
       <AnimatePresence>
-        {isPending && <GameSpinoverlay />}
+        {isPending && <FullScreenLoader lines={SUBMIT_LINES} />}
       </AnimatePresence>
     </>
   )

@@ -1,12 +1,12 @@
-import { ai, AI_MODEL } from "@/lib/ai";
+import { ai, AI_MODEL } from "@/server/service/ai";
 import { Answer } from "@/generated/prisma/client";
-import { AnswerPayloadItem, generateResultPrompt } from "@/prompts/generate-result.prompt";
-// import { generateResultResponseSchema } from "@/prompts/generate-result.response";
+import { AnswerPayloadItem, generateResultPrompt } from "@/server/prompts/generate-result.prompt";
+// import { generateResultResponseSchema } from "@/server/prompts/generate-result.response";
 
 import { OnbordingType } from "@/schemas/onbording.schema";
 import { resultSchema } from "@/schemas/result.schema";
 import { Question, QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
-import { AppError } from "@/app/api/_error";
+import { AppError } from "@/lib/_error";
 
 
 export const getResult = async (
@@ -23,7 +23,7 @@ export const getResult = async (
 
     const answersPayload: AnswerPayloadItem[] = answers.map((answer) => {
         const question = questionMap.get(answer.questionId);
-        
+
         if (!question) {
             throw new AppError(`Question not found for ID: ${answer.questionId}`, 404, "RESOURCE_NOT_FOUND");
         }
@@ -38,27 +38,32 @@ export const getResult = async (
         };
     });
 
-    const prompt = generateResultPrompt(answersPayload, onboarding)
+    try {
+        const prompt = generateResultPrompt(answersPayload, onboarding)
 
-    const response = await ai.models.generateContent({
-        model: AI_MODEL,
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
-            // responseSchema: generateResultResponseSchema,
-            temperature: 1,
-        },
-    })
+        const response = await ai.models.generateContent({
+            model: AI_MODEL,
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                // responseSchema: generateResultResponseSchema,
+                temperature: 1,
+            },
+        })
 
-    const rawText = response.text;
+        const rawText = response.text;
 
-    if (!rawText) {
-        throw new AppError("Gemini returned an empty response.");
+        if (!rawText) {
+            throw new AppError("Gemini returned an empty response.");
+        }
+
+        const parsed = JSON.parse(rawText);
+
+        const validated = resultSchema.parse(parsed);
+
+        return validated;
     }
-
-    const parsed = JSON.parse(rawText);
-
-    const validated = resultSchema.parse(parsed);
-    
-    return validated;
+    catch (e) {
+        throw new AppError("Gemini ubable to generate data.");
+    }
 }
