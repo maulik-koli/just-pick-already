@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { AnswersListItem } from "@/app/api/_types"
+import { AnswersListItem } from "@/types/_types"
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema"
 
 type ZonesQuestoins = QuestionGeneration['zones']
@@ -48,7 +48,7 @@ export const useGameStore = create<GameState>()(persist((set, get) => ({
         set((currentState) => {
             const currentAnswers = [...currentState.answers];
             const idx = currentAnswers.findIndex(a => a.questionId === answer.questionId);
-            
+
             if (idx > -1) {
                 // only rollback if the user hasn't overwritten this specific state yet.
                 if (currentAnswers[idx].selectedOptionId === answer.selectedOptionId) {

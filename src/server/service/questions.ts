@@ -1,16 +1,16 @@
-import { ai, AI_MODEL } from "@/lib/ai"
-import { generateQuestionsPrompt } from "@/prompts/generate-questions.prompt"
+import { ai, AI_MODEL } from "@/server/service/ai"
+import { generateQuestionsPrompt } from "@/server/prompts/generate-questions.prompt"
 import { questionGenerationSchema } from "@/schemas/questionGenerationSchema.schema"
-// import { generateQuestionsResponseSchema } from "@/prompts/generate-questions.response-schema"
+// import { generateQuestionsResponseSchema } from "@/server/prompts/generate-questions.response-schema"
 
 import { OnbordingType } from "@/schemas/onbording.schema"
-import { AppError } from "@/app/api/_error"
+import { AppError } from "@/lib/_error"
 
 
 export const getQuestions = async (payload: OnbordingType) => {
     try {
         const prompt = generateQuestionsPrompt(payload)
-    
+
         const response = await ai.models.generateContent({
             model: AI_MODEL,
             contents: prompt,
@@ -23,20 +23,20 @@ export const getQuestions = async (payload: OnbordingType) => {
                 }
             },
         })
-    
+
         const rawText = response.text;
-    
+
         if (!rawText) {
             throw new AppError("Gemini ubable to generate data.");
         }
-    
+
         const parsed = JSON.parse(rawText);
-    
+
         const validated = questionGenerationSchema.parse(parsed);
-    
+
         return validated;
     }
-    catch(e) {
+    catch (e) {
         throw new AppError("Gemini ubable to generate data.");
     }
 }

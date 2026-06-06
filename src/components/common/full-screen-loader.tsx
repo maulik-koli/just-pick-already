@@ -1,35 +1,33 @@
 'use client'
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { RESULT_LOADER_LINES } from "@/constants/result-data"
-import Character from "./character"
+import Character from "../game/character"
 
-const SUBMIT_LINES = [
-  "Sealing the envelope...",
-  "Counting your choices...",
-  "Sending to the oracle...",
-  ...RESULT_LOADER_LINES,
-]
+interface FullScreenLoaderProps {
+    lines?: string[]
+}
 
 
-const GameSpinoverlay: React.FC = () => {
+const FullScreenLoader: React.FC<FullScreenLoaderProps> = ({ lines }) => {
     const [lineIdx, setLineIdx] = useState(0)
     const [progress, setProgress] = useState(0)
 
     useEffect(() => {
         const msgTimer = setInterval(() => {
-            setLineIdx((i) => (i + 1) % SUBMIT_LINES.length)
+            if (lines && lines.length > 0) {
+                setLineIdx((i) => (i + 1) % lines.length)
+            }
         }, 2400)
 
         const progressTimer = setInterval(() => {
-            setProgress((prev) => (prev >= 85 ? 85 : prev + 0.5))
+            setProgress((prev) => (prev >= 90 ? 90 : prev + 0.5))
         }, 80)
 
         return () => {
             clearInterval(msgTimer)
             clearInterval(progressTimer)
         }
-    }, [])
+    }, [lines])
 
 
     return (
@@ -105,20 +103,22 @@ const GameSpinoverlay: React.FC = () => {
                 {Math.round(progress)}%
             </motion.p>
 
-            <div className="h-6 flex items-center justify-center">
-                <AnimatePresence mode="wait">
-                    <motion.p
-                        key={lineIdx}
-                        initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
-                        transition={{ duration: 0.35 }}
-                        className="text-sm font-medium text-muted-foreground text-center"
-                    >
-                        {SUBMIT_LINES[lineIdx]}
-                    </motion.p>
-                </AnimatePresence>
-            </div>
+            {lines && lines.length > 0 && (
+                <div className="h-6 flex items-center justify-center">
+                    <AnimatePresence mode="wait">
+                        <motion.p
+                            key={lineIdx}
+                            initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
+                            transition={{ duration: 0.35 }}
+                            className="text-sm font-medium text-muted-foreground text-center"
+                        >
+                            {lines[lineIdx]}
+                        </motion.p>
+                    </AnimatePresence>
+                </div>
+            )}
 
             <div className="flex gap-1.5 mt-8">
                 {[0, 1, 2].map((i) => (
@@ -143,4 +143,4 @@ const GameSpinoverlay: React.FC = () => {
     )
 }
 
-export default GameSpinoverlay
+export default FullScreenLoader

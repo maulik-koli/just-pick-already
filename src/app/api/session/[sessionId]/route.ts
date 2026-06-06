@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/prisma";
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
 
-import { StartGameResponse } from "../../_types";
-import { apiWrapper, AppError } from "../../_error";
+import { StartGameResponse } from "@/types/_types";
+import { apiWrapper, AppError } from "../../../../lib/_error";
 
 
 interface RouteParams {

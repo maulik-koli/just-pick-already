@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { GetAnswersResponse, UpdateAnswerResponse } from "@/app/api/_types";
-import { apiWrapper } from "@/app/api/_error";
+import { prisma } from "@/server/prisma";
+import { GetAnswersResponse, UpdateAnswerResponse } from "@/types/_types";
+import { apiWrapper } from "@/lib/_error";
 import { AnswerPaylod, answerSchema } from "@/schemas/answer.schema";
 
 interface RouteParams {
@@ -73,6 +73,6 @@ export const POST = apiWrapper(async (request: NextRequest, { params }: RoutePar
         success: true,
         data: null
     }
-    
+
     return NextResponse.json(resData, { status: 200 });
 });

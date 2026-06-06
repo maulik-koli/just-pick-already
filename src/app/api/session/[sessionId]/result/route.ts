@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/prisma";
 import { Answer } from "@/generated/prisma/client";
 
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
-import { getResult } from "@/service/result";
+import { getResult } from "@/server/service/result";
 import { Result } from "@/schemas/result.schema";
 
-import { ResultCreateResponse, ResultResponse } from "@/app/api/_types";
-import { apiWrapper, AppError } from "@/app/api/_error";
+import { ResultCreateResponse, ResultResponse } from "@/types/_types";
+import { apiWrapper, AppError } from "@/lib/_error";
 
 interface RouteParams {
     params: Promise<{
@@ -39,7 +39,7 @@ export const POST = apiWrapper(async (_request: NextRequest, { params }: RoutePa
             code: "OK",
             message: "Result already exists ",
             success: true,
-            data: null
+            data: results[0].resultData as unknown as Result
         };
 
         return NextResponse.json(resData, { status: 200 });
@@ -71,7 +71,7 @@ export const POST = apiWrapper(async (_request: NextRequest, { params }: RoutePa
         code: "OK",
         message: "Successfully generated result",
         success: true,
-        data: null
+        data: resultData as unknown as Result
     };
 
     return NextResponse.json(resData, { status: 200 });
@@ -113,10 +113,10 @@ export const GET = apiWrapper(async (_request: NextRequest, { params }: RoutePar
 
 
 
-function validateSessionAns(questionData: QuestionGeneration , answers: Answer[]) {
+function validateSessionAns(questionData: QuestionGeneration, answers: Answer[]) {
     const allQuestionIds = questionData.zones.flatMap((zone) =>
         zone.questions.map((question) => question.id)
-    ); 
+    );
 
     const questionIdSet = new Set(allQuestionIds);
 
@@ -128,7 +128,7 @@ function validateSessionAns(questionData: QuestionGeneration , answers: Answer[]
         throw new AppError("Invalid answers detected", 400, "BAD_REQUEST")
     }
 
-    const isComplete  = allQuestionIds.length === answers.length;
+    const isComplete = allQuestionIds.length === answers.length;
 
     if (!isComplete) {
         throw new AppError("There are still some unsnwers yet to select", 400, "BAD_REQUEST")

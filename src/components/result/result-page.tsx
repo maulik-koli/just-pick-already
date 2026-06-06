@@ -9,14 +9,17 @@ import { useGameStore } from '@/store'
 import { cn } from '@/lib/utils'
 import { ZONE_KEY_TO_COLOR, ZONE_KEY_TO_LABEL } from '@/constants/result-data'
 
-import ResultLoadingScreen from './result-loading'
+import FullScreenLoader from '@/components/common/full-screen-loader'
+import { RESULT_LOADER_LINES } from '@/constants/result-data'
 import ResultErrorScreen from './result-errors'
 import Footer from '../common/footer'
+import Header from '../common/header'
 import { TraitScores, TopTraits } from './common-result-section'
 import { DownloadPosterBtn } from './download-poster-btn'
 import { AlertTriangle, Sparkles, RotateCcw, Copy, Users, Heart, Briefcase, Scale, Brain } from 'lucide-react'
 import { WhatsAppIcon, Xicon } from '../icons/custom-icons'
 import { SITE_URL } from '@/constants/seo'
+import { SectionDivider, ShareBtn, SurprisingChoice } from './result-server-com'
 
 
 const containerVariants = {
@@ -41,51 +44,60 @@ const sectionVariants = {
 const ResultPage: React.FC = () => {
     const searchParams = useSearchParams()
     const sessionId = searchParams.get('session')
+    const [isMount, setIsMount] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (isMount) return
+        setIsMount(true)
+    }, [])
 
     const { isLoading, data, error } = useGetResult(sessionId)
 
     const resultData = data?.data ?? null
 
     const getContent = () => {
-        if (isLoading) return <ResultLoadingScreen key="loading" />
+        if (isLoading || !isMount) return <FullScreenLoader lines={RESULT_LOADER_LINES} key="loading" />
         if (error) return <ResultErrorScreen key="error" error={error} sessionId={sessionId} />
         if (!resultData) return <ResultErrorScreen key="no-data" error={null} sessionId={sessionId} />
 
         return <ResultBody key="result" data={resultData} />
     }
 
-
     return (
-        <div className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
-            <div className="dot-grid fixed inset-0 pointer-events-none opacity-[0.4] z-0" />
-            <div
-                className={cn(
-                    "absolute inset-0 pointer-events-none z-0",
-                    "bg-[radial-gradient(ellipse_900px_600px_at_center_20%,var(--color-secondary))_0%,transparent_80%]"
-                )}
-            />
+        <div className="flex flex-col w-full">
+            {/* rendering header only for error or result data to avoide dispalying it while laoding */}
+            {(!isLoading && isMount) && <Header isCustomeCondition />}
+            <div className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
+                <div className="dot-grid fixed inset-0 pointer-events-none opacity-[0.4] z-0" />
+                <div
+                    className={cn(
+                        "absolute inset-0 pointer-events-none z-0",
+                        "bg-[radial-gradient(ellipse_900px_600px_at_center_20%,var(--color-secondary))_0%,transparent_80%]"
+                    )}
+                />
 
-            <svg className="absolute top-0 left-0 w-full h-[600px] pointer-events-none z-0 opacity-[0.06]" viewBox="0 0 1200 600" preserveAspectRatio="none">
-                <defs>
-                    <pattern id="result-grid" patternUnits="userSpaceOnUse" width="60" height="60">
-                        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#result-grid)" />
-                <circle cx="200" cy="300" r="180" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 6" />
-                <circle cx="1000" cy="200" r="120" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 6" />
-            </svg>
+                <svg className="absolute top-0 left-0 w-full h-[600px] pointer-events-none z-0 opacity-[0.06]" viewBox="0 0 1200 600" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="result-grid" patternUnits="userSpaceOnUse" width="60" height="60">
+                            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#result-grid)" />
+                    <circle cx="200" cy="300" r="180" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 6" />
+                    <circle cx="1000" cy="200" r="120" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 6" />
+                </svg>
 
-            <div className="h-30 shrink-0 w-full relative z-10" />
+                <div className="h-30 shrink-0 w-full relative z-10" />
 
-            <main className="relative z-10 grow flex flex-col items-center pb-16 px-4 sm:px-6">
-                <AnimatePresence mode="wait">
-                    {getContent()}
-                </AnimatePresence>
-            </main>
+                <main className="relative z-10 grow flex flex-col items-center pb-16 px-4 sm:px-6">
+                    <AnimatePresence mode="wait">
+                        {getContent()}
+                    </AnimatePresence>
+                </main>
 
-            <div className="relative z-10 w-full mt-auto">
-                <Footer />
+                <div className="relative z-10 w-full mt-auto">
+                    <Footer />
+                </div>
             </div>
         </div>
     )
@@ -239,15 +251,7 @@ const ResultHeroSection: React.FC<{ data: Result }> = ({ data }) => {
 
 
 
-const SectionDivider: React.FC<{ label: string }> = ({ label }) => (
-    <div className="flex items-center gap-4 px-2">
-        <div className="h-px bg-border flex-1" />
-        <span className="text-[10px] sm:text-xs font-black text-muted-foreground uppercase tracking-[0.25em] shrink-0">
-            {label}
-        </span>
-        <div className="h-px bg-border flex-1" />
-    </div>
-)
+
 
 
 
@@ -373,26 +377,6 @@ const ZoneBreakdown: React.FC<{ insights: Result["zoneInsights"] }> = ({ insight
 
 
 
-const SurprisingChoice: React.FC<{ mc: Result["mostSurprisingChoice"] }> = ({ mc }) => (
-    <div className="relative p-7 sm:p-8 bg-card border border-border rounded-[2rem] border-l-4 border-l-accent overflow-hidden group hover:shadow-lg transition-shadow duration-500">
-        <div className="absolute -top-4 -right-4 opacity-[0.04] pointer-events-none">
-            <Sparkles className="w-24 h-24" />
-        </div>
-        <div className="relative z-10">
-            <div className="flex items-center gap-2.5 mb-4">
-                <span className="p-2 rounded-xl bg-accent/15 text-accent">
-                    <Sparkles className="w-4 h-4" />
-                </span>
-                <h3 className="text-lg font-black text-foreground tracking-tight">Most Surprising Choice</h3>
-            </div>
-            <p className="text-[16px] font-bold text-foreground mb-3">{mc.question}</p>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">{mc.explanation}</p>
-        </div>
-    </div>
-)
-
-
-
 const ShareSection: React.FC<{ shareText: string; data: Result; onPlayAgain: () => void }> = ({ shareText, data, onPlayAgain }) => {
     const [copied, setCopied] = useState(false)
     const [fullMessage, setFullMessage] = useState(shareText)
@@ -480,31 +464,5 @@ const ShareSection: React.FC<{ shareText: string; data: Result; onPlayAgain: () 
                 </button>
             </div>
         </div>
-    )
-}
-
-
-
-const ShareBtn: React.FC<{
-    children: React.ReactNode
-    onClick?: () => void
-    icon: React.ReactNode
-    asLink?: boolean
-    href?: string
-}> = ({ children, onClick, icon, asLink, href }) => {
-    const cls = "inline-flex items-center justify-center gap-2 px-5 h-11 rounded-full border-2 border-white/40 text-sm font-semibold transition-all cursor-pointer text-white bg-white/10 hover:bg-white hover:text-primary hover:border-white backdrop-blur-sm"
-
-    if (asLink) {
-        return (
-            <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
-                {icon}<span>{children}</span>
-            </a>
-        )
-    }
-
-    return (
-        <button onClick={onClick} className={cls}>
-            {icon}<span>{children}</span>
-        </button>
     )
 }

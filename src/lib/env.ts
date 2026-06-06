@@ -7,6 +7,7 @@ const envSchema = z.object({
     DIRECT_URL: z.url("Invalid DIRECT_URL"),
     GEMINI_MODEL_CODE: z.string().min(1, "Gemini model code required"),
     GEMINI_API_KEY: z.string().min(1, "Gemini api key required"),
+    EMAIL_API_KEY: z.string().min(1, "Email api key required")
 });
 
 export const env = envSchema.parse({
@@ -15,4 +16,5 @@ export const env = envSchema.parse({
     DIRECT_URL: process.env.DIRECT_URL,
     GEMINI_MODEL_CODE: process.env.GEMINI_MODEL_CODE,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    EMAIL_API_KEY: process.env.EMAIL_API_KEY,
 });

@@ -75,27 +75,15 @@ const ContactPageComp: React.FC = () => {
                         <motion.div variants={itemVariants} className="mt-12 grid grid-cols-2 gap-6">
                             <LinkBlock
                                 href="mailto:hello@justpickalready.in"
-                                className="flex flex-col"
+                                className="col-span-2 flex flex-row items-center gap-3"
                                 IconCom={Mail}
                             >
-                                <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-1">
-                                    Email
-                                </span>
-                                <span className="text-sm font-medium text-foreground">hello@justpickalready.in</span>
-                            </LinkBlock>
-
-                            <LinkBlock
-                                href="https://x.com/justpickalready"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex flex-col"
-                                IconCom={Xicon}
-                                iconProps={{ fill: "currentColor" }}
-                            >
-                                <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-1">
-                                    Twitter / X
-                                </span>
-                                <span className="text-sm font-medium text-foreground">@justpickalready</span>
+                                <div className="flex flex-col">
+                                    <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-1">
+                                        Email
+                                    </span>
+                                    <span className="text-sm font-medium text-foreground">hello@justpickalready.in</span>
+                                </div>
                             </LinkBlock>
 
                             <LinkBlock

@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Footer from "../common/footer";
+import { STATIC_LINKS } from "@/constants/static-links";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -53,7 +54,7 @@ const PrivacyPolicyPageComp: React.FC = () => {
                     <motion.section variants={itemVariants}>
                         <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground mb-4">1. Who We Are</h2>
                         <div className="text-lg text-muted-foreground leading-relaxed space-y-4">
-                            <p>Just Pick Already is an independent hobby project based in India. For any privacy-related questions, contact us at: <code className="text-foreground bg-muted px-2 py-1 rounded-md text-base">[your-email@example.com]</code></p>
+                            <p>Just Pick Already is an independent hobby project based in India. For any privacy-related questions, contact us at: <code className="text-foreground bg-muted px-2 py-1 rounded-md text-base">{STATIC_LINKS.email}</code></p>
                         </div>
                     </motion.section>
 
@@ -120,7 +121,7 @@ const PrivacyPolicyPageComp: React.FC = () => {
                     <motion.section variants={itemVariants}>
                         <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground mb-4">8. Your Rights</h2>
                         <div className="text-lg text-muted-foreground leading-relaxed space-y-4">
-                            <p>Since we do not collect personally identifiable information, there is no personal data profile to access, correct, or delete. If you have any concerns, reach out to us at <code className="text-foreground bg-muted px-2 py-1 rounded-md text-base">[your-email@example.com]</code>.</p>
+                            <p>Since we do not collect personally identifiable information, there is no personal data profile to access, correct, or delete. If you have any concerns, reach out to us at <code className="text-foreground bg-muted px-2 py-1 rounded-md text-base">{STATIC_LINKS.email}</code>.</p>
                         </div>
                     </motion.section>
 

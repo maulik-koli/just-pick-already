@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
-import ResultPage from "@/components/result/result-page";
-import ResultLoadingScreen from "@/components/result/result-loading";
 import { SITE_URL } from "@/constants/seo";
+import ResultPage from "@/components/result/result-page";
+import FullScreenLoader from "@/components/common/full-screen-loader";
 
 export const metadata: Metadata = {
     title: "Your Personality Results",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 const ResultsPage: React.FC = () => {
     return (
-        <Suspense fallback={<ResultLoadingScreen />}>
+        <Suspense fallback={<FullScreenLoader />}>
             <ResultPage />
         </Suspense>
     );

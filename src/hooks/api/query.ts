@@ -3,7 +3,7 @@ import { QueryOptions } from "@/types/api";
 import { QUERY_REGISTRY } from "@/constants/api-registery";
 
 import { getSession, getResult } from "./services";
-import { ResultResponse, StartGameResponse } from "@/app/api/_types";
+import { ResultResponse, StartGameResponse } from "@/types/_types";
 
 
 export const useGetSession = (
