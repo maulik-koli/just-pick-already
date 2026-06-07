@@ -1,5 +1,5 @@
 import React from 'react'
-import QueryProvider from './query-provider'
+import QueryProvider from '@/provider/query-provider'
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (

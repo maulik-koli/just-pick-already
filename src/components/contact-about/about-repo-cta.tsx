@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
 import { motion, Variants } from 'framer-motion'
-import { Button } from '../ui/button'
-import { GithubIcon } from '../icons/custom-icons'
+import { Button } from '@/components/ui/button'
+import { GithubIcon } from '@/components/icons/custom-icons'
 import { useHandleStart } from '@/hooks/use-handle-start'
 import { Play } from 'lucide-react'
 

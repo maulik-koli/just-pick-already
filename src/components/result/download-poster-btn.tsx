@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { Download, Loader2 } from 'lucide-react'
 
 import { Result } from '@/schemas/result.schema'
-import { IdentityHeader, SummaryCard, TraitScores, TopTraits } from './common-result-section'
+import { IdentityHeader, SummaryCard, TraitScores, TopTraits } from '@/components/result/common-result-section'
 
 export const DownloadPosterBtn: React.FC<{ data: Result }> = ({ data }) => {
     const cls = "inline-flex items-center justify-center gap-2 px-5 h-11 rounded-full border-2 border-white/40 text-sm font-semibold transition-all cursor-pointer text-white bg-white/10 hover:bg-white hover:text-primary hover:border-white backdrop-blur-sm"

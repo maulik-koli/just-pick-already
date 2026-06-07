@@ -9,9 +9,9 @@ import { onbordingSchema, OnbordingType } from "@/schemas/onbording.schema";
 import { useStartGame } from "@/hooks/api/mutation";
 import { useToast } from "@/hooks/use-toast";
 
-import OnbordingModel from "./onbording-model";
-import ContinueGameModel from "./continue-game-model";
-import LoadingScreen from "../game/loading-screen";
+import OnbordingModel from "@/components/home/onbording-model";
+import ContinueGameModel from "@/components/home/continue-game-model";
+import LoadingScreen from "@/components/game/loading-screen";
 
 
 const OnbordingHandler: React.FC = () => {

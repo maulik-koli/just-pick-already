@@ -1,5 +1,5 @@
 import { ResultScores } from "@/schemas/result.schema";
-import { ZONE_STYLES } from "./game-zones";
+import { ZONE_STYLES } from "@/constants/game-zones";
 
 
 export const RESULT_LOADER_LINES = [

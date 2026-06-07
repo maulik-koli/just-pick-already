@@ -11,7 +11,7 @@ import { CHAR_W, CHAR_H } from '@/hooks/use-character-move'
 import { cn, Log } from '@/lib/utils'
 
 import { ArrowLeft, ArrowRight, Astroid } from 'lucide-react'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 
 
 const getNextQuestionIndex = (zone: QuestionZone, answers: AnswersListItem[]) => {

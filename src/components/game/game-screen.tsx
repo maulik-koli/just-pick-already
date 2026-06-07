@@ -6,12 +6,12 @@ import { WORLD_HEIGHT, WORLD_WIDTH, ZONESS_STAICS_DATA, ZONE_STYLES } from '@/co
 import { CHAR_H, CHAR_W, useCharacterMove } from '@/hooks/use-character-move';
 import { constGameProgress } from '@/lib/utils';
 
-import Character from './character';
-import QuestionModel from './questoin-model';
-import NoGameData from './no-game-data';
-import CompletionButton from './completion-btn';
-import { VirtualJoystick } from './virtual-joystick';
-import { GameControlles, GameProgress } from './game-hud';
+import Character from '@/components/game/character';
+import QuestionModel from '@/components/game/questoin-model';
+import NoGameData from '@/components/game/no-game-data';
+import CompletionButton from '@/components/game/completion-btn';
+import { VirtualJoystick } from '@/components/game/virtual-joystick';
+import { GameControlles, GameProgress } from '@/components/game/game-hud';
 
 
 const GameScreenInner: React.FC = () => {

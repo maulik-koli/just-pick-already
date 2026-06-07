@@ -1,5 +1,5 @@
 import React from 'react'
-import Footer from '../common/footer'
+import Footer from '@/components/common/footer'
 import { 
     HeroSection, 
     EndCardSection, 
@@ -8,7 +8,7 @@ import {
     PreviewSections, 
     ResultCardSection,
     ZoneSections
-} from './sections'
+} from '@/components/home/sections'
 
 
 const HomePageCom: React.FC = () => {

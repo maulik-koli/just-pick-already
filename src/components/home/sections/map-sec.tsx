@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { MAP_ZONES } from '@/constants/home-statics-data'
 import { cn } from '@/lib/utils'
 
-import Character from '../../game/character'
-import { Reveal, SectionHeader } from '../common'
+import Character from '@/components/game/character'
+import { Reveal, SectionHeader } from '@/components/home/common'
 import { MapLine } from '@/components/icons/savgs'
 
 
