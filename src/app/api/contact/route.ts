@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/server/resend";
 import { contactFormSchema, ContactFormType } from "@/schemas/contact.schema";
 
-import { apiWrapper } from "../../../lib/_error";
+import { apiWrapper } from "@/lib/_error";
 import { SendEmailResponse } from "@/types/_types";
 
 
@@ -16,7 +16,7 @@ export const POST = apiWrapper(async (request: NextRequest) => {
 
     const resData: SendEmailResponse = {
         code: "OK",
-        message: "Successfully send mail",
+        message: "Successfully sent email",
         success: true,
         data: null
     }

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { QueryOptions } from "@/types/api";
 import { QUERY_REGISTRY } from "@/constants/api-registery";
 
-import { getSession, getResult } from "./services";
+import { getSession, getResult } from "@/hooks/api/services";
 import { ResultResponse, StartGameResponse } from "@/types/_types";
 
 

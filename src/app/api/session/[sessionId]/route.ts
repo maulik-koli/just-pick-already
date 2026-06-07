@@ -3,7 +3,7 @@ import { prisma } from "@/server/prisma";
 import { QuestionGeneration } from "@/schemas/questionGenerationSchema.schema";
 
 import { StartGameResponse } from "@/types/_types";
-import { apiWrapper, AppError } from "../../../../lib/_error";
+import { apiWrapper, AppError } from "@/lib/_error";
 
 
 interface RouteParams {

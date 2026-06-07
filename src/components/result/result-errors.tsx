@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useGameStore } from "@/store";
 import { AlertTriangle, Gamepad2, Home, SearchX, ServerCrash } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "../ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 interface ResultErrorScreenProps {
     error: { code?: string; message?: string } | null

@@ -1,8 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { motion } from "framer-motion";
-import Character from './character';
-import OsuCircles, { OsuScoreState } from './circle-game';
+import Character from '@/components/game/character';
+import OsuCircles, { OsuScoreState } from '@/components/game/circle-game';
 
 const MESSAGES = [
     "Analyzing your decision style...",

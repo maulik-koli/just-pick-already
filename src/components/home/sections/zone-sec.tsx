@@ -2,7 +2,7 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Reveal, SectionHeader } from '../common'
+import { Reveal, SectionHeader } from '@/components/home/common'
 import { ZONES_SECTION_DATA } from '@/constants/home-statics-data';
 
 

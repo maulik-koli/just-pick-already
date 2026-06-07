@@ -9,8 +9,8 @@ import { ONBORDING_STEPS, StepOptionsValue } from '@/constants/onbording-data'
 import { cn } from '@/lib/utils'
 
 import { ArrowLeft, Astroid } from 'lucide-react'
-import { Button } from '../ui/button'
-import { ShinyButton } from '../ui/shiny-button'
+import { Button } from '@/components/ui/button'
+import { ShinyButton } from '@/components/ui/shiny-button'
 
 const STEP_KEYS: (keyof OnbordingType)[] = ['ageRange', 'vibe', 'decisionStyle', 'selfDescription'];
 

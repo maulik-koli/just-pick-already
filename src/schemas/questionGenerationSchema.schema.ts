@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ZONES } from "./enums";
+import { ZONES } from "@/schemas/enums";
 
 
 export const questionOptionSchema = z.object({

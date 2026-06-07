@@ -1,5 +1,5 @@
 import z from "zod";
-import { AGE_RANGE, DECISOIN_STYLE, SELF_DESCRIPTION, VIBE } from "./enums";
+import { AGE_RANGE, DECISOIN_STYLE, SELF_DESCRIPTION, VIBE } from "@/schemas/enums";
 
 
 

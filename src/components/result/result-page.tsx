@@ -11,15 +11,15 @@ import { ZONE_KEY_TO_COLOR, ZONE_KEY_TO_LABEL } from '@/constants/result-data'
 
 import FullScreenLoader from '@/components/common/full-screen-loader'
 import { RESULT_LOADER_LINES } from '@/constants/result-data'
-import ResultErrorScreen from './result-errors'
-import Footer from '../common/footer'
-import Header from '../common/header'
-import { TraitScores, TopTraits } from './common-result-section'
-import { DownloadPosterBtn } from './download-poster-btn'
+import ResultErrorScreen from '@/components/result/result-errors'
+import Footer from '@/components/common/footer'
+import Header from '@/components/common/header'
+import { TraitScores, TopTraits } from '@/components/result/common-result-section'
+import { DownloadPosterBtn } from '@/components/result/download-poster-btn'
 import { AlertTriangle, Sparkles, RotateCcw, Copy, Users, Heart, Briefcase, Scale, Brain } from 'lucide-react'
-import { WhatsAppIcon, Xicon } from '../icons/custom-icons'
+import { WhatsAppIcon, Xicon } from '@/components/icons/custom-icons'
 import { SITE_URL } from '@/constants/seo'
-import { SectionDivider, ShareBtn, SurprisingChoice } from './result-server-com'
+import { SectionDivider, ShareBtn, SurprisingChoice } from '@/components/result/result-server-com'
 
 
 const containerVariants = {

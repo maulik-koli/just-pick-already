@@ -3,8 +3,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-import Footer from "../common/footer";
-import AboutRepoCta from "./about-repo-cta";
+import Footer from "@/components/common/footer";
+import AboutRepoCta from "@/components/contact-about/about-repo-cta";
 import { ShieldCheck, Map as MapIcon, Brain, Sparkles, FileText } from "lucide-react";
 
 const containerVariants = {

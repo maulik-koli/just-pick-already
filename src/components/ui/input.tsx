@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { Field, FieldError, FieldLabel } from "./field"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 
 interface InputPorps extends React.ComponentProps<"input"> {
   error?: string

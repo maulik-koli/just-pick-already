@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import Character from "../game/character"
+import Character from "@/components/game/character"
 
 interface FullScreenLoaderProps {
     lines?: string[]

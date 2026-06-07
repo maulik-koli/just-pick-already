@@ -2,7 +2,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { PREVIEW_CARDS } from '@/constants/home-statics-data'
-import { Reveal, SectionHeader } from '../common'
+import { Reveal, SectionHeader } from '@/components/home/common'
 
 
 const PreviewSections: React.FC = () => {

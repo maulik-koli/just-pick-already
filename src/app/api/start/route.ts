@@ -7,7 +7,7 @@ import { getQuestions } from "@/server/service/questions";
 import { QuestionGeneration, questionGenerationSchema } from "@/schemas/questionGenerationSchema.schema";
 
 import { StartGamePayload, StartGameResponse } from "@/types/_types";
-import { apiWrapper, AppError } from "../../../lib/_error";
+import { apiWrapper, AppError } from "@/lib/_error";
 
 
 export const POST = apiWrapper(async (request: NextRequest) => {

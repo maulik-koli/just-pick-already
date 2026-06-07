@@ -3,12 +3,12 @@ import React, { ComponentPropsWithoutRef } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-import Character from '../game/character';
-import ContactForm from './contact-form';
-import Footer from '../common/footer';
-import ContactStatic from './contact-static';
+import Character from '@/components/game/character';
+import ContactForm from '@/components/contact-about/contact-form';
+import Footer from '@/components/common/footer';
+import ContactStatic from '@/components/contact-about/contact-static';
 import { LucideIcon, Mail } from 'lucide-react';
-import { GithubIcon, Xicon } from '../icons/custom-icons';
+import { GithubIcon, Xicon } from '@/components/icons/custom-icons';
 
 const containerVariants = {
     hidden: { opacity: 0 },

@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { MutationOptions } from "@/types/api";
 import { MUTATION_REGISTRY } from "@/constants/api-registery";
 
-import { gameResult, sendEmail, startGame, syncAnswer } from "./services";
+import { gameResult, sendEmail, startGame, syncAnswer } from "@/hooks/api/services";
 import { ResultCreateResponse, ResultResponse, SendEmailResponse, StartGamePayload, StartGameResponse, UpdateAnswerPayload, UpdateAnswerResponse } from "@/types/_types";
 import { ContactFormType } from "@/schemas/contact.schema";
 

@@ -7,7 +7,7 @@ import { useHandleStart } from '@/hooks/use-handle-start';
 import { DRIFTING_ZONES } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
-import Character from '../../game/character';
+import Character from '@/components/game/character';
 import { ShinyButton } from '@/components/ui/shiny-button';
 import { ChevronDown, Play } from 'lucide-react';
 

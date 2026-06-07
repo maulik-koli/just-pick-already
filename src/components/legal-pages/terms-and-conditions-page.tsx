@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import Footer from "../common/footer";
+import Footer from "@/components/common/footer";
 import { STATIC_LINKS } from "@/constants/static-links";
 
 const containerVariants = {
