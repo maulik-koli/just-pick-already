@@ -14,7 +14,7 @@ const CIRCLE_SIZE = 56
 const RING_START = CIRCLE_SIZE * 2.8
 const LIFETIME = 1000
 
-const SAFE_ZONE = { w: 340, h: 220 }
+const SAFE_ZONE = { w: 460, h: 420 }
 
 interface CircleGradient {
     from: string

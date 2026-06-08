@@ -1,5 +1,6 @@
 import { Type } from "@google/genai";
 
+// Right now this is not getting use
 export const generateQuestionsResponseSchema = {
     type: Type.OBJECT,
     properties: {
