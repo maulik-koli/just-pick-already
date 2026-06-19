@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
 
 import { useGameStore, usePlayStore } from '@/store'
 import { useSyncAnswer } from '@/hooks/api/mutation'
@@ -202,16 +203,29 @@ const QuestionModel: React.FC = () => {
                         exit={{ scale: 0.95, opacity: 0 }}
                         transition={{ type: "spring", damping: 24, stiffness: 280 }}
                         onClick={(e) => e.stopPropagation()}
-                        className={cn(
-                            "w-full dot-texture overflow-hidden flex flex-col max-h-[90vh] rounded-[1.25rem] border-2",
-                            zoneStatic?.colorVar || "bg-card"
-                        )}
-                        style={{
-                            boxShadow: `0 25px 60px ${zoneStyle?.border}40`,
-                            maxWidth: 720,
-                            borderColor: zoneStyle?.border
-                        }}
+                        className="relative w-full flex flex-col"
+                        style={{ maxWidth: 720 }}
                     >
+                        {/* Peeking Mascot */}
+                        <motion.div
+                            className="absolute -top-[70px] -right-2 z-10 pointer-events-none"
+                            initial={{ y: 20, rotate: -15 }}
+                            animate={{ y: 0, rotate: [5, -5, 5] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <Image src="/mascot_2.webp" alt="Mascot" width={110} height={110} className="object-contain drop-shadow-xl" />
+                        </motion.div>
+
+                        <div
+                            className={cn(
+                                "w-full dot-texture overflow-hidden flex flex-col max-h-[90vh] rounded-[1.25rem] border-2 relative z-20",
+                                zoneStatic?.colorVar || "bg-card"
+                            )}
+                            style={{
+                                boxShadow: `0 25px 60px ${zoneStyle?.border}40`,
+                                borderColor: zoneStyle?.border
+                            }}
+                        >
                         <div
                             className="w-full py-3 flex items-center justify-center shrink-0 border-b"
                             style={{
@@ -394,6 +408,7 @@ const QuestionModel: React.FC = () => {
                                     </Button>
                                 )}
                             </div>
+                        </div>
                         </div>
                     </motion.div>
 
