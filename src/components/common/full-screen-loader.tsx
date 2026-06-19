@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Character from "@/components/game/character"
+import Image from "next/image"
 
 interface FullScreenLoaderProps {
     lines?: string[]
@@ -11,11 +12,13 @@ interface FullScreenLoaderProps {
 const FullScreenLoader: React.FC<FullScreenLoaderProps> = ({ lines }) => {
     const [lineIdx, setLineIdx] = useState(0)
     const [progress, setProgress] = useState(0)
+    const [mascotId, setMascotId] = useState(1)
 
     useEffect(() => {
         const msgTimer = setInterval(() => {
             if (lines && lines.length > 0) {
                 setLineIdx((i) => (i + 1) % lines.length)
+                setMascotId(Math.floor(Math.random() * 6) + 1)
             }
         }, 2400)
 
@@ -104,18 +107,31 @@ const FullScreenLoader: React.FC<FullScreenLoaderProps> = ({ lines }) => {
             </motion.p>
 
             {lines && lines.length > 0 && (
-                <div className="h-6 flex items-center justify-center">
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-sm flex justify-center z-50">
                     <AnimatePresence mode="wait">
-                        <motion.p
+                        <motion.div
                             key={lineIdx}
-                            initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                            exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
-                            transition={{ duration: 0.35 }}
-                            className="text-sm font-medium text-muted-foreground text-center"
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                            transition={{ duration: 0.35, type: "spring", stiffness: 200, damping: 20 }}
+                            className="flex items-center gap-4 bg-card/80 backdrop-blur-sm border-2 border-primary/20 p-4 rounded-2xl shadow-xl max-w-sm w-full"
                         >
-                            {lines[lineIdx]}
-                        </motion.p>
+                            <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center">
+                                <Image 
+                                    src={`/mascot_${mascotId}.webp`} 
+                                    alt="Guide Mascot" 
+                                    width={64} 
+                                    height={64} 
+                                    className="object-contain drop-shadow-md"
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold text-foreground leading-snug">
+                                    {lines[lineIdx]}
+                                </p>
+                            </div>
+                        </motion.div>
                     </AnimatePresence>
                 </div>
             )}

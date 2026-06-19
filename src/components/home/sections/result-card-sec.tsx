@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { PERSONAS } from '@/constants/home-statics-data';
 import { Reveal, SectionHeader } from '@/components/home/common';
 
@@ -18,6 +19,20 @@ const ResultCardSection: React.FC = () => {
 
                 <Reveal delay={0.1}>
                     <div className="relative h-[340px] sm:h-[380px] flex items-center justify-center group max-md:scale-[0.85] max-sm:scale-[0.70]">
+                        <motion.div
+                            className="absolute -top-16 -right-4 sm:-top-24 sm:-right-12 z-0 opacity-90"
+                            initial={{ y: 20, opacity: 0, rotate: -10 }}
+                            animate={{ y: [0, -10, 0], opacity: 1, rotate: [10, 5, 10] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <Image 
+                                src="/mascot_3.webp" 
+                                alt="Mascot" 
+                                width={180} 
+                                height={180} 
+                                className="object-contain drop-shadow-2xl" 
+                            />
+                        </motion.div>
                         {PERSONAS.map((p, i) => {
                             const offset = (i - (PERSONAS.length - 1) / 2) * 90;
                             return (

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Character from '@/components/game/character'
+import Image from 'next/image'
 import OsuCircles, { OsuScoreState } from '@/components/game/circle-game'
 
 const MESSAGES = [
@@ -18,6 +19,7 @@ interface LoadingScreenProps {
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading }) => {
     const [progress, setProgress] = useState(0)
     const [msgIdx, setMsgIdx] = useState(0)
+    const [mascotId, setMascotId] = useState(1)
     const [osuScore, setOsuScore] = useState<OsuScoreState>({ score: 0, combo: 0 })
 
     useEffect(() => {
@@ -31,6 +33,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading }) => {
 
             messageInterval = setInterval(() => {
                 setMsgIdx((prev) => (prev + 1) % MESSAGES.length)
+                setMascotId(Math.floor(Math.random() * 6) + 1)
             }, 2400)
         } else {
             setProgress(100)
@@ -131,18 +134,31 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading }) => {
                     {Math.round(progress)}%
                 </motion.p>
 
-                <div className="h-6 flex items-center justify-center">
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-sm flex justify-center z-50">
                     <AnimatePresence mode="wait">
-                        <motion.p
+                        <motion.div
                             key={isLoading ? msgIdx : 'done'}
-                            initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
-                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
-                            transition={{ duration: 0.35 }}
-                            className="text-sm font-medium text-muted-foreground text-center"
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                            transition={{ duration: 0.35, type: 'spring', stiffness: 200, damping: 20 }}
+                            className="flex items-center gap-4 bg-card/80 backdrop-blur-sm border-2 border-primary/20 p-4 rounded-2xl shadow-xl max-w-sm w-full"
                         >
-                            {isLoading ? MESSAGES[msgIdx] : "Ready! Let's go!"}
-                        </motion.p>
+                            <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-primary/10 border border-primary/20 flex items-center justify-center">
+                                <Image 
+                                    src={`/mascot_${mascotId}.webp`} 
+                                    alt="Guide Mascot" 
+                                    width={64} 
+                                    height={64} 
+                                    className="object-contain drop-shadow-md"
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold text-foreground leading-snug">
+                                    {isLoading ? MESSAGES[msgIdx] : "Ready! Let's go!"}
+                                </p>
+                            </div>
+                        </motion.div>
                     </AnimatePresence>
                 </div>
 
