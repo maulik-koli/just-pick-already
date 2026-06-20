@@ -279,7 +279,6 @@ const GameScreenInner: React.FC = () => {
 const GameScreen: React.FC = () => {
     const zone = useGameStore(state => state.zones)
     
-    // only render the game engine if zones are loaded
     if (!zone) return <NoGameData />
     
     return <GameScreenInner />

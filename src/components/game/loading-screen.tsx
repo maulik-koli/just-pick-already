@@ -16,6 +16,7 @@ interface LoadingScreenProps {
     isLoading: boolean
 }
 
+
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading }) => {
     const [progress, setProgress] = useState(0)
     const [msgIdx, setMsgIdx] = useState(0)

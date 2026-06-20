@@ -12,9 +12,6 @@ const NoGameData: React.FC = () => {
     const toggleModal = useApiUiStore(state => state.toggleModal)
 
     const handleStartNew = () => {
-        // Set the modal state to open, then route to the home page
-        // Since Next.js does a soft navigation, the Zustand state will persist
-        // and the modal will be open when the home page renders!
         toggleModal('openOnbordingModel', true)
         router.push('/')
     }

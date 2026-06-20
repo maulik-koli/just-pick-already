@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 import { useHandleStart } from '@/hooks/use-handle-start';
-import { DRIFTING_ZONES } from '@/constants/home-statics-data';
+import { DRIFTING_ZONES, MASCOT_CHARACTER } from '@/constants/home-statics-data';
 import { cn } from '@/lib/utils';
 
 import Character from '@/components/game/character';
@@ -40,13 +40,7 @@ const HeroSection: React.FC = () => {
                 ))}
             </div>
 
-            {/* Floating Mascots */}
-            {[
-                { src: "/mascot_1.webp", className: "absolute right-[2%] top-[10%] w-[100px] md:right-[5%] lg:right-[15%] md:top-[15%] md:w-[180px] lg:w-[240px]", delay: 0, duration: 6, rot: [-2, 2, -2] },
-                { src: "/mascot_4.webp", className: "absolute left-[2%] top-[15%] w-[90px] hidden sm:block md:left-[5%] lg:left-[12%] md:top-[25%] md:w-[150px] lg:w-[200px]", delay: 1, duration: 5, rot: [3, -3, 3] },
-                { src: "/mascot_5.webp", className: "absolute left-[5%] bottom-[10%] w-[80px] md:left-[10%] lg:left-[22%] md:bottom-[15%] md:w-[130px] lg:w-[160px]", delay: 2.5, duration: 7, rot: [-4, 4, -4] },
-                { src: "/mascot_6.webp", className: "absolute right-[5%] bottom-[12%] w-[85px] hidden sm:block md:right-[10%] lg:right-[25%] md:bottom-[15%] md:w-[140px] lg:w-[180px]", delay: 1.5, duration: 5.5, rot: [2, -2, 2] },
-            ].map((m, i) => (
+            {MASCOT_CHARACTER.map((m, i) => (
                 <motion.div
                     key={i}
                     className={cn("pointer-events-none opacity-40 md:opacity-80 z-0", m.className)}
