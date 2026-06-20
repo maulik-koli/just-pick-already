@@ -20,7 +20,7 @@ const ResultErrorScreen: React.FC<ResultErrorScreenProps> = ({ error, sessionId 
 
     const errorMessage = error?.message || "Something went wrong"
 
-    // Determine error type from message content
+    // determine error type from message content
     const isSessionNotFound = errorMessage.toLowerCase().includes("session not found")
     const isResultNotFound = errorMessage.toLowerCase().includes("unfinished") ||
         errorMessage.toLowerCase().includes("result") && errorMessage.toLowerCase().includes("not found")

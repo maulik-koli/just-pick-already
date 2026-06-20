@@ -94,3 +94,25 @@ export const ZONES_SECTION_DATA = [
     { name: "Moral Grey Areas", line: "No right answer. Pick anyway.", zone_color: "bg-zone-moral" },
     { name: "Impulse vs Logic", line: "The booking page is open. The clock is ticking.", zone_color: "bg-zone-impulse" },
 ];
+
+export const MASCOT_CHARACTER = [
+    { 
+        src: "/mascot_1.webp",
+        className: "absolute right-[2%] top-[10%] w-[100px] md:right-[5%] lg:right-[15%] md:top-[15%] md:w-[180px] lg:w-[240px]", delay: 0, duration: 6, rot: [-2, 2, -2]
+    },
+    {   
+        src: "/mascot_4.webp",
+        className: "absolute left-[2%] top-[15%] w-[90px] hidden sm:block md:left-[5%] lg:left-[12%] md:top-[25%] md:w-[150px] lg:w-[200px]",
+        delay: 1, duration: 5, rot: [3, -3, 3]
+    },
+    { 
+        src: "/mascot_5.webp",
+        className: "absolute left-[5%] bottom-[10%] w-[80px] md:left-[10%] lg:left-[22%] md:bottom-[15%] md:w-[130px] lg:w-[160px]",
+        delay: 2.5, duration: 7, rot: [-4, 4, -4]
+    },
+    { 
+        src: "/mascot_6.webp",
+        className: "absolute right-[5%] bottom-[12%] w-[85px] hidden sm:block md:right-[10%] lg:right-[25%] md:bottom-[15%] md:w-[140px] lg:w-[180px]",
+        delay: 1.5, duration: 5.5, rot: [2, -2, 2]
+    },
+]
