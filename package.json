@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3110",
-    "build": "prisma migrate deploy && prisma generate && next build",
-    "start": "next start",
+    "dev": "node api.js && next dev -p 3110",
+    "build": "node api.js && prisma migrate deploy && prisma generate && next build",
+    "start": "node api.js && next start",
     "lint": "eslint"
   },
   "dependencies": {
